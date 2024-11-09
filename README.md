@@ -11,6 +11,6 @@ The hallmarks of the Tufte's books include wide margins and extensive formatting
 To complement the material, the text is filled with number line and geometric diagrams which attempt to elucidate concepts.  I have found that the study of Analysis is extremely visual and that concrete examples make the theorems much easier to understand and internalize.  
 
 ## Acknowledgements
-Many thanks to my professors and classmates at Columbia for introducing me to the subject of mathematical analysis. Of course, my notes are not a faithful representation of my courses; in particular, the errors are entirely my own.  Similarly, any virtues of the text are to be credited to my lecturers and peers.
+Many thanks to my professors and classmates at Columbia for introducing me to the subject of mathematical analysis. Of course, my notes are not a faithful representation of my courses; in particular, any errors are entirely my own.  Similarly, any virtues are attributed to my lecturers and peers.
 
 [AnalysisBook.pdf](https://github.com/user-attachments/files/17686074/AnalysisBook.pdf)
