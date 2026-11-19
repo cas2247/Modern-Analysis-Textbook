@@ -35,18 +35,18 @@ We recall that the set of all points $p_n  (n=1,2,3, \ldots)$  is the \textsc{ra
 In an effort to decipher this complicated definition, it helps to consider the phrase ``$d(p_n, p) < \varepsilon$'' and think about the points that satisfy an inequality of this type.
 
 
-\begin{definition}$\varepsilon-$neighborhoods:  Given a point $p \in X$ and a positive number $\varepsilon > 0$,  the set
+\begin{definition}$\varepsilon$-neighborhoods:  Given a point $p \in X$ and a positive number $\varepsilon > 0$,  the set
 \[V_{\varepsilon}(p) = \{x \in X: d(x,p)< \varepsilon\}\]
-is called the $\varepsilon-$neighborhood of $p$. \end{definition}
+is called the $\varepsilon$-neighborhood of $p$. \end{definition}
 
-Notice that $V_{\varepsilon}(p)$ consists of all those points whose distance from p is less than $\varepsilon$.  Recasting the definition of convergence in terms of $\varepsilon-$neighborhoods gives us a more geometric impression of what is being described.
+Notice that $V_{\varepsilon}(p)$ consists of all those points whose distance from p is less than $\varepsilon$.  Recasting the definition of convergence in terms of $\varepsilon$-neighborhoods gives us a more geometric impression of what is being described.
 
-\begin{definition}\newthought{Convergence of a Sequence (Topological Version):}  a sequence $\{p_n\}$ in a metric space $X$ converges to $p$, if, given any $\varepsilon-$neighborhood  $V_{\varepsilon}(p)$ of $p$, there exists a point in the sequence after which all the terms are in $V_{\varepsilon}(p)$.  In other words, every $\varepsilon-$neighborhood centered at $p$ contains all but a finite number of the terms of $\{p_n\}$.
+\begin{definition}\newthought{Convergence of a Sequence (Topological Version):}  a sequence $\{p_n\}$ in a metric space $X$ converges to $p$, if, given any $\varepsilon$-neighborhood  $V_{\varepsilon}(p)$ of $p$, there exists a point in the sequence after which all the terms are in $V_{\varepsilon}(p)$.  In other words, every $\varepsilon$-neighborhood centered at $p$ contains all but a finite number of the terms of $\{p_n\}$.
 \end{definition}
 
 Notice that these two definitions of convergence say exactly the same thing.  The natural number $N$ from before is the point where the sequence enters $V_{\varepsilon}(p)$ and never leaves.  It should be apparent that \emph{the value of $N$ depends on the choice of} $\varepsilon$.   
 
-The smaller the $\varepsilon-$neighborhood, the larger $N$ may have to be.
+The smaller the $\varepsilon$-neighborhood, the larger $N$ may have to be.
 
 
 \noindent \emph{Example:}  We claim that $$ \lim \bigg( \frac{1}{\sqrt{n}} \bigg) = 0 $$
@@ -104,7 +104,7 @@ The  definition of convergence given earlier is the result of hundreds of years 
 	\begin{enumerate}
 			\item Let $\varepsilon>0$ be arbitrary
 			\item  Demonstrate a choice for $N \in \mathbb{N}$.  This usually requires the most work, which should be done before actually writing the proof (less messy)
-			\item Now, show that N actually works
+			\item Now, show that $N$ actually works
 				\begin{enumerate}
 						\item Assume $n \geq N$
 						\item With $N$ well chosen, it should be possible to derive the inequality that $|x_{n} - x| < \varepsilon$.
@@ -404,7 +404,7 @@ Let $\varepsilon > 0$.  Since the sequence is constantly $a$, we know that for a
 
 \noindent
 \emph{Exercise 2.3.2.}
-Let $x_n \geq 0$ for all $n \in N$. 
+Let $x_n \geq 0$ for all $n \in \mathbb{N}$. 
 \begin{enumerate}[(a)]
 \item If $(x_n) \to 0$, show that $(\sqrt{x_n}) \to 0$. 
 \item If $(x_n) \to x$, show that $(\sqrt{x_n}) \to \sqrt{x}$.
@@ -438,7 +438,7 @@ $\begin{array} {lcl}
 \smallskip
 
 \noindent
-\emph{Exercise 2.3.3.} (Squeeze Theorem). Show that if $x_n \leq y_n \leq z_n$ for all $n \in N$, and if $\lim x_n = \lim z_n = l$, then $\lim y_n = l$ as well.
+\emph{Exercise 2.3.3.} (Squeeze Theorem). Show that if $x_n \leq y_n \leq z_n$ for all $n \in \mathbb{N}$, and if $\lim x_n = \lim z_n = l$, then $\lim y_n = l$ as well.
 \begin{proof}
 Let $\varepsilon > 0$.  Since $(x_n) \to l$, there exists $N_{1}$ such that $n \geq N_{1} \implies x_n \in (l- \varepsilon, l + \varepsilon)$.
 

@@ -16,8 +16,8 @@ Recall the topological definitions of a limit point.
 A point $x$ is called a \emph{limit point} (sometimes called a ``cluster point'' or ``accumulation point'') of a set $A$ if either of the following equivalent conditions holds: 
 
 \begin{enumerate}
-	\item Every $\varepsilon-$neighborhood $V_{\varepsilon}(x)$ of $x$ intersects the set $A$ in some point other than $x$
-	\item The point $x = \lim a_n$ for some sequence $(a_n)$ contained in $A$ satisfying $a_n \neq x$ for all $n \in N$.  In other words, $x$ is the limit of some sequence contained entirely in $A$ but such that no term of the sequence equals $x$.  
+	\item Every $\varepsilon$-neighborhood $V_{\varepsilon}(x)$ of $x$ intersects the set $A$ in some point other than $x$
+	\item The point $x = \lim a_n$ for some sequence $(a_n)$ contained in $A$ satisfying $a_n \neq x$ for all $n \in \mathbb{N}$.  In other words, $x$ is the limit of some sequence contained entirely in $A$ but such that no term of the sequence equals $x$.  
 \end{enumerate}
 
 It is important to remember that limit points of $A$ do not necessarily belong to the set $A$ unless $A$ is closed.
@@ -35,7 +35,7 @@ conveys that the values of $f(x)$ get close to $L$ as $x$ gets close to $c$.   T
 Like with sequential limits we can cast this definition with a more topological intuition.
 
 \begin{definition}[Topological Version]
-	Let $c$ be a limit point of the domain of $f: A \to \mathbb{R}$.  We say that $\lim_{x \to c} f(x) = L$ provided that for every $\varepsilon-$neighborhood $V_{\varepsilon}(L)$ of $L$, there exists a $\delta-$neighborhood $V_{\delta}(c)$ around $c$ with the property that for all $x \in V_{\delta}(c)$ different from $c$ it follows that $f(x) \in V_{\varepsilon}(L)$\end{definition}
+	Let $c$ be a limit point of the domain of $f: A \to \mathbb{R}$.  We say that $\lim_{x \to c} f(x) = L$ provided that for every $\varepsilon$-neighborhood $V_{\varepsilon}(L)$ of $L$, there exists a $\delta$-neighborhood $V_{\delta}(c)$ around $c$ with the property that for all $x \in V_{\delta}(c)$ different from $c$ it follows that $f(x) \in V_{\varepsilon}(L)$\end{definition}
 
 
 Note that the appearance of $f(x)$ carries with it the implicit assumption that $x$ is in the domain of $f$.  On a similar note, there is no reason to discuss functional limits at isolated points in the domain.  Thus, functional limits will only be discussed as $x$ tends toward a limit point of the function's domain.

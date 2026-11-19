@@ -117,7 +117,7 @@ The Axiom of Completeness is a short statement with long consequences.  What fol
 
 We work throughout on the real number line.  Keep $\mathbb{Q}$ in mind as a contrast: there, a set that is bounded above can have a ``hole'' exactly where its supremum ought to be.
 
-\begin{theorem}\marginnote{Nested Interval Property}  For each $n \in N$ assume we are given a closed interval $I_n = [a_n , b_n] = \{ x \in R : a_n \leq x \leq b_n\}$.  Assume also that each $I_n$ contains $I_{n+1}$.  Then, the resulting sequence of nested intervals, 
+\begin{theorem}\marginnote{Nested Interval Property}  For each $n \in \mathbb{N}$ assume we are given a closed interval $I_n = [a_n , b_n] = \{ x \in \mathbb{R} : a_n \leq x \leq b_n\}$.  Assume also that each $I_n$ contains $I_{n+1}$.  Then, the resulting sequence of nested intervals, 
 
 \[I_1 \supseteq I_2 \supseteq I_3 \supseteq I_4 \supseteq \cdots \]
 
@@ -126,7 +126,7 @@ has a nonempty intersection; that is, $\bigcap_{n=1}^{\infty} I_n \neq \emptyset
 
 \begin{proof}
 Knowing that we want to use the AoC to produce a single real value  $x$ satisfying $x \in I_n$ for all $n \in \mathbb{N}$, we should consider a bounded set such that its supremum might be this $x$.  Let us consider the set 
-\[ A = \{a_n : n \in N\}\]
+\[ A = \{a_n : n \in \mathbb{N}\}\]
 of the left-hand endpoints of the intervals.
 
 \begin{marginfigure}
@@ -141,7 +141,7 @@ Because the intervals are nested, we see that every $b_n$ serves as an upper bou
 
 Now, consider a particular $I_n = [a_n , b_n]$.  Because $x$ is an upper bound for $A$, we have $a_n \leq x$.  The fact that each $b_n$ is an upper bound for $A$ and that $x$ is the least upper bound implies $x\leq b_n$.
 
-Altogether then, we have $a_n \leq x \leq b_n$, which means $x \in I_n$ for every choice of $n \in N$.  Hence, $x \in \bigcap_{n=1}^{\infty} I_n$ and the intersection is not empty.
+Altogether then, we have $a_n \leq x \leq b_n$, which means $x \in I_n$ for every choice of $n \in \mathbb{N}$.  Hence, $x \in \bigcap_{n=1}^{\infty} I_n$ and the intersection is not empty.
 \end{proof}
 
 
@@ -149,11 +149,11 @@ Altogether then, we have $a_n \leq x \leq b_n$, which means $x \in I_n$ for ever
 Again here, we are restricting our discussion to the real numbers.  
 
 \begin{theorem}\marginnote{Archimedean Property}  \begin{itemize}[(i)] 
-\item  Given any number $x \in R$ there exists an $n \in N$ such that $x<n$.  \item Given any real number $y>0$, there exists an $ n \in N$ such that $\frac{1}{n}< y$. \end{itemize} \end{theorem}
+\item  Given any number $x \in \mathbb{R}$ there exists an $n \in \mathbb{N}$ such that $x<n$.  \item Given any real number $y>0$, there exists an $ n \in \mathbb{N}$ such that $\frac{1}{n}< y$. \end{itemize} \end{theorem}
 
 \begin{proof}   Part (i) of the theorem states that $\mathbb{N}$ is not bounded above.  This might seem obvious and not in need of a proof yet it is important to note that a set might possess the Archimedean property without being complete---take $\mathbb{Q}$ for example---but a demonstration of this fact requires an investigation into the axiomatic construction of the ordered field in question. In the case of $\mathbb{R}$, the AoC furnishes us with a very short argument.
 
-Assume that $\mathbb{N}$ is bounded above.  By the Axiom of Completeness, $\mathbb{N}$ should then have a least upper bound, and we can set $\alpha = \sup \mathbb{N}$.  If we were to consider $\alpha -1$, then we no longer have an upper bound and therefore there exists an $n \in N$ such that $\alpha - 1 < n$.  But this is equivalent to $\alpha < n+1$. But because $n+1 \in N$ we have a contradiction to the fact that $\alpha $ is meant to be  an upper bound for $\mathbb{N}$.  \marginnote{The contradiction here rests on the AoC and the fact that $\mathbb{N}$ is closed under addition.}
+Assume that $\mathbb{N}$ is bounded above.  By the Axiom of Completeness, $\mathbb{N}$ should then have a least upper bound, and we can set $\alpha = \sup \mathbb{N}$.  If we were to consider $\alpha -1$, then we no longer have an upper bound and therefore there exists an $n \in \mathbb{N}$ such that $\alpha - 1 < n$.  But this is equivalent to $\alpha < n+1$. But because $n+1 \in \mathbb{N}$ we have a contradiction to the fact that $\alpha $ is meant to be  an upper bound for $\mathbb{N}$.  \marginnote{The contradiction here rests on the AoC and the fact that $\mathbb{N}$ is closed under addition.}
 
 For part (ii) just let $x = 1/y$ from above.
 Note that $\frac{1}{n} < y$ implies that $\frac{1}{y} < n$.  Therefore this statement again says that $\mathbb{N}$ is not bounded above and the proof is exactly as before.
@@ -172,7 +172,7 @@ Note that $\frac{1}{n} < y$ implies that $\frac{1}{y} < n$.  Therefore this stat
 	\[	a  < \frac{m}{n} < b	\]
  The first step is to choose a denominator large enough so that consecutive increments of size $1/n$ are too close together to ``step over'' the interval $(a,b)$.
  
- Using the Archimedean property, we pick $n \in N$ so that 
+ Using the Archimedean property, we pick $n \in \mathbb{N}$ so that 
  \[		\frac{1}{n} < b-a\]
 Multiplying our target inequality by $n$ shows that we want $na < m <nb$.  With $n$ already chosen, we choose $m$ to be the smallest natural number greater than $na$.  In other words,
 $$m-1 \leq na < m$$ 
@@ -228,7 +228,7 @@ We omit the proof since it is a little tedious.
 
 
 \begin{proof}
-Using the fact that $R$ is an ordered field with the least upper bound property, we know that a nonempty subset $A \subseteq \mathbb{R}$ that is bounded below has a greatest lower bound or infimum in $\mathbb{R}$.  Call it $\alpha$.
+Using the fact that $\mathbb{R}$ is an ordered field with the least upper bound property, we know that a nonempty subset $A \subseteq \mathbb{R}$ that is bounded below has a greatest lower bound or infimum in $\mathbb{R}$.  Call it $\alpha$.
 
 Taking an arbitrary member of this subset $x \in A$, we know that $-x \in -A$ by definition of membership in $-A$.  Furthermore by the definition of infimum, we know that $\alpha \leq x$ for all $x\in A$.  Multiplying an inequality by $-1$ reverses it, so we can deduce that $-\alpha \geq -x$ for all $-x \in -A$.
 
