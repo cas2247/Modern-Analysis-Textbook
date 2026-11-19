@@ -43,6 +43,12 @@
 \newtheorem*{dangerousbend}{\textdbend Caution}
 \newtheorem*{summary}{Summary}
 
+% Original end-of-chapter problems: \begin{problem}[Optional title] ... \end{problem}
+\newtheorem{problem}{Problem}[chapter]
+% A hint, set in the margin beside a problem.
+% Put it straight after \begin{problem}[...] so it lines up with the heading.
+\newcommand{\hint}[1]{\leavevmode\marginnote{\emph{Hint.} #1}\ignorespaces}
+
 % ---------------------------------------------------------------- Front-matter macros
 % A full-width epigraph: \openepigraph{quotation}{author}
 \newcommand{\openepigraph}[2]{%

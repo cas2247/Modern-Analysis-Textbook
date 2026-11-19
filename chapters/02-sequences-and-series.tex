@@ -1047,3 +1047,91 @@ Also note that we could have begun this chain with \emph{any} of these statement
 	\marginnote{This is Theorem 3.54 in Rudin's \emph{Principles of Mathematical Analysis}.}
 		
 		
+
+
+\section{Problems}
+
+\noindent The problems in this section are original to this text.
+
+\begin{problem}[Three proofs on trial]
+\hint{Read each proof against the template in Section~\ref{sec:sequence-examples}.  Who is supposed to speak first, $\varepsilon$ or $N$?  And for which $n$ must the final inequality hold?}
+Each of the following ``proofs'' has something wrong with it.  In each case say whether the \emph{claim} is true, pinpoint the faulty step, and, where the claim is true, write a correct proof.
+\begin{enumerate}[(a)]
+	\item \emph{Claim:} $\lim \frac{1}{n} = 0$.
+
+	\emph{``Proof.''}  Let $N \in \mathbb{N}$ be arbitrary and set $\varepsilon = 2/N$.  If $n \geq N$ then $\left|\frac{1}{n} - 0\right| = \frac{1}{n} \leq \frac{1}{N} < \frac{2}{N} = \varepsilon$.  Hence $\left(\frac{1}{n}\right) \to 0$.
+	\item \emph{Claim:} the sequence $a_n = (-1)^n$ converges to $1$.
+
+	\emph{``Proof.''}  Let $\varepsilon > 0$ and choose $N = 2$.  For every even $n \geq N$ we have $|a_n - 1| = |1 - 1| = 0 < \varepsilon$.
+	\item \emph{Claim:} $\lim \frac{2n+1}{n} = 2$.
+
+	\emph{``Proof.''}  Let $\varepsilon > 0$ and choose $N = 1/\varepsilon$.  If $n \geq N$ then $\left|\frac{2n+1}{n} - 2\right| = \frac{1}{n} \leq \frac{1}{N} = \varepsilon$.
+\end{enumerate}
+To convince yourself that (a) is a broken argument and not merely an unusual one, show that exactly the same reasoning ``proves'' that the constant sequence $(1, 1, 1, \ldots)$ converges to $0$.
+\end{problem}
+
+\begin{problem}[Sticking and visiting]
+\hint{For the second half of (c), look back at Chapter One: how many rational numbers are there?  For (d), the Bolzano--Weierstrass Theorem will find you a second number to visit.}
+Here are two invented definitions, built from the same ingredients as convergence but with the quantifiers rearranged.
+\begin{itemize}
+	\item A sequence $(a_n)$ \emph{sticks to} $a$ if there exists an $N \in \mathbb{N}$ such that for every $\varepsilon > 0$ and every $n \geq N$ we have $|a_n - a| < \varepsilon$.
+	\item A sequence $(a_n)$ \emph{visits} $a$ if for every $\varepsilon > 0$ and every $N \in \mathbb{N}$ there exists an $n \geq N$ with $|a_n - a| < \varepsilon$.
+\end{itemize}
+\begin{enumerate}[(a)]
+	\item Describe each definition in a plain sentence that mentions neither $\varepsilon$ nor $N$.
+	\item Show that if $(a_n)$ sticks to $a$ then it converges to $a$, and that if it converges to $a$ then it visits $a$.  Give examples to show that neither implication can be reversed.
+	\item Give an example of a sequence that visits exactly two numbers.  Then give an example of a single sequence that visits \emph{every} real number.
+	\item Suppose $(a_n)$ is bounded, visits $a$, and visits no other number.  Prove that $(a_n) \to a$.  Show by example that the conclusion can fail if the word ``bounded'' is dropped.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Climbing toward a hole]
+\hint{For (c), write $x_{n+1} - x_n$ as a single fraction and look at the sign of the numerator.}
+Define a sequence by $x_1 = 1$ and
+\[ x_{n+1} = \frac{2x_n + 3}{x_n + 2}. \]
+\begin{enumerate}[(a)]
+	\item Compute $x_2$, $x_3$ and $x_4$, both as fractions and as decimals.  Explain why every $x_n$ is a positive rational number.
+	\item Verify the identity
+	\[ 3 - x_{n+1}^2 = \frac{3 - x_n^2}{(x_n + 2)^2} \]
+	and use it to prove that $x_n^2 < 3$ for every $n$.
+	\item Show that $(x_n)$ is increasing, and conclude that it converges.  Find the square of its limit.
+	\item Every term of this sequence lies in $\mathbb{Q}$, and within $\mathbb{Q}$ the sequence is increasing and bounded.  Which theorem of this chapter have you just shown to be false in $\mathbb{Q}$?
+	\item Use the identity in (b) to show that $3 - x_n^2 \leq 2/9^{\,n-1}$.  How many terms are needed before $x_n^2$ is guaranteed to be within one millionth of $3$?
+\end{enumerate}
+Notice what part (c) accomplishes: without ever writing the symbol $\sqrt{3}$, you have proved that there is a positive real number whose square is $3$.
+\end{problem}
+
+\begin{problem}[Bolzano--Weierstrass by decimal digits]
+\hint{Part (a) is the pigeonhole principle for infinitely many pigeons: if infinitely many terms are shared among ten bins, the bins cannot all be finite.}
+The proof of the Bolzano--Weierstrass Theorem in the text cuts an interval in half again and again.  This problem redoes it by cutting into tenths, which lets us watch the limit being written down one digit at a time.  Let $(a_n)$ be any sequence with $0 \leq a_n < 1$ for all $n$.
+\begin{enumerate}[(a)]
+	\item Sort the terms into ten bins $[0, 0.1)$, $[0.1, 0.2)$, \ldots, $[0.9, 1)$ according to their first decimal digit.  Explain why at least one bin receives $a_n$ for infinitely many values of $n$.  Call the digit of one such bin $d_1$.
+	\item Split that bin into ten smaller bins according to the second decimal digit and repeat.  Explain how continuing in this way produces digits $d_1, d_2, d_3, \ldots$ and nested closed intervals $I_1 \supseteq I_2 \supseteq I_3 \supseteq \cdots$, where $I_k$ has length $10^{-k}$ and contains $a_n$ for infinitely many $n$.
+	\item Build a subsequence with $a_{n_k} \in I_k$ for each $k$, and prove that it converges.  What is the decimal expansion of its limit?
+	\item Carry out the construction for the sequence $0.4,\ 0.41,\ 0.414,\ 0.4142,\ \ldots$ whose $n$th term consists of the first $n$ decimal digits of $\sqrt{2} - 1$.  Every term of this sequence is rational.  Is the limit?
+	\item Halves work and tenths work.  Would it also work to cut each interval into two \emph{unequal} pieces, say in the ratio $1:9$?  What is the one property of the cutting scheme that the proof really needs?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[A hiker's steps]
+\hint{For (b), group the steps: the third and fourth together cover at least $\frac{1}{2}$, as do the fifth through eighth, and so on.  For (c), let her turn around whenever she has wandered too far.}
+A hiker walks along the number line.  Her position after $n$ steps is $a_n$, so her $n$th step has length $|a_{n+1} - a_n|$.
+\begin{enumerate}[(a)]
+	\item Suppose that $|a_{n+1} - a_n| \leq 2^{-n}$ for every $n$.  Prove that $(a_n)$ is a Cauchy sequence, so that she is certainly headed \emph{somewhere}.
+	\item Suppose instead that every step is forward and the $n$th step has length exactly $1/n$; that is, $a_{n+1} = a_n + \frac{1}{n}$.  Show that she eventually passes every milestone: the sequence $(a_n)$ is unbounded.
+	\item Now let the $n$th step again have length exactly $1/n$, but allow her to choose its direction.  Describe a rule for choosing directions that keeps her inside the interval $[-1, 2]$ forever and yet leaves $(a_n)$ divergent.  Prove both claims.
+	\item In (b) and (c) the steps shrink to zero, and still the sequence is not Cauchy.  Explain in a sentence or two, with reference to the quantifiers in the definition, why ``consecutive terms get close together'' is a weaker statement than ``the sequence is Cauchy.''
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The sceptic's series]
+\hint{For (c), expand $(\sqrt{x} - \sqrt{y})^2 \geq 0$.  For (e), apply the Cauchy Criterion for series to the block $a_{n+1} + a_{n+2} + \cdots + a_{2n}$.}
+Suppose that $a_n \geq 0$ for all $n$ and that $\sum_{n=1}^{\infty} a_n$ converges.  A sceptical friend proposes the statements below.  Decide which are true, prove those, and give a counterexample to each of the others.
+\begin{enumerate}[(a)]
+	\item $\sum_{n=1}^{\infty} a_n^2$ converges.  (Does your answer change if the terms are allowed to be negative?)
+	\item $\sum_{n=1}^{\infty} \sqrt{a_n}$ converges.
+	\item $\sum_{n=1}^{\infty} \sqrt{a_n a_{n+1}}$ converges.
+	\item $n a_n \to 0$.
+	\item If in addition $(a_n)$ is decreasing, then $n a_n \to 0$.
+\end{enumerate}
+\end{problem}
