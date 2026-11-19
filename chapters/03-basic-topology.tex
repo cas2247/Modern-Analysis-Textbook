@@ -1,0 +1,180 @@
+\setcounter{chapter}{3}
+\chapter{Chapter Three:  Basic Topology}
+
+
+\setcounter{section}{0}
+\setcounter{theorem}{0}
+\setcounter{definition}{0}		
+		
+
+\section{Metric Spaces}
+
+\textsc{Metric Spaces}  A set X whose elements, we shall call points, is said to be a metric space if with any two points p and q of X there is associated a real number called the distance from p to q such that:
+
+\begin{itemize}
+	\item $d(p,q) > 0$ if $p \neq q  ; d(p,p) = 0$
+	\item $d(p,q) = d(q,p)$
+	\item $d(p,q) \leq d(p,r) + d(r,q)$ for any $r \in X$  (Triangle Inequality)
+\end{itemize}
+
+\newthought{Examples of Metric Spaces:}
+\begin{enumerate}
+	\item Let $X$ be any set and define
+		
+\begin{displaymath}
+   d(p,q) = \left\{
+     \begin{array}{lr}
+       0 & : if q \neq q \\
+       1 & : if p =q
+     \end{array}
+   \right.
+ \end{displaymath} 
+ 
+ \item Q or E with $d(p,q) =|p-q|$ is a metric space
+ 
+ \item  $\mathbb{R}^2 = \{x_1 x_2 \in \mathbb{R}\}$ with
+ \[d(\vec{x}, \vec{y}) = ||\vec{x}- \vec{y}|| = \sqrt{(x_1 - y_1)^2  + (x_2 - y_2)^2} \]  is a metric space.
+ 
+ \item  The most important examples of metric spaces from out standpoint are the euclidean spaces $R^k$ with the distance function defined as above.  The rules of operations on norms  in $R^k$(reviewed below) show that the conditions of a metric space are satisfied.
+		
+\end{enumerate}
+
+Also note that every subset of a metric space, is itself a metric space under that same distance function.  Thus every subset of euclidean space is a metric space.
+
+
+\newthought{Definitions:}
+\begin{itemize}
+
+	\item A  \textsc{segment (a,b)} is the set of real numbers x such that  $a<x<b$ 
+	\item An \textsc{interval  [a,b]} is the set of real numbers x such that  $a\leq x \leq b$	
+	
+	\item A \textsc{k-cell} is the set of points in $R^k$ such that  $a_i\leq x \leq b_i$ for $1 \leq i \leq k$, given that $a_i < b_i$ for every $1 \leq i \leq k$.
+	\item An \textsc{Open (or Closed) Ball} with a center at x and a radius r is the set of all points y such that $|x-y|< r$
+	\item A set E is \textsc{convex} if $\lambda y + \lambda(1-z) \in E$ given $y,z \in E$ and $0< \lambda < 1$.
+	\item A \textsc{neighborhood} a point p with radius r is the set of all points q such that $d(p,q) < r$
+	
+	\item A \textsc{Limit Point of E}  is a point p such that every neighborhood of p contains a point q, $q \neq p$ such that $q \in E$
+	\item An \textsc{Isolated Point}  is a point $p\in E$ such that p is not a limit point of E (that is, there is a neighborhood of p that contains no other points of E)
+	\item A set E is \textsc{Closed} if it contains all of its limit points.
+	\item An \textsc{Interior Point}  is a point $p\in E$ such that there exists a neighborhood (N) at p where $N \subset E$
+	\item A set E is \textsc{Open} if all of its points are interior points.   \marginnote{The notion of being "open" is relative to the metric space that contains the subset.}
+	\item The \textsc{Complement} of a set E is the set of all points $p \in X$	such that $p \notin E$
+	\item A set E is \textsc{Bounded} if there exists a real number M and a point $p \in X$ such that $d(p,q) < M$ for all $q\in E$
+	\item A set E is \textsc{Dense} in X if for all $p\in X$, p is either a limit point of E or $p \in E$	
+	
+	\end{itemize}
+
+\newthought{Every Neighborhood is an open set. That is, open balls are open.}
+
+\begin{proof}
+Consider a neighborhood $E = N_r (p) $ and let q be any point of E.  Then there is a positive real number h such that 
+\[d(p,q) = r-h\]
+For all points $s$ such that $d(q,s)<h$, we have then that
+\[d(p,s) \leq d(p,q) + d(p,s) < r-h+h = r\]
+so that $s\in E$.  Thus $q$ is an interior point of E and therefore E is open. 
+\end{proof}
+
+\newthought{Theorem:} If p is a limit point of a set E, then every neighborhood of p contains infinitely many points of E.
+
+\begin{proof}
+We proceed with a proof by contradiction.  Suppose that there is a neighborhood N of p which contains only a finite number of points of E.   Let $q_1, q_2, \ldots , q_n$ be those points of $N \cap E$, which are distinct from p, and put
+\[r = \min_{1\leq m \leq n} d(p,q_m)\]
+The minimum of a finite set of positive numbers is clearly positive so that r>0.\\ 
+
+The neighborhood $N_{r}(p)$ contains no point $q$ of E such that $q \neq p$ so that p is not a limit point of E.  This contradiction established the theorem.
+\end{proof}
+
+\newthought{Corollary:} A finite point set has no limit points.
+
+\newthought{Theorem:} A set E is open $\iff$ its complement is closed.
+
+\begin{proof}
+($\Leftarrow$)  Assume that $E^c$ is closed and say that $p \in E$.  Then $p \notin E^c$, so $p$ cannot be a limit point of $E^c$.  Hence, there exists an $r>0$ such that $B_r (p)$ does not contain any points of $E^c$.  Then $B_r (p) \subset E$, p is an interior point of E and E is open.\\
+($\Rightarrow$)  Assume that E is open.  Let $p$ be a limit point of $E^c$.  Since $p$ is a limit point of  $E^c$ then every neighborhood of $p$ contains a point of  $E^c$ other than p.   But then for every neighborhood of p, $B_r (p) \not \subset E$.  Therefore $p$ is not an interior point of $E$, and since $E$ is open, this implies that $p \in E^c$.
+\end{proof}
+
+%\newtheorem{Theorem:}  Let (X,d) be a metric space and let A be any set.   
+%\begin{itemize}
+	%\item 
+%\end{itemize}
+
+
+\section{Compactness}
+
+Some heuristic remarks are helpful only to a subset of readers. (Maybe that's true of all heuristics, as a meta-heuristic - if everyone accepts a rough explanation, it's something rather more than that.)
+
+Non-compactness is about being able to "move off to infinity" in some way in a space. On the real line you can do that to the left, or right: but bend the line round to fill all but one point on a circle (which is compact) and you see the difference having the "other point" near which you end up. This example of real line versus circle is too simple, really. Another way you can "go off to infinity" in a space is by having paths branching out infinitely.
+
+Compactness is a major topological concept because the various ways you might try to "trap" movement within a space to prevent "escape" to infinity can be summed up in a single idea (for metric spaces, let's say). The definition by open sets is cleaner, but the definition by sequences having to accumulate on themselves (not necessarily to converge, but to have at least one convergent subsequence) is somewhat quicker to say. If you restrict attention to spaces that are manifolds, you can think of continuous paths and whether they have to wind back close to themselves or not.
+
+I swear the concept of compactness was invented to remedy the shortcomings of closedness. Compact sets are closed (in Hausdorff spaces and therefore metric spaces), so compactness is stricter than closedness. It evidently patches some feebleness in the definition of closedness to make it more useful.
+
+Closedness of a set in a metric space (includes all limit points), by the sound of it, really wants to be something akin to has solid boundaries. But it isnt. The problem is that the existence of limit points depends on the embedding space. If the embedding space lacks those limit points, then a set in it can be technically closed even though it isnt really like other closed sets. For example, the set  in space  is closed, because the space has no point called .
+
+%The first stab at �has solid boundaries� was to get rid of infinities by adding boundedness (�can be covered by some ball�) to the condition. Now, the set ? in space (?,dEucl.) is closed yet not bounded, so it doesn�t have solid boundaries. Excellent. Upon further inspection, however, it doesn�t really address the real issue. For instance, set ??[0,1] in space (?,dEucl.) is closed and bounded, but it�s still porous at all the irrational numbers. It doesn�t have solid boundaries.
+
+%The second stab then was to replace closedness with completeness (�contains all Cauchy limits�). Completeness gets rid of the dependency on the embedding space and uses points in the set itself to define limits. This along with boundedness takes care of the above two examples. But there is still a deeply unsatisfying outcome: completeness and boundedness both depend on the metric and therefore are affected by rescaling. First let�s rewrite the boundedness condition as equivalently �can be covered by a finite number of r-balls for a fixed r�. The set ? in space (?,d1Disc.) where dkDisc.(x,y)=k if x�y is complete and bounded, if we choose r>1, yet under a rescaling, say by replacing d1Disc. with dr+?Disc., the set is no longer bounded.
+
+%So finally, a third stab was to require sets to be bounded at once for all rescaling, by replacing boundedness with total boundedness (�can be covered by a finite collection of r-balls for all r�).
+
+%This last definition, complete and totally bounded, turns out to be equivalent to compactness (�every open cover has a finite subcover�) in metric spaces. And it shows. We�ve managed to drop all the stuff dependent on the embedding space and the metric scaling. All that is left are the topological properties of the set under open balls generated by the metric.
+
+%In some sense, what we get out of compactness (and really wanted from the outset) is the notion that a set is well contained regardless of scaling. This is what it means to have solid boundaries. It has to be a topological property of the set itself. More interestingly, because we can scale the set however we want (provided the scaling is non-singular), we can turn infinitesimals into infinities and vice versa. Small-scale infinitesimals (limiting sequence) and large-scale infinities (unbounded sequence) are really the same thing. For instance, the set {1/n}n?? under the metric dEucl. has an unincluded Cauchy limit at 0 and is thus not complete, but if we rescale the underlying space by 1/x at x, then it is basically ? under the metric d1Disc., with no Cauchy limits to include and is complete. Similarly the first set is totally bounded while the second is not. This scale-dependence is awkward. Apparently, completeness and total boundedness take care of the small-scale and the large-scale separately, but in the end, they are all infinities and should be treated the same. The true distinction of consequence is between finitude (solid boundaries, well contained) and infinitude (no solid boundaries, ill contained), a distinction which compactness identifies.
+
+%One of the immediately intuitive notions coming from this understanding of compactness is the theorem that states �the image of a compact set under continuous mapping is also compact� (just a rescaling after all). We can regurgitate this as, a set with solid boundaries under continuous rescaling of the space still has solid boundaries. Other nice properties about limits being attained on compact sets, and about functions on compact sets, follow from the same intuition of their having solid boundaries. It also makes sense why the intersection of a compact set with a closed set is compact (well containment only needs to be ensured once), and therefore the intersection of any number of compact sets is compact. In some sense, compact sets are a much more useful dual to open sets, than closed sets � even under their topological definition (�complement is open�) � ever were.
+
+
+\newthought{The biggest thing about compactness} that I have come across is that for a compact set, results that hold locally also hold globally.
+For example, local boundedness on a compact set implies global boundedness for the whole set.
+Other properties follow the same idea.
+
+
+\subsection{Completeness Revisited:}
+
+The principles of the Axiom of Completeness, Nested Interval Property, Monotone Convergence, Bolzano-Weierstrass and Cauchy Criterion are inextricably linked.
+
+\section{Topology of $\mathbb{R}$ and Metric Spaces}
+\subsection{Open and Closed Sets}
+\newthought{Open:} A set is open $O$ if every point in $O$ is an interior point.
+	\newthought{Examples}
+		\begin{itemize}
+			\item The real numbers are open
+			\item $(c,d)$ is open
+			\item The union of open intervals is open
+		\end{itemize}
+
+
+\newthought{Closed} A set E is \textsc{Closed} if it contains all of its limit points.
+	\marginnote{ An \textsc{Interior Point}  is a point $p\in E$ such that there exists a neighborhood (N) at p where $N \subset E$}
+	
+	\newthought{Theorem}  A point x is a limit point of A iff x=
+
+\newthought{}
+
+\subsection{Closure}
+\subsection{Complements}
+\subsection{Compact Sets}
+The three definitions of compactness: 1) every sequence has a convergent subsequence with its limit in the compact set 2) Closed and Bounded 3) Every open cover has a finite sub cover
+
+\subsection{Connected Sets}
+
+
+\section{Functional Limits and Continuity}
+\subsection{Functional Limits}
+Structure of the definition follows the "challenge-response" approach we saw in limits of sequences.
+Formal definition and Topological Version
+Sequential Criterion for Functional Limits
+\subsection{Combinations of Continuous Functions}
+\subsection{Continuous Functions on Compact Sets}
+Uniform Continuity
+\subsection{IVT}
+\subsection{Discontinuity}
+
+
+
+
+
+%Arithmetic Mean Inequality:
+%$ \lambda \geq 0$ for all $0 \leq i \leq n$
+%Then $$  (\lambda_1 \ldots \lambda_n) \leq ( \frac{\lamda_1 + \ldots + \lambda_n}{n} ) ^n $$
+
