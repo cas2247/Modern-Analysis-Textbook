@@ -1,66 +1,823 @@
-\bookchapter{Four}{Continuity}
+\bookchapter{Four}{Functional Limits and Continuity}
 
-We now have a mathematically unambiguous definition of what it means for a sequence or series to converge.  Now we move toward a rigorous understanding of functional limits and continuity.
+In Chapter Two we made the phrase ``gets close to'' precise for sequences.  In this chapter we do the same for functions.  Loosely speaking, a function $f$ is continuous at a point $c$ if choosing $x$ close to $c$ forces $f(x)$ to be close to $f(c)$.  Our first job is to turn that sentence into a definition we can prove things with.
 
-Loosely, if given a function $f$ with domain $D \subseteq \mathbb{R}$, we want to define continuity at a point $c \in D$ to mean that if we choose $x \in D$ \emph{close to} $c$, then $f(x)$ is \emph{close to} $f(c)$.
+The reward for doing so is a trio of theorems about continuous functions.  A continuous function on a closed interval reaches a highest and a lowest value.  It cannot get from one value to another without passing through everything in between.  And its continuity can be measured by a single standard that works at every point at once.  Each of these facts turns out to be a statement about one of the kinds of set we met in Chapter Three, and the topology we built there will do most of the work.
 
-At present however, we do not yet have a clear notion of what is meant by $\lim_{x \to c} f(x)$.  Unlike with sequences,  we want the value of $\lim_{x \to c} f(x)$ to be independent of how we approach $c$.  In fact, $c$ need not even be in the domain of $f$.   
+\section{A Question of Tolerance}\label{sec:tolerance}
+
+A tiler has been asked for a square tile with an area of exactly $9$ square centimeters.  She knows the side should be $3$ centimeters, but no saw cuts a length of exactly $3$.  Her client is reasonable about this and says that any area within $0.1$ of $9$ will do.  How accurately does she have to cut?
+
+Suppose the side comes out as $x$ instead of $3$.  The error in the area is
+\[ |x^2 - 9| = |x - 3|\,|x + 3|. \]
+If she can at least promise to be within $1$ of the target, then $x$ is between $2$ and $4$, so $|x + 3|$ is less than $7$ and the error in the area is less than $7|x - 3|$.  To keep this below $0.1$ it is enough to cut the side to within $0.1/7$, which is about $0.014$ centimeters.
+
+Now the client changes his mind and asks for an area within $0.001$ of $9$.  The tiler is not troubled.  The same calculation tells her to cut to within $0.001/7$.  Whatever tolerance the client names for the \emph{area}, she can answer with a tolerance for the \emph{side} that guarantees it.  That ability to answer every challenge is what we will mean by saying that the function $f(x) = x^2$ is continuous at $3$.
+
+\newthought{Here is a function} for which the game cannot be won.  A post office charges $1.00$ to send a letter weighing up to $20$ grams and $1.50$ for anything heavier.  Suppose you are aiming for a weight of $20$ grams and want the price to be within $0.25$ of $1.00$.  No scale is accurate enough to promise this.  However small the error in the weight, a letter that comes out the slightest bit over $20$ grams costs $1.50$.  The challenge $0.25$ has no answer, and the price is not a continuous function of the weight at $20$.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+  % ---- left panel: the tile
+  \begin{scope}[x=1.8cm,y=0.3cm]
+    \fill[epsband] (0,3.6) rectangle (1.95,6.4);
+    \fill[delband] (0.79,0) rectangle (1.21,10.2);
+    \draw[graphaxis] (0,0) -- (2.05,0) node[lbl,right] {side};
+    \draw[graphaxis] (0,0) -- (0,10.8) node[lbl,above] {area};
+    \draw[curve] plot[domain=2.2:3.72, samples=40] ({\x-2},{\x*\x-4});
+    \draw[guide] (1,0) -- (1,5) -- (0,5);
+    \node[seqpt] at (1,5) {};
+    \node[lbl,below=2pt] at (1,0) {$3$};
+    \node[lbl,left=2pt] at (0,5) {$9$};
+    \node[lbl,left=2pt,calm] at (0,6.4) {$9+\varepsilon$};
+    \node[lbl,left=2pt,calm] at (0,3.6) {$9-\varepsilon$};
+  \end{scope}
+  % ---- right panel: the postage
+  \begin{scope}[shift={(5.5,0)},x=1.8cm,y=0.3cm]
+    \fill[epsband] (0,1.6) rectangle (1.95,4.4);
+    \fill[delband] (0.79,0) rectangle (1.21,10.2);
+    \draw[graphaxis] (0,0) -- (2.05,0) node[lbl,right] {weight};
+    \draw[graphaxis] (0,0) -- (0,10.8) node[lbl,above] {price};
+    \draw[curve] (0.1,3) -- (1,3);
+    \draw[curve] (1,7.5) -- (1.9,7.5);
+    \node[closedpt] at (1,3) {};
+    \node[openpt] at (1,7.5) {};
+    \node[lbl,below=2pt] at (1,0) {$20$};
+    \node[lbl,left=2pt] at (0,3) {$1.00$};
+    \node[lbl,left=2pt] at (0,7.5) {$1.50$};
+  \end{scope}
+\end{tikzpicture}
+\caption{Two tolerance games.  The blue band is the tolerance the client allows on the output and the red band is the tolerance we choose for the input.  On the left, the part of the graph above the red band stays inside the blue band, so we win.  On the right, no red band is narrow enough.}
+\label{fig:tolerance}
+\end{figure}
+
+Notice the order of play.  The client speaks first and names a tolerance for the output.  We respond with a tolerance for the input.  This is the same challenge and response that we met in the definition of a convergent sequence, where the challenge was an $\varepsilon$ and the response was an $N$.  The challenge will again be called $\varepsilon$.  The response is traditionally called $\delta$.
+
+\newthought{You may have been told} that a function is continuous when its graph can be drawn without lifting the pen from the paper.  That picture agrees with what we have just said about the tile and the postage.  But it is no help at all with a function whose graph cannot be drawn.  Consider the function that Dirichlet proposed in 1829,
+\begin{displaymath}
+   g(x) = \left\{
+     \begin{array}{ll}
+       1 & \text{if } x \in \mathbb{Q}, \\
+       0 & \text{if } x \notin \mathbb{Q}.
+     \end{array}
+   \right.
+\end{displaymath}
+Between any two rational numbers there is an irrational one, and between any two irrational numbers a rational one, so the graph of $g$ is a pair of dotted lines with no two dots adjacent.  Is $g$ continuous anywhere?  What about the function $h(x) = x\,g(x)$?  The pen has no opinion.  The definition will.
 
 \section{Functional Limits}
 
-Consider a function $f: A \to \mathbb{R}$.
+Before we define continuity we isolate the idea underneath it, which is the limit of a function at a point.  There is one subtlety to absorb first.  When we ask what $f(x)$ approaches as $x$ approaches $c$, we are asking about the values of $f$ \emph{near} $c$.  The value of $f$ \emph{at} $c$ is beside the point, and $f$ need not even be defined there.  What we do need is that there are points of the domain arbitrarily close to $c$ and different from $c$.  In the language of Chapter Three, $c$ must be a limit point of the domain (Definition~\ref{def:limit-point}).
 
-Recall the topological definitions of a limit point.
-
-\newthought{Limit Point:}
-A point $x$ is called a \emph{limit point} (sometimes called a ``cluster point'' or ``accumulation point'') of a set $A$ if either of the following equivalent conditions holds: 
-
-\begin{enumerate}
-	\item Every $\varepsilon$-neighborhood $V_{\varepsilon}(x)$ of $x$ intersects the set $A$ in some point other than $x$
-	\item The point $x = \lim a_n$ for some sequence $(a_n)$ contained in $A$ satisfying $a_n \neq x$ for all $n \in \mathbb{N}$.  In other words, $x$ is the limit of some sequence contained entirely in $A$ but such that no term of the sequence equals $x$.  
-\end{enumerate}
-
-It is important to remember that limit points of $A$ do not necessarily belong to the set $A$ unless $A$ is closed.
-
-
-
-If we were to say that $c$ is a limit point of the domain of $f$, then intuitively, the statement 
-\[		\lim_{x \to c} f(x) = L\]
-conveys that the values of $f(x)$ get close to $L$ as $x$ gets close to $c$.   The issue of what happens when $x=c$ is irrelevant from the point of view of functional limits.  In fact, like with the limit points of sets, we do not even require that $c$ be in the domain of $f$.
-
-\begin{definition}
-	Let $f: A \to \mathbb{R}$ and let $c$ be a limit point of the domain $A$.  We say that $\lim_{x \to c} f(x) = L$ provided that for all $\varepsilon >0$, there exists a $\delta >0$ such that whenever $0 < |x - c| < \delta$ (and $x\in A$) it follows that $|f(x) - L|<\varepsilon$.  
+\begin{definition}\label{def:functional-limit}
+Let $f : A \to \mathbb{R}$ and let $c$ be a limit point of the domain $A$.  We say that $\lim_{x \to c} f(x) = L$ if, for every $\varepsilon > 0$, there exists a $\delta > 0$ such that whenever $0 < |x - c| < \delta$ and $x \in A$, it follows that $|f(x) - L| < \varepsilon$.
 \end{definition}
 
-Like with sequential limits we can cast this definition with a more topological intuition.
+\marginnote{The inequality $0 < |x - c|$ is only a compact way of saying $x \neq c$.  It is how the definition ignores what happens at $c$ itself.}
+
+As with sequences, the definition can be recast in the language of neighborhoods, and the picture is easier to hold in the mind.
 
 \begin{definition}[Topological Version]
-	Let $c$ be a limit point of the domain of $f: A \to \mathbb{R}$.  We say that $\lim_{x \to c} f(x) = L$ provided that for every $\varepsilon$-neighborhood $V_{\varepsilon}(L)$ of $L$, there exists a $\delta$-neighborhood $V_{\delta}(c)$ around $c$ with the property that for all $x \in V_{\delta}(c)$ different from $c$ it follows that $f(x) \in V_{\varepsilon}(L)$\end{definition}
+Let $c$ be a limit point of the domain of $f : A \to \mathbb{R}$.  We say that $\lim_{x \to c} f(x) = L$ if, for every $\varepsilon$-neighborhood $V_{\varepsilon}(L)$ of $L$, there exists a $\delta$-neighborhood $V_{\delta}(c)$ of $c$ such that every $x \in V_{\delta}(c)$ other than $c$ that lies in $A$ satisfies $f(x) \in V_{\varepsilon}(L)$.
+\end{definition}
 
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1.2cm,y=0.7cm]
+  \fill[epsband] (0,1.6) rectangle (3.55,2.8);
+  \fill[delband] (1.65,0) rectangle (2.35,4.9);
+  \draw[graphaxis] (0,0) -- (3.75,0);
+  \draw[graphaxis] (0,0) -- (0,5.2);
+  \draw[curve] plot[domain=0.3:3.3, samples=40] (\x,{0.8+0.35*\x*\x});
+  \node[openpt] at (2,2.2) {};
+  \node[closedpt] at (2,3.9) {};
+  \draw[guide] (2,0) -- (2,2.05);
+  \node[lbl,below=2pt] at (2,0) {$c$};
+  \node[lbl,left=2pt] at (0,2.2) {$L$};
+  \node[lbl,calm] at (0.72,2.25) {$V_{\varepsilon}(L)$};
+  \node[lbl,above=1pt,accent] at (2,4.9) {$V_{\delta}(c)$};
+\end{tikzpicture}
+\caption{The limit of $f$ at $c$ is $L$.  Over the red band, the graph stays inside the blue band.  The value of $f$ at $c$ itself, shown by the solid dot, plays no part.}
+\end{marginfigure}
 
-Note that the appearance of $f(x)$ carries with it the implicit assumption that $x$ is in the domain of $f$.  On a similar note, there is no reason to discuss functional limits at isolated points in the domain.  Thus, functional limits will only be discussed as $x$ tends toward a limit point of the function's domain.
+\begin{example}
+We show that $\lim_{x \to 2} (3x + 1) = 7$.  Let $\varepsilon > 0$.  Since
+\[ |(3x + 1) - 7| = 3\,|x - 2|, \]
+the response $\delta = \varepsilon/3$ works.  If $0 < |x - 2| < \delta$ then $|(3x+1) - 7| = 3|x - 2| < 3\delta = \varepsilon$.
+\end{example}
 
+\begin{example}\label{ex:tile-limit}
+We show that $\lim_{x \to 3} x^2 = 9$.  This is the tiler's calculation, written as a proof.  Let $\varepsilon > 0$ and choose
+\[ \delta = \min\left\{1, \frac{\varepsilon}{7}\right\}. \]
+Suppose $0 < |x - 3| < \delta$.  Because $\delta \leq 1$, we have $2 < x < 4$ and therefore $|x + 3| < 7$.  Because $\delta \leq \varepsilon/7$, we get
+\[ |x^2 - 9| = |x - 3|\,|x + 3| < \frac{\varepsilon}{7} \cdot 7 = \varepsilon. \]
+\end{example}
 
+The device used here is worth remembering.  The factor $|x + 3|$ is not constant, but it cannot be large when $x$ is near $3$.  Agreeing in advance that $\delta$ will be at most $1$ gives us a fixed bound for it, and after that the problem is as easy as the previous one.
 
+\begin{example}
+Let $f(x) = \dfrac{x^2 - 9}{x - 3}$, a function whose domain is every real number except $3$.  The point $3$ is a limit point of the domain, so we may ask for the limit there.  For $x \neq 3$ we have $f(x) = x + 3$, so $|f(x) - 6| = |x - 3|$, and the response $\delta = \varepsilon$ shows that $\lim_{x \to 3} f(x) = 6$.  The function has a limit at a point where it has no value.
+\end{example}
 
+\newthought{Template for a proof that $\lim_{x \to c} f(x) = L$.}
+\begin{enumerate}
+	\item Let $\varepsilon > 0$ be arbitrary.
+	\item Name a $\delta > 0$.  Finding it usually takes some scratch work, which is best done before the proof is written.
+	\item Assume $0 < |x - c| < \delta$ and $x \in A$.
+	\item Derive the inequality $|f(x) - L| < \varepsilon$.
+\end{enumerate}
 
+\subsection{Limits of Functions and Limits of Sequences}
 
+We spent a whole chapter on the limits of sequences.  It would be a pity to prove everything a second time for functions, and we do not have to.  The next theorem is a bridge between the two kinds of limit.
 
-% ----------------------------------------------------------------------
-% Outline notes for the rest of this chapter (carried over from the stub
-% that used to sit at the end of Chapter Three):
-%
-%   Functional Limits
-%     - structure of the definition follows the "challenge-response"
-%       approach we saw in limits of sequences
-%     - formal definition and topological version
-%     - Sequential Criterion for Functional Limits
-%   Combinations of Continuous Functions
-%   Continuous Functions on Compact Sets
-%     - Uniform Continuity
-%   The Intermediate Value Theorem
-%   Discontinuity
-%
-% Arithmetic Mean Inequality: for lambda_i >= 0,
-%   lambda_1 ... lambda_n <= ((lambda_1 + ... + lambda_n)/n)^n
-% ----------------------------------------------------------------------
+\begin{theorem}[Sequential Criterion for Functional Limits]\label{thm:sequential-criterion}
+Let $f : A \to \mathbb{R}$ and let $c$ be a limit point of $A$.  The following two statements are equivalent.
+\begin{enumerate}[(i)]
+	\item $\lim_{x \to c} f(x) = L$.
+	\item For every sequence $(x_n)$ in $A$ with $x_n \neq c$ and $(x_n) \to c$, it follows that $f(x_n) \to L$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) $\Rightarrow$ (ii).  Assume $\lim_{x \to c} f(x) = L$, and let $(x_n)$ be a sequence in $A$ with $x_n \neq c$ and $(x_n) \to c$.  Let $\varepsilon > 0$.  The definition of the functional limit supplies a $\delta > 0$ such that $0 < |x - c| < \delta$ and $x \in A$ imply $|f(x) - L| < \varepsilon$.  Since $(x_n) \to c$, there is an $N$ such that $|x_n - c| < \delta$ for all $n \geq N$, and $x_n \neq c$ gives $0 < |x_n - c|$.  So $|f(x_n) - L| < \varepsilon$ for all $n \geq N$.
+
+(ii) $\Rightarrow$ (i).  We prove the contrapositive.  Suppose that (i) is false.  Then there is some $\varepsilon_0 > 0$ for which no $\delta$ works.  In particular $\delta = \frac1n$ does not work, so for each $n \in \mathbb{N}$ there is a point $x_n \in A$ with
+\[ 0 < |x_n - c| < \frac1n \qquad \text{and yet} \qquad |f(x_n) - L| \geq \varepsilon_0. \]
+The sequence $(x_n)$ lies in $A$, avoids $c$, and converges to $c$, but $f(x_n)$ does not converge to $L$.  So (ii) is false as well.
+\end{proof}
+
+\marginnote{The second half of this proof is the same manoeuvre as in Theorem~\ref{thm:limit-point-sequence}.  When a statement about every $\delta$ fails, try $\delta = \frac1n$ and collect the offenders into a sequence.}
+
+With this bridge in place, the Algebraic Limit Theorem crosses over from sequences to functions at no cost.
+
+\begin{corollary}[Algebraic Limit Theorem for Functional Limits]\label{cor:alt-functions}
+Let $f$ and $g$ be functions defined on $A$, and suppose $\lim_{x \to c} f(x) = L$ and $\lim_{x \to c} g(x) = M$ at a limit point $c$ of $A$.  Then
+\begin{enumerate}[(i)]
+	\item $\lim_{x \to c} k f(x) = kL$ for every $k \in \mathbb{R}$,
+	\item $\lim_{x \to c} \big(f(x) + g(x)\big) = L + M$,
+	\item $\lim_{x \to c} f(x) g(x) = LM$, and
+	\item $\lim_{x \to c} f(x)/g(x) = L/M$, provided $M \neq 0$ and $g$ is never zero on $A$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Take any sequence $(x_n)$ in $A$ with $x_n \neq c$ and $(x_n) \to c$.  By Theorem~\ref{thm:sequential-criterion}, $f(x_n) \to L$ and $g(x_n) \to M$.  The Algebraic Limit Theorem for sequences then gives $f(x_n) + g(x_n) \to L + M$, and since the sequence was arbitrary, Theorem~\ref{thm:sequential-criterion} applied in the other direction gives (ii).  The other parts are proved in the same way.
+\end{proof}
+
+The bridge is just as useful for showing that a limit does \emph{not} exist.
+
+\begin{corollary}[Divergence Criterion for Functional Limits]\label{cor:divergence-criterion}
+Let $f : A \to \mathbb{R}$ and let $c$ be a limit point of $A$.  If there are two sequences $(x_n)$ and $(y_n)$ in $A$, with $x_n \neq c$ and $y_n \neq c$, such that
+\[ \lim x_n = \lim y_n = c \qquad \text{but} \qquad \lim f(x_n) \neq \lim f(y_n), \]
+then $\lim_{x \to c} f(x)$ does not exist.
+\end{corollary}
+
+\begin{example}
+Dirichlet's function $g$ has no limit at any point.  Let $c \in \mathbb{R}$.  Because $\mathbb{Q}$ is dense in $\mathbb{R}$ there is a sequence of rational numbers $r_n \neq c$ converging to $c$, and because the irrationals are dense there is a sequence of irrational numbers $t_n \neq c$ converging to $c$.  Then $g(r_n) = 1$ for every $n$ and $g(t_n) = 0$ for every $n$.  The two sequences of values have different limits, so $\lim_{x \to c} g(x)$ does not exist.
+\end{example}
+
+\begin{example}
+For an example you can draw, borrow the sine function from calculus\marginnote{We have not yet defined the sine function rigorously, so examples that use it are for illustration only.  Nothing we prove will depend on them.} and consider $f(x) = \sin(1/x)$ for $x \neq 0$.  As $x$ approaches $0$, the quantity $1/x$ runs off to infinity and the sine oscillates between $-1$ and $1$ faster and faster.  Taking $x_n = \frac{1}{2n\pi}$ and $y_n = \frac{1}{2n\pi + \pi/2}$ we have $f(x_n) = 0$ and $f(y_n) = 1$ for every $n$, so $\lim_{x \to 0} \sin(1/x)$ does not exist.
+\end{example}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=4.0cm,y=1.25cm]
+  \draw[graphaxis] (0,0) -- (1.08,0);
+  \draw[graphaxis] (0,-1.25) -- (0,1.35);
+  \draw[curve, line width=0.6pt] plot[domain=1:75, samples=1100, variable=\t] ({1/\t},{sin(deg(\t))});
+  \draw[tickmark] (-0.02,1) -- (0.02,1);
+  \draw[tickmark] (-0.02,-1) -- (0.02,-1);
+  \node[lbl,left=2pt] at (0,1) {$1$};
+  \node[lbl,left=2pt] at (0,-1) {$-1$};
+  \node[lbl,below=2pt] at (1,0) {$1$};
+  \draw[tickmark] (1,-0.04) -- (1,0.04);
+\end{tikzpicture}
+\caption{The graph of $\sin(1/x)$.  Near $0$ it visits every height between $-1$ and $1$ infinitely often and settles on none of them.}
+\end{marginfigure}
+
+\section{Continuous Functions}
+
+We are ready for the main definition.
+
+\begin{definition}\label{def:continuity}
+A function $f : A \to \mathbb{R}$ is \textsc{continuous at a point} $c \in A$ if, for every $\varepsilon > 0$, there exists a $\delta > 0$ such that whenever $|x - c| < \delta$ and $x \in A$, it follows that $|f(x) - f(c)| < \varepsilon$.
+
+If $f$ is continuous at every point of $A$, we say that $f$ is \textsc{continuous on} $A$.
+\end{definition}
+
+Set this beside the definition of a functional limit and two differences stand out.  The point $c$ must now belong to the domain, and the number $L$ has been replaced by $f(c)$.  The condition $0 < |x - c|$ has quietly disappeared, because $x = c$ now does no harm.  It only says that $|f(c) - f(c)| < \varepsilon$.  When $c$ is a limit point of $A$, the definition says precisely that
+\[ \lim_{x \to c} f(x) = f(c). \]
+A function is continuous at $c$ when its limit at $c$ exists and is the value it actually takes there.\marginnote{If $c$ is an isolated point of $A$, then $f$ is automatically continuous at $c$, since a small enough $\delta$ leaves no $x$ to test except $c$ itself.  This is harmless, if a little odd.}
+
+The next theorem gathers the different ways of saying this.
+
+\begin{theorem}[Characterizations of Continuity]\label{thm:continuity-characterizations}
+Let $f : A \to \mathbb{R}$ and let $c \in A$.  The following statements are equivalent.
+\begin{enumerate}[(i)]
+	\item For every $\varepsilon > 0$ there exists a $\delta > 0$ such that $|x - c| < \delta$ and $x \in A$ imply $|f(x) - f(c)| < \varepsilon$.
+	\item For every neighborhood $V_{\varepsilon}(f(c))$ there exists a neighborhood $V_{\delta}(c)$ such that $x \in V_{\delta}(c) \cap A$ implies $f(x) \in V_{\varepsilon}(f(c))$.
+	\item For every sequence $(x_n)$ in $A$ with $(x_n) \to c$, it follows that $f(x_n) \to f(c)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Statement (ii) is statement (i) written with neighborhoods, so these two are equivalent.  The equivalence of (i) and (iii) is proved exactly as in Theorem~\ref{thm:sequential-criterion}, with $f(c)$ in place of $L$.  The only change is that the terms $x_n$ are now allowed to equal $c$, and such terms cause no difficulty because $|f(c) - f(c)| = 0$.
+\end{proof}
+
+Statement (iii) is the one to carry around.  It says that continuous functions are the functions that respect limits.  If $f$ is continuous and $(x_n)$ converges, then
+\[ \lim f(x_n) = f\big(\lim x_n\big), \]
+so a continuous function may be moved through a limit sign.  We have in fact done this already.  In Exercise 2.4.4 we took a limit inside a square root, and the justification we gave there amounts to the continuity of the square root function.
+
+\begin{corollary}[Criterion for Discontinuity]\label{cor:discontinuity-criterion}
+Let $f : A \to \mathbb{R}$ and $c \in A$.  If there is a sequence $(x_n)$ in $A$ with $(x_n) \to c$ such that $f(x_n)$ does not converge to $f(c)$, then $f$ is not continuous at $c$.
+\end{corollary}
+
+\begin{theorem}[Algebraic Continuity Theorem]\label{thm:algebraic-continuity}
+Suppose $f : A \to \mathbb{R}$ and $g : A \to \mathbb{R}$ are continuous at a point $c \in A$.  Then $kf$ is continuous at $c$ for every $k \in \mathbb{R}$, and so are $f + g$ and $fg$.  The quotient $f/g$ is continuous at $c$ as well, provided $g$ is never zero on $A$.
+\end{theorem}
+
+\begin{proof}
+Let $(x_n)$ be a sequence in $A$ converging to $c$.  Then $f(x_n) \to f(c)$ and $g(x_n) \to g(c)$, and the Algebraic Limit Theorem for sequences gives $f(x_n) + g(x_n) \to f(c) + g(c)$, and similarly for the other combinations.  Now apply part (iii) of Theorem~\ref{thm:continuity-characterizations}.
+\end{proof}
+
+\begin{example}
+A constant function is continuous everywhere, since any $\delta$ works.  The function $f(x) = x$ is continuous everywhere, since $\delta = \varepsilon$ works.  By the Algebraic Continuity Theorem, every polynomial
+\[ p(x) = a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n \]
+is continuous on $\mathbb{R}$, being built from these two by finitely many products and sums.  A quotient of two polynomials is continuous wherever its denominator is not zero.
+\end{example}
+
+\begin{example}\label{ex:sqrt-continuous}
+The function $f(x) = \sqrt{x}$ is continuous on $[0, \infty)$.  At $c = 0$, given $\varepsilon > 0$ take $\delta = \varepsilon^2$.  Then $0 \leq x < \delta$ gives $\sqrt{x} < \varepsilon$.  At a point $c > 0$ we use the identity
+\[ |\sqrt{x} - \sqrt{c}| = \frac{|x - c|}{\sqrt{x} + \sqrt{c}} \leq \frac{|x - c|}{\sqrt{c}}, \]
+which shows that $\delta = \varepsilon\sqrt{c}$ works.
+\end{example}
+
+\begin{example}
+Dirichlet's function $g$ is continuous nowhere.  We saw that $g$ has no limit at any point $c$, so its limit at $c$ certainly cannot equal $g(c)$.
+\end{example}
+
+\begin{example}\label{ex:one-point}
+Now consider
+\begin{displaymath}
+   h(x) = x\,g(x) = \left\{
+     \begin{array}{ll}
+       x & \text{if } x \in \mathbb{Q}, \\
+       0 & \text{if } x \notin \mathbb{Q}.
+     \end{array}
+   \right.
+\end{displaymath}
+At $c = 0$ this function is continuous.  Whether $x$ is rational or not, $|h(x) - h(0)| = |h(x)| \leq |x|$, so $\delta = \varepsilon$ works.  At any other point $c \neq 0$ it is not.  A sequence of rationals $r_n \to c$ has $h(r_n) = r_n \to c$, while a sequence of irrationals $t_n \to c$ has $h(t_n) = 0 \to 0$, and $c \neq 0$.  One of the two limits must differ from $h(c)$, and the Criterion for Discontinuity applies.
+
+So $h$ is continuous at exactly one point.  The idea of drawing a graph without lifting the pen could never have told us that.
+\end{example}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1.15cm,y=1.15cm]
+  \fill[epsband] (-1.9,-0.5) rectangle (1.9,0.5);
+  \fill[delband] (-0.5,-1.7) rectangle (0.5,1.7);
+  \draw[graphaxis] (-2,0) -- (2.05,0);
+  \draw[graphaxis] (0,-1.8) -- (0,1.9);
+  \draw[accent, line width=1.1pt, dash pattern=on 1pt off 2.2pt] (-1.7,-1.7) -- (1.7,1.7);
+  \draw[accent, line width=1.1pt, dash pattern=on 1pt off 2.2pt] (-1.9,0) -- (1.9,0);
+  \node[seqpt] at (0,0) {};
+  \node[lbl,anchor=east] at (1.42,1.62) {$x \in \mathbb{Q}$};
+  \node[lbl,below=2pt] at (1.5,0) {$x \notin \mathbb{Q}$};
+  \node[lbl,left=2pt,calm] at (0,0.5) {$\varepsilon$};
+  \node[lbl,below=1pt,accent] at (0.5,-1.7) {$\delta$};
+\end{tikzpicture}
+\caption{The function $h$ lives on two dotted lines.  Near the origin both lines are inside the blue band, and nowhere else do they come together.}
+\end{marginfigure}
+
+Functions are combined by composition as well as by arithmetic, and continuity survives that too.
+
+\begin{theorem}[Composition of Continuous Functions]\label{thm:composition}
+Let $f : A \to \mathbb{R}$ and $g : B \to \mathbb{R}$, where the range of $f$ is contained in $B$, so that the composition $g \circ f(x) = g(f(x))$ is defined on $A$.  If $f$ is continuous at $c \in A$ and $g$ is continuous at $f(c)$, then $g \circ f$ is continuous at $c$.
+\end{theorem}
+
+\begin{proof}
+Let $(x_n)$ be a sequence in $A$ with $(x_n) \to c$.  Since $f$ is continuous at $c$, we have $f(x_n) \to f(c)$.  This is a sequence in $B$ converging to $f(c)$, and $g$ is continuous at $f(c)$, so $g(f(x_n)) \to g(f(c))$.
+\end{proof}
+
+For instance, $\sqrt{x^2 + 1}$ is continuous on $\mathbb{R}$, being the composition of a polynomial with the square root.
+
+\section{Continuous Functions on Compact Sets}
+
+A function $f : A \to \mathbb{R}$ carries each subset $B$ of its domain to a set of values, $f(B) = \{f(x) : x \in B\}$.  If $f$ is continuous, which properties of $B$ are passed on to $f(B)$?  The answer is fewer than one might hope.
+\begin{itemize}
+	\item \emph{Open sets need not go to open sets.}  The function $f(x) = x^2$ takes the open interval $(-1,1)$ to $[0,1)$.
+	\item \emph{Closed sets need not go to closed sets.}  The function $f(x) = \frac{1}{1+x^2}$ takes the closed set $[0, \infty)$ to $(0,1]$.
+	\item \emph{Bounded sets need not go to bounded sets.}  The function $f(x) = \frac1x$ takes the bounded set $(0,1)$ to $(1, \infty)$.
+\end{itemize}
+In the second example the set was closed but not bounded, and in the third it was bounded but not closed.  When a set is both, the story changes completely.
+
+\begin{theorem}[Preservation of Compact Sets]\label{thm:preserve-compact}
+Let $f : A \to \mathbb{R}$ be continuous on $A$.  If $K \subseteq A$ is compact, then $f(K)$ is compact.
+\end{theorem}
+
+\begin{proof}
+Let $(y_n)$ be any sequence in $f(K)$.  We must find a subsequence converging to a point of $f(K)$.  Each $y_n$ is a value of $f$ on $K$, so we can choose $x_n \in K$ with $f(x_n) = y_n$.  Since $K$ is compact, $(x_n)$ has a subsequence $(x_{n_k})$ converging to a point $x \in K$.  By continuity,
+\[ y_{n_k} = f(x_{n_k}) \to f(x), \]
+and $f(x) \in f(K)$.
+\end{proof}
+
+The proof is short because the definitions were made for each other.  Compactness is about sequences having convergent subsequences, and continuity is about functions preserving convergence.  An immediate consequence is one of the most useful theorems in analysis.
+
+\begin{theorem}[Extreme Value Theorem]\label{thm:evt}
+If $f : K \to \mathbb{R}$ is continuous on a nonempty compact set $K$, then $f$ attains a maximum and a minimum value.  That is, there are points $x_0, x_1 \in K$ such that
+\[ f(x_0) \leq f(x) \leq f(x_1) \qquad \text{for all } x \in K. \]
+\end{theorem}
+
+\begin{proof}
+The set $f(K)$ is compact, so it is bounded and closed.  Because it is bounded and nonempty, $\alpha = \sup f(K)$ exists.  A supremum is either a member of its set or a limit point of it, as we observed in the proof of Theorem~\ref{thm:connected-intervals}, and $f(K)$ is closed, so in either case $\alpha \in f(K)$.  This means $\alpha = f(x_1)$ for some $x_1 \in K$, and $f(x) \leq \alpha = f(x_1)$ for all $x \in K$.  The minimum is found in the same way from $\inf f(K)$.
+\end{proof}
+
+Every hypothesis of the Extreme Value Theorem is needed, as Figure~\ref{fig:evt-failures} shows.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+  % (a) domain not closed
+  \begin{scope}[x=2.3cm,y=2.3cm]
+    \draw[graphaxis] (0,0) -- (1.2,0);
+    \draw[graphaxis] (0,0) -- (0,1.2);
+    \draw[guide] (0,1) -- (1,1) -- (1,0);
+    \draw[curve] (0,0) -- (1,1);
+    \node[openpt] at (0,0) {};
+    \node[openpt] at (1,1) {};
+    \node[lbl,below=2pt] at (1,0) {$1$};
+    \node[lbl,left=2pt] at (0,1) {$1$};
+    \node[lbl] at (0.6,-0.42) {$f(x) = x$ on $(0,1)$};
+    \node[lbl] at (0.6,-0.66) {domain not closed};
+  \end{scope}
+  % (b) domain not bounded
+  \begin{scope}[shift={(3.75,0)},x=0.42cm,y=2.3cm]
+    \draw[graphaxis] (0,0) -- (6.6,0);
+    \draw[graphaxis] (0,0) -- (0,1.2);
+    \draw[guide] (0,1) -- (6.4,1);
+    \draw[curve] plot[domain=0:6.3, samples=50] (\x,{\x/(1+\x)});
+    \node[closedpt] at (0,0) {};
+    \node[lbl,left=2pt] at (0,1) {$1$};
+    \node[lbl] at (3.3,-0.42) {$f(x) = \frac{x}{1+x}$ on $[0,\infty)$};
+    \node[lbl] at (3.3,-0.66) {domain not bounded};
+  \end{scope}
+  % (c) not continuous
+  \begin{scope}[shift={(7.5,0)},x=2.3cm,y=2.3cm]
+    \draw[graphaxis] (0,0) -- (1.2,0);
+    \draw[graphaxis] (0,0) -- (0,1.2);
+    \draw[guide] (0,1) -- (1,1) -- (1,0);
+    \draw[curve] (0,0) -- (1,1);
+    \node[closedpt] at (0,0) {};
+    \node[openpt] at (1,1) {};
+    \node[closedpt] at (1,0) {};
+    \node[lbl,below=3pt] at (1,0) {$1$};
+    \node[lbl,left=2pt] at (0,1) {$1$};
+    \node[lbl] at (0.6,-0.42) {$f(1)$ moved to $0$};
+    \node[lbl] at (0.6,-0.66) {not continuous};
+  \end{scope}
+\end{tikzpicture}
+\caption{Three functions that never reach the value $1$, although they come arbitrarily close to it.  Each one fails exactly one hypothesis of the Extreme Value Theorem.}
+\label{fig:evt-failures}
+\end{figure}
+
+\subsection{Uniform Continuity}
+
+Let us go back to the tiler.  For a tile of side $3$ she found that an area tolerance of $\varepsilon$ could be met by cutting the side to within $\varepsilon/7$.  Suppose she is now asked for a much larger tile, of side $30$.  The same calculation gives
+\[ |x^2 - 900| = |x - 30|\,|x + 30| < 61\,|x - 30| \]
+when $x$ is within $1$ of $30$, so now she must cut to within $\varepsilon/61$.  The function is the same and the tolerance on the area is the same, but the answer has become nearly nine times more demanding.  Where the graph of $x^2$ is steep, a small error in the side makes a large error in the area.
+
+This is a feature of the definition of continuity that is easy to overlook.  When we say $f$ is continuous on $A$, the response $\delta$ is allowed to depend on the point $c$ as well as on the challenge $\varepsilon$.  For some functions there is a single $\delta$ that answers a given $\varepsilon$ at every point of the domain simultaneously.
+
+\begin{definition}\label{def:uniform-continuity}
+A function $f : A \to \mathbb{R}$ is \textsc{uniformly continuous} on $A$ if, for every $\varepsilon > 0$, there exists a $\delta > 0$ such that for all $x, y \in A$, $|x - y| < \delta$ implies $|f(x) - f(y)| < \varepsilon$.
+\end{definition}
+
+The difference from ordinary continuity is entirely in the order of the quantifiers.  For continuity on $A$, we are told the point $c$ and the tolerance $\varepsilon$ and then choose $\delta$.  For uniform continuity, we are told only $\varepsilon$, and our $\delta$ must be chosen before we know where it will be used.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=3.3cm,y=0.78cm]
+  \fill[epsband] (0.273,-0.14) rectangle (0.927,0.86);
+  \fill[epsband] (1.773,3.11) rectangle (2.027,4.11);
+  \draw[graphaxis] (0,0) -- (2.42,0);
+  \draw[graphaxis] (0,-0.2) -- (0,5.6);
+  \draw[curve] plot[domain=0:2.3, samples=50] (\x,{\x*\x});
+  \draw[guide] (0.273,-0.14) -- (0.273,-0.55);
+  \draw[guide] (0.927,-0.14) -- (0.927,-0.55);
+  \draw[guide] (1.773,3.11) -- (1.773,-0.55);
+  \draw[guide] (2.027,3.11) -- (2.027,-0.55);
+  \draw[bracedeco] (0.927,-0.62) -- (0.273,-0.62) node[midway,below=4pt,lbl] {wide};
+  \draw[bracedeco] (2.027,-0.62) -- (1.773,-0.62) node[midway,below=4pt,lbl] {narrow};
+  \node[seqpt] at (0.6,0.36) {};
+  \node[seqpt] at (1.9,3.61) {};
+  \draw[bracedeco] (0.927,0.86) -- (0.927,-0.14) node[midway,right=4pt,lbl,calm] {$2\varepsilon$};
+  \draw[bracedeco] (2.027,4.11) -- (2.027,3.11) node[midway,right=4pt,lbl,calm] {$2\varepsilon$};
+\end{tikzpicture}
+\caption{The function $x^2$ at two different points.  The two boxes have the same height, which is the tolerance on the output.  Where the graph is steeper, the box that keeps the graph inside must be narrower.  On the whole real line no single width will do.}
+\label{fig:uniform}
+\end{figure}
+
+\begin{example}
+The function $f(x) = 3x + 1$ is uniformly continuous on $\mathbb{R}$.  Since $|f(x) - f(y)| = 3|x - y|$, the response $\delta = \varepsilon/3$ works for every pair of points.  A straight line is equally steep everywhere.
+\end{example}
+
+To show that a function is \emph{not} uniformly continuous we need to negate the definition, and it is convenient to have the negation in the form of sequences.
+
+\begin{theorem}[Sequential Criterion for Absence of Uniform Continuity]\label{thm:not-uniform}
+A function $f : A \to \mathbb{R}$ fails to be uniformly continuous on $A$ if and only if there exist an $\varepsilon_0 > 0$ and two sequences $(x_n)$ and $(y_n)$ in $A$ such that
+\[ |x_n - y_n| \to 0 \qquad \text{but} \qquad |f(x_n) - f(y_n)| \geq \varepsilon_0 \quad \text{for all } n. \]
+\end{theorem}
+
+\begin{proof}
+To say that $f$ is not uniformly continuous is to say that there is an $\varepsilon_0 > 0$ for which no $\delta$ works.  If so, then for each $n$ the choice $\delta = \frac1n$ fails, which means there are points $x_n, y_n \in A$ with $|x_n - y_n| < \frac1n$ and $|f(x_n) - f(y_n)| \geq \varepsilon_0$.  These are the required sequences.
+
+Conversely, if such sequences exist, then no $\delta$ can answer the challenge $\varepsilon_0$.  Given any $\delta > 0$ there is an $n$ with $|x_n - y_n| < \delta$, and yet $|f(x_n) - f(y_n)| \geq \varepsilon_0$.
+\end{proof}
+
+\begin{example}
+The function $f(x) = x^2$ is not uniformly continuous on $\mathbb{R}$.  Take $x_n = n$ and $y_n = n + \frac1n$.  Then $|x_n - y_n| = \frac1n \to 0$, but
+\[ |f(x_n) - f(y_n)| = \left(n + \frac1n\right)^2 - n^2 = 2 + \frac{1}{n^2} \geq 2. \]
+On the other hand, the same function \emph{is} uniformly continuous on the interval $[0,10]$.  For $x, y$ in that interval, $|x^2 - y^2| = |x - y|\,|x + y| \leq 20\,|x - y|$, so $\delta = \varepsilon/20$ works.  Uniform continuity is a property of a function together with its domain.
+\end{example}
+
+\begin{example}
+Unboundedness of the domain is not the only obstacle.  The function $f(x) = \frac1x$ is continuous on the bounded interval $(0,1)$ but not uniformly continuous there.  Take $x_n = \frac1n$ and $y_n = \frac{1}{n+1}$.  Then $|x_n - y_n| = \frac{1}{n(n+1)} \to 0$, but $|f(x_n) - f(y_n)| = 1$.
+\end{example}
+
+In the first example the trouble came from a domain that was not bounded, and in the second from a domain that was not closed.  By now this pattern should be familiar.
+
+\begin{theorem}[Uniform Continuity on Compact Sets]\label{thm:uniform-compact}
+A function that is continuous on a compact set $K$ is uniformly continuous on $K$.
+\end{theorem}
+
+\begin{proof}
+This is the local-to-global principle of Chapter Three in action.  Continuity gives us a $\delta$ at each point, and compactness will let us get by with finitely many of them.
+
+Let $\varepsilon > 0$.  For each point $c \in K$, continuity at $c$ gives a $\delta_c > 0$ such that
+\[ |x - c| < \delta_c \ \text{ and } \ x \in K \quad \text{imply} \quad |f(x) - f(c)| < \frac{\varepsilon}{2}. \]
+The neighborhoods $V_{\delta_c/2}(c)$, one for each $c \in K$, form an open cover of $K$.  Note that we have used only half of each radius.  By the Heine--Borel Theorem (Theorem~\ref{thm:heine-borel}), finitely many of these neighborhoods cover $K$.  Call their centers $c_1, \ldots, c_m$, and let
+\[ \delta = \min\left\{\frac{\delta_{c_1}}{2}, \ldots, \frac{\delta_{c_m}}{2}\right\}. \]
+Now suppose $x, y \in K$ with $|x - y| < \delta$.  The point $x$ lies in one of the finitely many neighborhoods, say $|x - c_i| < \delta_{c_i}/2$.  Then $y$ is close to the same center, because
+\[ |y - c_i| \leq |y - x| + |x - c_i| < \delta + \frac{\delta_{c_i}}{2} \leq \delta_{c_i}. \]
+So both $x$ and $y$ are within $\delta_{c_i}$ of $c_i$, and therefore
+\[ |f(x) - f(y)| \leq |f(x) - f(c_i)| + |f(c_i) - f(y)| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon. \qedhere \]
+\end{proof}
+
+\marginnote{Why cover $K$ with neighborhoods of \emph{half} the radius?  To leave room.  Knowing that $x$ is within $\delta_{c_i}/2$ of the center, we can still move a little way to $y$ without leaving the full neighborhood.}
+
+\section{The Intermediate Value Theorem}
+
+\begin{theorem}[Intermediate Value Theorem]\label{thm:ivt}
+Let $f : [a,b] \to \mathbb{R}$ be continuous.  If $L$ is a real number strictly between $f(a)$ and $f(b)$, then there is a point $c \in (a,b)$ with $f(c) = L$.
+\end{theorem}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=0.88cm,y=1cm]
+  \draw[graphaxis] (0,0) -- (4.75,0);
+  \draw[graphaxis] (0,0) -- (0,4);
+  \draw[guide] (0,1.9) -- (4.5,1.9);
+  \draw[guide] (0.5,0) -- (0.5,0.127) -- (0,0.127);
+  \draw[guide] (4.2,0) -- (4.2,3.5) -- (0,3.5);
+  \draw[guide] (2.4,0) -- (2.4,1.9);
+  \draw[curve] plot[domain=0.5:4.2, samples=50] (\x,{1.9+0.5*(\x-2.4)+0.12*(\x-2.4)^3});
+  \node[closedpt] at (0.5,0.127) {};
+  \node[closedpt] at (4.2,3.5) {};
+  \node[seqpt] at (2.4,1.9) {};
+  \node[lbl,below=2pt] at (0.5,0) {$a$};
+  \node[lbl,below=2pt] at (2.4,0) {$c$};
+  \node[lbl,below=2pt] at (4.2,0) {$b$};
+  \node[lbl,left=2pt] at (0,0.3) {$f(a)$};
+  \node[lbl,left=2pt] at (0,1.9) {$L$};
+  \node[lbl,left=2pt] at (0,3.5) {$f(b)$};
+\end{tikzpicture}
+\caption{To get from the height $f(a)$ to the height $f(b)$, a continuous graph must cross every level $L$ in between.}
+\end{marginfigure}
+
+Of all the theorems in this chapter, this one looks the most obvious.  A pen that starts below a line and ends above it must cross the line.  But the statement is not as innocent as it looks.  Consider the function $f(x) = x^2 - 2$, with only rational numbers allowed as inputs.  Then $f(1) = -1$ and $f(2) = 2$, and yet there is no rational $c$ with $f(c) = 0$, as we proved at the start of Chapter One.  Among the rationals the theorem is false.  Any proof of it must therefore use the completeness of $\mathbb{R}$ in an essential way.
+
+Our proof will use completeness in the form of Theorem~\ref{thm:connected-intervals}, which says that the connected subsets of $\mathbb{R}$ are the intervals.  What we need in addition is that continuous functions do not tear connected sets apart.
+
+\begin{theorem}[Preservation of Connected Sets]\label{thm:preserve-connected}
+Let $f : A \to \mathbb{R}$ be continuous.  If $E \subseteq A$ is connected, then $f(E)$ is connected.
+\end{theorem}
+
+\begin{proof}
+We prove the contrapositive.  Suppose $f(E)$ is disconnected, so that $f(E) = P \cup Q$ where $P$ and $Q$ are nonempty separated sets.  Pull these two pieces back to the domain by setting
+\[ S = \{x \in E : f(x) \in P\}, \qquad T = \{x \in E : f(x) \in Q\}. \]
+Both are nonempty, and $E = S \cup T$.  We claim that $S$ and $T$ are separated, which will show that $E$ is disconnected.
+
+Suppose, for contradiction, that some point $x \in T$ belongs to $\overline{S}$.  The sets $S$ and $T$ have no point in common, because $P$ and $Q$ have none.  So $x$ must be a limit point of $S$, and there is a sequence $(s_n)$ in $S$ with $(s_n) \to x$.  Since $f$ is continuous at $x$, we have $f(s_n) \to f(x)$.  Each $f(s_n)$ lies in $P$, so the limit $f(x)$ lies in the closed set $\overline{P}$.  But $x \in T$ means $f(x) \in Q$.  This puts $f(x)$ in $\overline{P} \cap Q$, which is empty.  The contradiction shows that $\overline{S} \cap T = \emptyset$, and the same argument with the roles exchanged gives $S \cap \overline{T} = \emptyset$.
+\end{proof}
+
+\begin{proof}[Proof of the Intermediate Value Theorem]
+The interval $[a,b]$ is connected, so $f([a,b])$ is connected by Theorem~\ref{thm:preserve-connected}.  It contains the numbers $f(a)$ and $f(b)$, and $L$ lies strictly between them.  By Theorem~\ref{thm:connected-intervals}, $L$ belongs to $f([a,b])$ too.  So $L = f(c)$ for some $c \in [a,b]$, and $c$ is neither $a$ nor $b$ because $L$ is neither $f(a)$ nor $f(b)$.
+\end{proof}
+
+Here are two things the theorem can do.
+
+\begin{example}[Roots exist]\label{ex:roots}
+Let $y > 0$ and $n \in \mathbb{N}$.  We claim there is a positive real number $x$ with $x^n = y$.  The function $f(x) = x^n$ is a polynomial, so it is continuous on the interval $[0, 1 + y]$.  At the left endpoint, $f(0) = 0 < y$.  At the right endpoint, $f(1 + y) = (1+y)^n \geq 1 + y > y$.  By the Intermediate Value Theorem there is a point $x$ strictly between $0$ and $1 + y$ where $f(x) = y$.
+
+In particular there is a real number whose square is $2$.  We have been writing $\sqrt2$ since Chapter One on trust, and that debt is now paid.
+\end{example}
+
+\begin{example}[Fixed points]
+Let $f : [0,1] \to [0,1]$ be continuous.  Then $f$ has a \emph{fixed point}, a number $x$ with $f(x) = x$.  To see this, let $g(x) = f(x) - x$, which is continuous on $[0,1]$.  Since the values of $f$ lie in $[0,1]$, we have $g(0) = f(0) \geq 0$ and $g(1) = f(1) - 1 \leq 0$.  If either of these is zero we have found a fixed point.  Otherwise $g(0) > 0 > g(1)$, and the Intermediate Value Theorem gives a point $x$ with $g(x) = 0$.
+\end{example}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=3.6cm,y=3.6cm]
+  \draw[tickmark] (0,0) rectangle (1,1);
+  \draw[guide] (0,0) -- (1,1);
+  \draw[curve] plot[domain=0:1, samples=40] (\x,{0.75-0.55*\x*\x});
+  \node[closedpt] at (0,0.75) {};
+  \node[closedpt] at (1,0.2) {};
+  \node[seqpt] at (0.5708,0.5708) {};
+  \node[lbl,below=2pt] at (0,0) {$0$};
+  \node[lbl,below=2pt] at (1,0) {$1$};
+  \node[lbl,left=2pt] at (0,1) {$1$};
+  \node[lbl,rotate=45,above=1pt] at (0.25,0.25) {$y = x$};
+\end{tikzpicture}
+\caption{A continuous graph that starts on the left side of the square and ends on the right side must cross the diagonal.  The crossing is a fixed point.}
+\end{marginfigure}
+
+\begin{dangerousbend}
+The converse of the Intermediate Value Theorem is false.  A function can take every intermediate value on every interval without being continuous.  The function equal to $\sin(1/x)$ for $x \neq 0$ and to $0$ at $x = 0$ is an example.  Taking all the values in between is a consequence of continuity, not a definition of it.
+\end{dangerousbend}
+
+\section{How Discontinuous Can a Function Be?}
+
+We have seen a function that is discontinuous at every point, and another that is continuous at just one.  It is natural to ask which sets can arise as the set of points where a function fails to be continuous.  Could a function be continuous at every irrational number and discontinuous at every rational one?  It sounds impossible, since the two kinds of number are so thoroughly mixed together.  Here is such a function, discovered by Carl Thomae in 1875.
+\begin{displaymath}
+   t(x) = \left\{
+     \begin{array}{ll}
+       \dfrac1n & \text{if } x = \dfrac{m}{n} \text{ is rational, in lowest terms with } n > 0, \\[2ex]
+       0 & \text{if } x \text{ is irrational.}
+     \end{array}
+   \right.
+\end{displaymath}
+So $t\left(\frac12\right) = \frac12$, $t\left(\frac34\right) = \frac14$ and $t(\sqrt2) = 0$, while $t(0) = t(1) = 1$ because the integers have denominator $1$.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=9cm,y=6.2cm]
+  \draw[graphaxis] (0,0) -- (1.06,0);
+  \draw[graphaxis] (0,0) -- (0,1.12);
+  \foreach \n in {2,...,26} {
+    \foreach \m in {1,...,\n} {
+      \pgfmathtruncatemacro{\g}{gcd(\m,\n)}
+      \ifnum\g=1
+        \fill[accent] ({\m/\n},{1/\n}) circle (0.75pt);
+      \fi
+    }
+  }
+  \fill[accent] (0,1) circle (1.1pt);
+  \fill[accent] (1,1) circle (1.1pt);
+  \foreach \y/\l in {1/1, 0.5/\frac12, 0.3333/\frac13, 0.25/\frac14} {
+    \draw[tickmark] (-0.008,\y) -- (0.008,\y);
+    \node[lbl,left=2pt] at (0,\y) {$\l$};
+  }
+  \foreach \x/\l in {0.5/\frac12, 1/1} {
+    \draw[tickmark] (\x,-0.02) -- (\x,0.02);
+    \node[lbl,below=3pt] at (\x,0) {$\l$};
+  }
+  \node[lbl,below=3pt] at (0,0) {$0$};
+\end{tikzpicture}
+\caption{Thomae's function on $[0,1]$, showing the rationals with denominator up to $26$.  Its value at every irrational is $0$.  Only a few points are high up, and near any irrational number the points crowd down toward the axis.}
+\label{fig:thomae}
+\end{figure}
+
+\newthought{$t$ is discontinuous at every rational number.}  Let $c$ be rational, so that $t(c) > 0$.  Choose irrational numbers $t_n \to c$.  Then $t(t_n) = 0$ for all $n$, which does not converge to $t(c)$.
+
+\newthought{$t$ is continuous at every irrational number.}  Let $c$ be irrational, so that $t(c) = 0$, and let $\varepsilon > 0$.  Where is $t$ large?  The value $t(x)$ can be $\varepsilon$ or more only if $x$ is a rational number whose denominator is at most $1/\varepsilon$.  In the interval $(c - 1, c + 1)$ there are only finitely many such rationals, since there are finitely many denominators to consider and each one has finitely many numerators that land in the interval.  None of these finitely many points is $c$, because $c$ is irrational.  So we can choose $\delta > 0$, no larger than $1$, to be smaller than the distance from $c$ to the nearest of them.  Every $x$ with $|x - c| < \delta$ then satisfies $|t(x) - t(c)| = t(x) < \varepsilon$.
+
+So the answer to our question is yes.  The picture makes the proof visible.  Draw a horizontal line at height $\varepsilon$.  Only finitely many dots lie on or above it, and an irrational $c$ is not under any of them, so there is room around $c$ where the function stays below the line.
+
+Curiously, the reverse arrangement is impossible.  No function on $\mathbb{R}$ is continuous at every rational number and discontinuous at every irrational one.  The proof needs ideas beyond this chapter, but the reason can be stated.  The set of discontinuities of any function is a countable union of closed sets, and the set of irrational numbers is not.
+
+\subsection{Three Kinds of Discontinuity}
+
+To sort discontinuities into kinds we approach a point from one side at a time.
+
+\begin{definition}
+Let $f : A \to \mathbb{R}$, and let $c$ be a limit point of $A \cap (c, \infty)$.  We say that the \textsc{right-hand limit} of $f$ at $c$ is $L$, and write $\lim_{x \to c^+} f(x) = L$, if for every $\varepsilon > 0$ there exists a $\delta > 0$ such that $0 < x - c < \delta$ and $x \in A$ imply $|f(x) - L| < \varepsilon$.  The \textsc{left-hand limit} $\lim_{x \to c^-} f(x)$ is defined in the same way, with $0 < c - x < \delta$.
+\end{definition}
+
+The ordinary limit $\lim_{x \to c} f(x)$ exists exactly when both one-sided limits exist and are equal.  If $f$ is discontinuous at $c$, then one of three things has gone wrong.
+\begin{itemize}
+	\item The limit $\lim_{x \to c} f(x)$ exists but is not equal to $f(c)$.  This is a \textsc{removable discontinuity}, because changing the single value $f(c)$ would repair it.
+	\item Both one-sided limits exist but they are different.  This is a \textsc{jump discontinuity}.  The postage function has one at $20$.
+	\item At least one of the one-sided limits does not exist.  This is an \textsc{essential discontinuity}.  The function $\sin(1/x)$ has one at $0$, however we define it there, and Dirichlet's function has one at every point.
+\end{itemize}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+  % removable
+  \begin{scope}[x=1cm,y=1cm]
+    \draw[graphaxis] (0,0) -- (3,0);
+    \draw[graphaxis] (0,0) -- (0,2.6);
+    \draw[curve] plot[domain=0.3:2.7, samples=30] (\x,{0.5+0.22*\x*\x});
+    \node[openpt] at (1.5,0.995) {};
+    \node[closedpt] at (1.5,1.9) {};
+    \draw[guide] (1.5,0) -- (1.5,0.85);
+    \node[lbl,below=2pt] at (1.5,0) {$c$};
+    \node[lbl] at (1.5,-0.75) {removable};
+  \end{scope}
+  % jump
+  \begin{scope}[shift={(3.75,0)},x=1cm,y=1cm]
+    \draw[graphaxis] (0,0) -- (3,0);
+    \draw[graphaxis] (0,0) -- (0,2.6);
+    \draw[curve] plot[domain=0.3:1.5, samples=20] (\x,{0.45+0.3*\x});
+    \draw[curve] plot[domain=1.5:2.7, samples=20] (\x,{1.3+0.35*\x});
+    \node[closedpt] at (1.5,0.9) {};
+    \node[openpt] at (1.5,1.825) {};
+    \draw[guide] (1.5,0) -- (1.5,0.75);
+    \node[lbl,below=2pt] at (1.5,0) {$c$};
+    \node[lbl] at (1.5,-0.75) {jump};
+  \end{scope}
+  % essential
+  \begin{scope}[shift={(7.5,0)},x=1cm,y=1cm]
+    \draw[graphaxis] (0,0) -- (3,0);
+    \draw[graphaxis] (0,0) -- (0,2.6);
+    \draw[curve] plot[domain=0.3:1.5, samples=20] (\x,{0.6+0.35*\x});
+    \draw[curve, line width=0.6pt] plot[domain=1.1:90, samples=900, variable=\t] ({1.5+1.3/\t},{1.3+0.8*sin(deg(0.55*\t))});
+    \node[closedpt] at (1.5,1.125) {};
+    \draw[guide] (1.5,0) -- (1.5,0.98);
+    \node[lbl,below=2pt] at (1.5,0) {$c$};
+    \node[lbl] at (1.5,-0.75) {essential};
+  \end{scope}
+\end{tikzpicture}
+\caption{The three ways a function can fail to be continuous at a point $c$.}
+\label{fig:discontinuities}
+\end{figure}
+
+\subsection{Monotone Functions}
+
+A function $f$ is \textsc{increasing} on a set if $x < y$ implies $f(x) \leq f(y)$, \textsc{decreasing} if $x < y$ implies $f(x) \geq f(y)$, and \textsc{monotone} if it is one or the other.  Monotone functions are the functions that never change direction, and that restriction tames their discontinuities considerably.
+
+\begin{theorem}\label{thm:monotone-limits}
+Let $f$ be increasing on an open interval $(a,b)$.  Then at every point $c \in (a,b)$ both one-sided limits exist, and
+\[ \lim_{x \to c^-} f(x) \ \leq\ f(c)\ \leq\ \lim_{x \to c^+} f(x). \]
+In particular, the only discontinuities an increasing function can have are jumps.  The same is true of decreasing functions, with the inequalities reversed.
+\end{theorem}
+
+\begin{proof}
+Let $c \in (a,b)$.  The set $\{f(x) : a < x < c\}$ is nonempty and is bounded above by $f(c)$, because $f$ is increasing.  Let $L$ be its supremum, so that $L \leq f(c)$.  We claim that $L$ is the left-hand limit.
+
+Let $\varepsilon > 0$.  Since $L - \varepsilon$ is not an upper bound, there is a point $x_0$ with $a < x_0 < c$ and $f(x_0) > L - \varepsilon$.  Put $\delta = c - x_0$.  If $0 < c - x < \delta$, then $x_0 < x < c$, and so
+\[ L - \varepsilon < f(x_0) \leq f(x) \leq L. \]
+Hence $|f(x) - L| < \varepsilon$, as required.  The right-hand limit is the infimum of $\{f(x) : c < x < b\}$, by the same argument.
+\end{proof}
+
+This is the Monotone Convergence Theorem in a new setting.  A monotone function, like a monotone sequence, has nowhere to go but toward its supremum.
+
+\begin{theorem}\label{thm:monotone-countable}
+A monotone function on an open interval has at most countably many discontinuities.
+\end{theorem}
+
+\begin{proof}
+Let $f$ be increasing on $(a,b)$.  The decreasing case is the same.  At a point $c$ where $f$ is discontinuous, the two one-sided limits in Theorem~\ref{thm:monotone-limits} cannot be equal, so there is a gap between them.  Since $\mathbb{Q}$ is dense in $\mathbb{R}$ we can choose a rational number $r(c)$ inside the gap,
+\[ \lim_{x \to c^-} f(x) \ <\ r(c)\ <\ \lim_{x \to c^+} f(x). \]
+Different discontinuities receive different rational numbers.  Indeed, if $c < d$ are two of them, pick any point $z$ with $c < z < d$.  Then
+\[ r(c) < \lim_{x \to c^+} f(x) \leq f(z) \leq \lim_{x \to d^-} f(x) < r(d). \]
+So $r$ is a one-to-one map from the set of discontinuities of $f$ into $\mathbb{Q}$.  Since $\mathbb{Q}$ is countable, the set of discontinuities is at most countable.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=0.88cm,y=1cm]
+  \draw[graphaxis] (0,0) -- (4.7,0);
+  \draw[graphaxis] (0,0) -- (0,3.5);
+  \draw[curve] (0.3,0.49) -- (1.6,0.88);
+  \draw[curve] (1.6,1.5) -- (3.0,1.85);
+  \draw[curve] (3.0,2.6) -- (4.3,2.99);
+  \node[closedpt] at (1.6,0.88) {};
+  \node[openpt] at (1.6,1.5) {};
+  \node[closedpt] at (3.0,1.85) {};
+  \node[openpt] at (3.0,2.6) {};
+  \draw[guide] (1.6,0.88) -- (0,0.88);
+  \draw[guide] (1.6,1.5) -- (0,1.5);
+  \draw[guide] (3.0,1.85) -- (0,1.85);
+  \draw[guide] (3.0,2.6) -- (0,2.6);
+  \draw[guide] (1.6,0) -- (1.6,0.88);
+  \draw[guide] (3.0,0) -- (3.0,1.85);
+  \draw[nbhdline] (0,0.88) -- (0,1.5);
+  \draw[nbhdline] (0,1.85) -- (0,2.6);
+  \node[closedpt=calm] at (0,1.2) {};
+  \node[closedpt=calm] at (0,2.25) {};
+  \node[lbl,left=3pt,calm] at (0,1.2) {$r(c)$};
+  \node[lbl,left=3pt,calm] at (0,2.25) {$r(d)$};
+  \node[lbl,below=2pt] at (1.6,0) {$c$};
+  \node[lbl,below=2pt] at (3.0,0) {$d$};
+\end{tikzpicture}
+\caption{Each jump of an increasing function leaves a gap on the vertical axis.  The gaps do not overlap, and each one contains a rational number of its own.}
+\end{marginfigure}
+
+A monotone function, then, cannot behave like Dirichlet's.  It is continuous at all but countably many points.  This is still a great deal of freedom, since $\mathbb{Q}$ itself is countable, and a monotone function can indeed have a jump at every rational number.
+
+\section{Problems}
+
+\noindent The problems in this section are original to this text.
+
+\begin{problem}[Answering the client]
+\hint{In (b) and (c), first promise that $\delta$ will be at most $1$, or at most $\frac12$, and see what bound that gives you for the awkward factor.}
+For each limit, find a response $\delta$ to the challenges $\varepsilon = 1$ and $\varepsilon = \frac{1}{10}$, and then to a general $\varepsilon > 0$.  Write out the proof for the general case.
+\begin{enumerate}[(a)]
+	\item $\lim_{x \to 4} (5 - 2x) = -3$
+	\item $\lim_{x \to 1} (x^2 + x) = 2$
+	\item $\lim_{x \to 2} \dfrac1x = \dfrac12$
+	\item A student answers part (b) with $\delta = \varepsilon/5$ and no further conditions.  Show that this response is correct when $\varepsilon = 1$ but fails when $\varepsilon = 100$.  For which $\varepsilon$ does it work?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Scrambled definitions]
+\hint{For (c), the Extreme Value Theorem is useful.}
+Each of the following is the definition of continuity at $c$ with something rearranged.  Let $f : \mathbb{R} \to \mathbb{R}$ and $c \in \mathbb{R}$.
+\begin{itemize}
+	\item $f$ is \emph{frozen} at $c$ if there exists a $\delta > 0$ such that for every $\varepsilon > 0$, $|x - c| < \delta$ implies $|f(x) - f(c)| < \varepsilon$.
+	\item $f$ is \emph{fenced} at $c$ if for every $\delta > 0$ there exists an $\varepsilon > 0$ such that $|x - c| < \delta$ implies $|f(x) - f(c)| < \varepsilon$.
+	\item $f$ is \emph{revealing} at $c$ if for every $\varepsilon > 0$ there exists a $\delta > 0$ such that $|f(x) - f(c)| < \varepsilon$ implies $|x - c| < \delta$.
+\end{itemize}
+\begin{enumerate}[(a)]
+	\item Describe each property in a plain sentence that mentions neither $\varepsilon$ nor $\delta$.
+	\item Show that a function frozen at $c$ is continuous at $c$, and that $f(x) = x$ is continuous at every point but frozen at none.
+	\item Show that a function continuous on all of $\mathbb{R}$ is fenced at every point.  Then show that Dirichlet's function is fenced at every point as well, so that being fenced tells us very little.
+	\item Give an example of a function that is revealing at $0$, and a continuous function that is not.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Continuity by appointment]
+\hint{In each part, multiply Dirichlet's function by something continuous.}
+Example~\ref{ex:one-point} showed that $h(x) = x\,g(x)$ is continuous at $0$ and nowhere else, where $g$ is Dirichlet's function.
+\begin{enumerate}[(a)]
+	\item Let $\varphi : \mathbb{R} \to \mathbb{R}$ be continuous.  Prove that the product $\varphi\,g$ is continuous at a point $c$ if and only if $\varphi(c) = 0$.
+	\item Find a function that is continuous at $1$ and at $-1$ and at no other point.
+	\item Find a function that is continuous at every integer and at no other point.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[What a continuous function does to a set]
+\hint{Statement (c) deserves care.  Compare it with the example of $1/x$ on $(0,1)$ in the text, and ask what is different.}
+Let $f : \mathbb{R} \to \mathbb{R}$ be continuous on all of $\mathbb{R}$.  For a set $B$, write $f^{-1}(B) = \{x : f(x) \in B\}$.  Decide whether each statement is always true.  Prove the true ones and give a counterexample to each of the others.
+\begin{enumerate}[(a)]
+	\item If $B$ is open, then $f(B)$ is open.
+	\item If $B$ is closed, then $f(B)$ is closed.
+	\item If $B$ is bounded, then $f(B)$ is bounded.
+	\item If $B$ is an interval, then $f(B)$ is an interval.
+	\item If $B$ is open, then $f^{-1}(B)$ is open.
+	\item If $B$ is compact, then $f^{-1}(B)$ is compact.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The mountain path]
+\hint{Consider the difference between her altitude on the way up and her altitude on the way down, as a function of the time of day.}
+A hiker leaves the trailhead at 8 in the morning and reaches the summit at 6 in the evening.  She camps there, sets off down the same path at 8 the next morning, and is back at the trailhead at 6 in the evening.  She does not walk at a steady pace on either day, and she stops whenever she likes.
+\begin{enumerate}[(a)]
+	\item Prove that there is a time of day at which she was at exactly the same altitude on both days.
+	\item Which property of walking did your proof depend on?  Describe a fanciful way of travelling for which the conclusion would be false.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The runner]
+\hint{Let $d(t)$ be the distance covered after $t$ minutes and look at $d(t+5) - d(t)$.  What do the values of this function at $t = 0, 5, 10, \ldots, 45$ add up to?}
+A runner covers $10$ kilometers in exactly $50$ minutes.  Her speed varies, but the distance she has covered is a continuous function of time.
+\begin{enumerate}[(a)]
+	\item Prove that there is some $5$-minute stretch of the run during which she covers exactly $1$ kilometer.
+	\item Does the same argument show that there is a $7$-minute stretch during which she covers exactly $1.4$ kilometers?  Where does it break down?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Uniform or not]
+\hint{For (c), first show that $|\sqrt{x} - \sqrt{y}| \leq \sqrt{|x - y|}$.}
+Decide whether each function is uniformly continuous on the given set, and prove your answer.
+\begin{enumerate}[(a)]
+	\item $f(x) = \dfrac1x$ on $[1, \infty)$
+	\item $f(x) = \dfrac{1}{x^2}$ on $(0,1]$
+	\item $f(x) = \sqrt{x}$ on $[0, \infty)$
+	\item $f(x) = x^3$ on $\mathbb{R}$
+	\item Prove that a function which is uniformly continuous on a \emph{bounded} set $A$ must be a bounded function.  Which of the examples above does this explain?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[A second proof by sequences]
+\hint{Begin with the sequences supplied by Theorem~\ref{thm:not-uniform} and use compactness to make one of them converge.}
+In the text, the theorem that a continuous function on a compact set $K$ is uniformly continuous was proved with open covers.  Give a different proof that uses sequences.
+\begin{enumerate}[(a)]
+	\item Suppose $f$ is continuous on $K$ but not uniformly continuous, and derive a contradiction.
+	\item Run your argument for $f(x) = \frac1x$ on the set $(0,1)$, which is not compact, and identify the exact step that fails.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Popcorn and staircases]
+\hint{For (a), reread the proof that $t$ is continuous at irrational points and notice how little of it used the fact that $c$ was irrational.}
+\begin{enumerate}[(a)]
+	\item Let $t$ be Thomae's function.  Prove that $\lim_{x \to c} t(x) = 0$ at \emph{every} real number $c$, rational or not.  What kind of discontinuity does $t$ have at a rational point?
+	\item Define $s$ on $[0,1]$ by $s(0) = 0$ and $s(x) = \frac1n$ when $\frac{1}{n+1} < x \leq \frac1n$.  Sketch the graph of $s$.  At which points is $s$ discontinuous, and what kind of discontinuity does it have there?
+	\item Is $s$ continuous at $0$?  Prove your answer.
+\end{enumerate}
+\end{problem}
