@@ -4,9 +4,9 @@ In order to have a fruitful discussion on the main concepts of analysis (namely,
 
 We shall assume all of the axioms that govern arithmetic of the integers and assume familiarity with the rational numbers.  
 
-We will demonstrate how the rational number system is inadequate for many purposes, both as a \textsc{field} and as an \textsc{ordered set}.   (These terms will be defined shortly).   This leads to a natural introduction of the "irrational numbers."
+We will demonstrate how the rational number system is inadequate for many purposes, both as a \textsc{field} and as an \textsc{ordered set}.   (These terms will be defined shortly).   This leads to a natural introduction of the ``irrational numbers.''
 
-\newthought{The purpose of our discussion of the real numbers}, will be to show that the rational number system has certain gaps, in spite of the fact that between any two rationals there is another. \marginnote{If $r<s$ then $r< \frac{(r+s)}{2} < s$.}  The real number system on the other hand, fills these gaps.  This is the principle reason for the fundamental role it plays in analysis. 
+\newthought{The purpose of our discussion of the real numbers} will be to show that the rational number system has certain gaps, in spite of the fact that between any two rationals there is another. \marginnote{If $r<s$ then $r< \frac{(r+s)}{2} < s$.}  The real number system on the other hand, fills these gaps.  This is the principal reason for the fundamental role it plays in analysis. 
 
 \bigskip
 
@@ -27,29 +27,29 @@ In order to elucidate the structure of the real numbers as well as that of the c
 \end{definition}
 
 
-The statement "$x<y$" may be read as "x is less than y" or "x is smaller than y" or even "x precedes y."
+The statement ``$x<y$'' may be read as ``$x$ is less than $y$'' or ``$x$ is smaller than $y$'' or even ``$x$ precedes $y$.''
 
 The notation $x \leq y$ indicates that $x<y$ or $x=y$ without specifying which of these two is in fact the case.  In other words $x \leq y$ is the negation of $y<x$.
 
 
-\begin{definition}An {ordered set} is a set $S$ in which an order is defined.  For example, Q is an ordered set if $r<s$ is defined to mean that $s-r$ is a positive rational number. \end{definition}
+\begin{definition}An \textsc{ordered set} is a set $S$ in which an order is defined.  For example, $\mathbb{Q}$ is an ordered set if $r<s$ is defined to mean that $s-r$ is a positive rational number. \end{definition}
 
 
 
 \begin{definition}Suppose that $S$ is an ordered set and that $E \subset S$.  If there exists a $\beta \in S$ such that $x \leq \beta$ for every $x \in E$ then we say that $E$ is \textsc{bounded above} and call that $\beta$ an \textsc{upper bound} of $E$.  Lower bounds are similarly defined. \end{definition}
 
 
-\begin{definition} Suppose that $S$ \marginnote{An alternative and often useful definition of supremum is as follows:  Assume $\alpha \in S$ and is an upper bound for a set $E \subset S$.  Then $\alpha= \sup E$ iff $\forall \quad \varepsilon>0 $ there exists an element $x \in E$ such that $\alpha-\varepsilon < x.$}
+\begin{definition} Suppose that $S$ \marginnote{An alternative and often useful definition of supremum is as follows:  Assume $\alpha \in S$ and is an upper bound for a set $E \subset S$.  Then $\alpha= \sup E$ if and only if for every $\varepsilon>0$ there exists an element $x \in E$ such that $\alpha-\varepsilon < x.$}
 is an ordered set, $E \subset S$ and $E$ is bounded above.    Suppose that there exists an $\alpha \in S$ with the following properties:
 \begin{itemize}
 	\item $\alpha$ is an upper bound of $E$
 	\item If $\gamma< \alpha$ then $\gamma$ is not an upper bound of $E$
 \end{itemize}
-The $\alpha$ is called the \textsc{least upper bound} \footnote{that there is a most one such $\alpha$ is clear from the second premise} or the \textsc{supremum of $E$} and we write
+Then $\alpha$ is called the \textsc{least upper bound}\footnote{That there is at most one such $\alpha$ is clear from the second property.} or the \textsc{supremum of $E$} and we write
 \[\alpha = \sup E\]
 \end{definition}
 
-The greatest lower bound of infimum of a set which is bounded below if defined in a similar manner.
+The \textsc{greatest lower bound}, or \textsc{infimum}, of a set which is bounded below is defined in a similar manner.
 
 
 
@@ -66,25 +66,25 @@ The greatest lower bound of infimum of a set which is bounded below if defined i
 \section{Examples}
 Let us now show that $\sqrt{2}$ is irrational.
 
-\begin{proposition} There is no such rational $p$ such that $p^2 = 2$. \end{proposition}
+\begin{proposition} There is no rational $p$ such that $p^2 = 2$. \end{proposition}
 
 \begin{proof}  If there were such a $p$, we could write $p=m/n$ where $m$ and $n$ are both integers that are not both even (alternatively that $\gcd(m,n) = 1$).  Let us assume this is done.\\
-Then we have that $m^2 = 2n^2$.  Hence $m$ is even. \marginnote{$k^2$ is even $\iff$ $k$ is even for all $k \in \mathbb{Z}$}.  Then $m=2k$ for some $k$ and $m^2 = (2k)^2 = 4k^2 = 2n^2$.  Therefore $n^2$ is also even and so therefore is $n$.\\
+Then we have that $m^2 = 2n^2$.  Hence $m$ is even. \marginnote{$k^2$ is even $\iff$ $k$ is even, for all $k \in \mathbb{Z}$.}  Then $m=2k$ for some $k$ and $m^2 = (2k)^2 = 4k^2 = 2n^2$.  Therefore $n^2$ is also even and so therefore is $n$.\\
 This conclusion is contrary to our choice of $m$ and $n$.  Hence there exists no such rational $p$. \end{proof}
 
-Let's now examine the situation a little more closely.   Let $A$ be the set of all positive rationals such that $p^2 < 2$ and let $B$ consist of all the positive rationals such that $q^2 > 2$.  We can see that $A$ contains no largest member and $B$ contains no smallest, despite the fact that they are bounded above and below respectively.  Therefore $A$ has no least upper bound in $\mathbb{Q}$ and $B$ has no greatest lower bound in $\mathbb{Q}$.  \\
+Let's now examine the situation a little more closely.   Let $A$ be the set of all positive rationals $p$ such that $p^2 < 2$ and let $B$ consist of all the positive rationals $q$ such that $q^2 > 2$.  We can see that $A$ contains no largest member and $B$ contains no smallest, despite the fact that they are bounded above and below respectively.  Therefore $A$ has no least upper bound in $\mathbb{Q}$ and $B$ has no greatest lower bound in $\mathbb{Q}$.  \\
 
 \newthought{Let $E$} consist of all numbers $1/n$ where $n=1,2,3,\ldots$.  Then, $\sup E = 1 \in E$ and $\inf E =0$ which is not in $E$.  This is to demonstrate that infimum and supremum may or may not be included in the sets which they bound.
 
 
 \section{Least Upper Bound Property}
-An ordered set $S$ is said to have the \textsc{least-upper-bound property} is the following is true:
+An ordered set $S$ is said to have the \textsc{least-upper-bound property} if the following is true:
 
 \begin{fullwidth}
 If $E \subset S$, $E$ is not empty, and $E$ is bounded above, then $\sup E $ exists in $S$.
 \end{fullwidth}
 
-Abbott calls this the Axiom of Completeness and purports that it is the final, most distinctive assumption about the real number system.
+Abbott calls this the \textsc{Axiom of Completeness} (AoC for short) and maintains that it is the final, most distinctive assumption about the real number system.
 
 For example, we have already shown by a previous example that $\mathbb{Q}$ does not have the least upper bound property.
 
@@ -113,21 +113,21 @@ We have shown that $\alpha \in L$ but $\beta \notin L$ if $\beta> \alpha$.  In o
 
 \section{Consequences of Completeness}
 
-Complete metric spaces often have certain nice properties as a result of having least upper bounds.  What follows are some of the consequences of the Completeness Axiom.
+The Axiom of Completeness is a short statement with long consequences.  What follows are the first of them.
 
-For simplicity, we often assume that complete metric space we are working in is the real number line, but be advised that these properties will hold in any metric space with similar properties.
+We work throughout on the real number line.  Keep $\mathbb{Q}$ in mind as a contrast: there, a set that is bounded above can have a ``hole'' exactly where its supremum ought to be.
 
 \begin{theorem}\marginnote{Nested Interval Property}  For each $n \in N$ assume we are given a closed interval $I_n = [a_n , b_n] = \{ x \in R : a_n \leq x \leq b_n\}$.  Assume also that each $I_n$ contains $I_{n+1}$.  Then, the resulting sequence of nested intervals, 
 
 \[I_1 \supseteq I_2 \supseteq I_3 \supseteq I_4 \supseteq \cdots \]
 
-has a nonempty intersection; that is, $\cap_{n=1}^{\infty} I_n \neq \emptyset$.
+has a nonempty intersection; that is, $\bigcap_{n=1}^{\infty} I_n \neq \emptyset$.
 \end{theorem}
 
 \begin{proof}
-Knowing that we want to use the AoC to produce a single real value  $x$ satisfying $x \in I_n$ for all $N$, we should consider a bounded set such that its supremum might be this $x$.  Let us consider the set 
+Knowing that we want to use the AoC to produce a single real value  $x$ satisfying $x \in I_n$ for all $n \in \mathbb{N}$, we should consider a bounded set such that its supremum might be this $x$.  Let us consider the set 
 \[ A = \{a_n : n \in N\}\]
-of the left-handed endpoints of the intervals.
+of the left-hand endpoints of the intervals.
 
 \begin{marginfigure}
   \includegraphics{NIP.pdf}
@@ -141,49 +141,47 @@ Because the intervals are nested, we see that every $b_n$ serves as an upper bou
 
 Now, consider a particular $I_n = [a_n , b_n]$.  Because $x$ is an upper bound for $A$, we have $a_n \leq x$.  The fact that each $b_n$ is an upper bound for $A$ and that $x$ is the least upper bound implies $x\leq b_n$.
 
-Altogether then, we have $a_n \leq x \leq b_n$, which means $x \in I_n$ for every choice of $n \in N$.  Hence, $x \in \cap_{n=1}^{\infty} I_n$ and the intersection is not empty.
+Altogether then, we have $a_n \leq x \leq b_n$, which means $x \in I_n$ for every choice of $n \in N$.  Hence, $x \in \bigcap_{n=1}^{\infty} I_n$ and the intersection is not empty.
 \end{proof}
 
 
-\section{The Density of Q and C in R}
+\section{The Density of \texorpdfstring{$\mathbb{Q}$}{Q} and of the Irrationals in \texorpdfstring{$\mathbb{R}$}{R}}
 Again here, we are restricting our discussion to the real numbers.  
 
 \begin{theorem}\marginnote{Archimedean Property}  \begin{itemize}[(i)] 
 \item  Given any number $x \in R$ there exists an $n \in N$ such that $x<n$.  \item Given any real number $y>0$, there exists an $ n \in N$ such that $\frac{1}{n}< y$. \end{itemize} \end{theorem}
 
-\begin{proof}   Part (i) of the proposition states that N is not bounded above.  This might seem obvious and not in need of a proof yet it is important to note that a set might posses the Archimedean property without being Complete- take Q for example- but a demonstration of this fact requires an investigation into the axiomatic construction of the ordered field in question. In the case of R, the AoC furnishes us with a very short argument.
+\begin{proof}   Part (i) of the theorem states that $\mathbb{N}$ is not bounded above.  This might seem obvious and not in need of a proof yet it is important to note that a set might possess the Archimedean property without being complete---take $\mathbb{Q}$ for example---but a demonstration of this fact requires an investigation into the axiomatic construction of the ordered field in question. In the case of $\mathbb{R}$, the AoC furnishes us with a very short argument.
 
-Assume that N is bounded above.  By the Axiom of Completeness, N should then have a least upper bound property, and we can set $\alpha = \sup N$.  If we were to consider $\alpha -1$, then we no longer have an upper bound and therefore there exists an $n \in N$ such that $\alpha - 1 < n$.  But this is equivalent to $\alpha < n+1$. But because $n+1 \in N$ we have a contradiction to the fact that $\alpha $ is meant to be  an upper bound for $N$.  \marginnote{The contradiction here rests on the AoC and the fact that N is closed under addition.}
+Assume that $\mathbb{N}$ is bounded above.  By the Axiom of Completeness, $\mathbb{N}$ should then have a least upper bound, and we can set $\alpha = \sup \mathbb{N}$.  If we were to consider $\alpha -1$, then we no longer have an upper bound and therefore there exists an $n \in N$ such that $\alpha - 1 < n$.  But this is equivalent to $\alpha < n+1$. But because $n+1 \in N$ we have a contradiction to the fact that $\alpha $ is meant to be  an upper bound for $\mathbb{N}$.  \marginnote{The contradiction here rests on the AoC and the fact that $\mathbb{N}$ is closed under addition.}
 
 For part (ii) just let $x = 1/y$ from above.
-Note that $\frac{1}{n} < y$ implies that $\frac{1}{y} < n$.  Therefore this proposition again states that N is not bounded above and the proof is exactly as before.
+Note that $\frac{1}{n} < y$ implies that $\frac{1}{y} < n$.  Therefore this statement again says that $\mathbb{N}$ is not bounded above and the proof is exactly as before.
 \end{proof}
 
-\begin{theorem}  \marginnote{Density of C and Q in R}  
+\begin{theorem}  \marginnote{Density of $\mathbb{Q}$ and of the irrationals in $\mathbb{R}$}  
 
 \begin{itemize}[(i)] 
-\item    For every two real number $a$ and $b$ with $a<b$, there exists a rational number $r$ satisfying $a<r<b$
-\item Given any two real numbers $a$ and $b$ with $a<b$. there exists an irrational number $t$ satisfying $a<t<b$
+\item    For every two real numbers $a$ and $b$ with $a<b$, there exists a rational number $r$ satisfying $a<r<b$
+\item Given any two real numbers $a$ and $b$ with $a<b$, there exists an irrational number $t$ satisfying $a<t<b$
  \end{itemize} \end{theorem}
  
  \begin{proof}
  \begin{itemize}[(i)]
- 	\item WLOG assume that  $0 \leq a \leq b$.  A rational number is a quotient, therefore there exists $n,m \in N$ such that 
+ 	\item Without loss of generality assume that $0 \leq a < b$.  A rational number is a quotient of integers, so our task is to produce $m, n \in \mathbb{N}$ such that 
 	\[	a  < \frac{m}{n} < b	\]
- The first step is to choose a denominator large enough so that consecutive increments of size $1/n$ are too close together to "step over" the interval $(a,b)$.
+ The first step is to choose a denominator large enough so that consecutive increments of size $1/n$ are too close together to ``step over'' the interval $(a,b)$.
  
  Using the Archimedean property, we pick $n \in N$ so that 
  \[		\frac{1}{n} < b-a\]
-The first inequality gives us $na < m <nb$.  With $n$ already chosen, we choose $m$ to be the smallest integer great that $na$.  In other words.
+Multiplying our target inequality by $n$ shows that we want $na < m <nb$.  With $n$ already chosen, we choose $m$ to be the smallest natural number greater than $na$.  In other words,
 $$m-1 \leq na < m$$ 
-which yields $a < m/n$.  The second equality is also equivalent to $a< b - 1/n$ and we can use the third to write,
-$$  m \leq na +1$$
-$$<  n \big( b - \frac{1}{n} \big) + 1 $$
-$$ = nb $$
+which immediately yields $a < m/n$.  Our choice of $n$ is equivalent to $a< b - 1/n$, and we can use this together with $m - 1 \leq na$ to write
+\[ m \leq na + 1 < n \Big( b - \frac{1}{n} \Big) + 1 = nb. \]
 
-Because $m<nb$ implies that $m/n < b$, and we have that $a<m/n <b$ as desired.
+Because $m<nb$ implies that $m/n < b$, we have $a<m/n <b$ as desired.
 
-\item  We want to prove the existence of an irrational number between any two real numbers $a$ and $b$.  Using the density of $Q$ in $R$ on the real number $a - \sqrt{2}$ and $b - \sqrt{2}$ we can find a rational number $r$ such that $a - \sqrt{2} < r < b - \sqrt{2}$.  This then implies that $a< r + \sqrt{2} < b$.  Since an irrational plus a rational is again an irrational (a result proved in the exercises) it follows that $r + \sqrt{2}$ is irrational.
+\item  We want to prove the existence of an irrational number between any two real numbers $a$ and $b$.  Using the density of $\mathbb{Q}$ in $\mathbb{R}$ on the real numbers $a - \sqrt{2}$ and $b - \sqrt{2}$ we can find a rational number $r$ such that $a - \sqrt{2} < r < b - \sqrt{2}$.  This then implies that $a< r + \sqrt{2} < b$.  Since an irrational plus a rational is again an irrational (a result proved in the exercises) it follows that $r + \sqrt{2}$ is irrational.
 
  
  \end{itemize}
@@ -199,7 +197,7 @@ Because $m<nb$ implies that $m/n < b$, and we have that $a<m/n <b$ as desired.
 
 We now state the existence theorem which is the core of this chapter.
 
-\begin{theorem}  \marginnote{Here, we only state the existence of $\mathbb{R}$ but we do not yet provide a proof of its existence.}There exists an ordered field $R$ which has the least-upper bound property.   Moreover, $R$ contains $Q$ as a subfield. \end{theorem}
+\begin{theorem}  \marginnote{Here, we only state the existence of $\mathbb{R}$ but we do not yet provide a proof of its existence.}There exists an ordered field $\mathbb{R}$ which has the least-upper bound property.   Moreover, $\mathbb{R}$ contains $\mathbb{Q}$ as a subfield. \end{theorem}
 
 
 We omit the proof since it is a little tedious.
@@ -211,9 +209,9 @@ We omit the proof since it is a little tedious.
 \allcaps{1.}  If $r$ is nonzero and rational and $x$ is irrational, show that $rx$ and $r+x$ are also irrational. 
 
 \begin{proof}
-	i) Assume that $rx$ is rational for contradiction, where $r$ and $x$ are rational and irrational respectively.  Then assume $r = \frac{a}{b}$
- for some $a,b \in Z$, $b \neq 0$
- \[x \cdot \frac{a}{b} = \frac{c}{d} \leftrightarrow x = \frac{bc}{ad}\]
+	i) Assume that $rx$ is rational for contradiction, where $r$ and $x$ are rational and irrational respectively.  Write $r = \frac{a}{b}$
+ for some nonzero $a,b \in \mathbb{Z}$ (nonzero because $r \neq 0$), and $rx = \frac{c}{d}$ for some $c,d \in \mathbb{Z}$ with $d \neq 0$.  Then
+ \[x \cdot \frac{a}{b} = \frac{c}{d} \iff x = \frac{bc}{ad},\]
  contradicting our assumption that $x$ is irrational.
  
  ii) Assume for contradiction that $r+x$ is rational. Therefore $x = (r+x) - r$ is the difference between two rational numbers and therefore is rational itself.  This contradicts our assumption that $x$ is irrational.
@@ -230,20 +228,20 @@ We omit the proof since it is a little tedious.
 
 
 \begin{proof}
-Using the fact that $R$ is an ordered field with the least upper bound property, we can assume that a nonempty subset $A \subseteq R$ that is bounded below has a greatest lower bound or infimum in $R$.  Call it $\alpha$.
+Using the fact that $R$ is an ordered field with the least upper bound property, we know that a nonempty subset $A \subseteq \mathbb{R}$ that is bounded below has a greatest lower bound or infimum in $\mathbb{R}$.  Call it $\alpha$.
 
-Taking an arbitrary member of this subset $x \in A$, we know that $-x \in -A$ by definition of membership in $-A$.  Furthermore by the definition of infimum, we know that $\alpha \leq x$ for all $x\in A$.  As a consequence of Proposition 1.18 (a) we can deduce that $-\alpha \geq -x$ for all $-x \in -A$.
+Taking an arbitrary member of this subset $x \in A$, we know that $-x \in -A$ by definition of membership in $-A$.  Furthermore by the definition of infimum, we know that $\alpha \leq x$ for all $x\in A$.  Multiplying an inequality by $-1$ reverses it, so we can deduce that $-\alpha \geq -x$ for all $-x \in -A$.
 
-Using an arbitrary element in $-A$, we have shown that $-\alpha \geq -x$ for all $-x \in -A$ which suggests that $-\alpha$ is an upper bound for $-A$.  
+Using an arbitrary element in $-A$, we have shown that $-\alpha \geq -x$ for all $-x \in -A$ which says precisely that $-\alpha$ is an upper bound for $-A$.  
 
 What remains to be shown is that $-\alpha$ is a \emph{least} upper bound.  
 
-Choosing some arbitrary element $\beta < -\alpha$, using again Proposition 1.18 (a), we can be sure that $-\beta > \alpha$.  Since $\alpha $, we already know, is the greatest lower bound of $A$, an element greater than $\alpha$ is not a lower bound but a member of $A$.  By the density of the real numbers, there must exist some element of $x \in A$ such that  $x < -\beta$.  Using yet again Proposition 1.18 (a), there exists some element $-x \in -A$ such that $-x > \beta$.  This states strictly then that $\beta$ \emph{cannot} be an upper bound of $-A$.
+Choose an arbitrary element $\beta < -\alpha$.  Reversing the inequality, we can be sure that $-\beta > \alpha$.  Since $\alpha$ is the \emph{greatest} lower bound of $A$, the larger number $-\beta$ cannot be a lower bound of $A$ at all.  There must therefore exist some element $x \in A$ such that  $x < -\beta$.  Reversing the inequality once more, there exists some element $-x \in -A$ such that $-x > \beta$.  This says precisely that $\beta$ \emph{cannot} be an upper bound of $-A$.
 
-Therefore, we have shown that any element LESS than $-\alpha$ cannot be an upper bound for $-A$.  This together with the proof that $-\alpha$ is an upper bound for $-A$ shows that $-\alpha$ is the Supremum of $-A$.
+Therefore, we have shown that any element \emph{less} than $-\alpha$ cannot be an upper bound for $-A$.  This together with the proof that $-\alpha$ is an upper bound for $-A$ shows that $-\alpha$ is the supremum of $-A$.
 
 
-By Proposition 1.14 (d), we can be sure that 
+Since $-(-\alpha) = \alpha$, we can be sure that 
 $$ -\sup(-A) = -(-\alpha) = \alpha =  \inf(A) $$
 as desired.
 \end{proof}
@@ -254,19 +252,19 @@ as desired.
 \begin{definition}\textsc{Function:}  Consider two sets $A$ and $B$ and suppose that with each element $x$ of $A$ there is associated, in some manner, an element of $B$, which we denote by $f(x)$.  Then $f$ is said to be a \textsc{function} from $A$ to $B$ (or a mapping of $A$ into $B$).  The set $A$ is called the \textsc{domain} of $f$  (we also say that $f$ is defined on $A$) and the elements $f(x)$ are called the values of $f$. The set of all values of $f$ is called the \textsc{range} of $f$.\end{definition}
 \bigskip
 
-\begin{definition}\textsc{Image:}  Let $A$ and $B$ be two sets and let $f$ be a mapping of $A$ into $B$.   If $E \subset A$,  $f(E)$ is defined to be the set of all elements $f(x)$ for $x \in E$.   We call $f(E)$ the \textsc{image} of E under f.  \\In this notation, f(A) is the range of f.  It is clear that $f(A) \subset B$.  \\If $f(A) = B$, then we say that f maps \emph{onto} B.  That is, the function is \textsc{surjective}.\end{definition}
+\begin{definition}\textsc{Image:}  Let $A$ and $B$ be two sets and let $f$ be a mapping of $A$ into $B$.   If $E \subset A$,  $f(E)$ is defined to be the set of all elements $f(x)$ for $x \in E$.   We call $f(E)$ the \textsc{image} of $E$ under $f$.  \\In this notation, $f(A)$ is the range of $f$.  It is clear that $f(A) \subset B$.  \\If $f(A) = B$, then we say that $f$ maps \emph{onto} $B$.  That is, the function is \textsc{surjective}.\end{definition}
 \bigskip
 
 
 \begin{definition}\textsc{Inverse Image:}  If $E \subset B, f^{-1}(E)$ denotes the set of all $x \in A$ such that $f(x) \in E$.  We call $f^{-1}(E)$ the \textsc{inverse image} of $E$ under $f$.  \\
-\marginnote{Alternatively, the concept of 1-1 can be expressed as follows:  $f$ is a 1-1 mapping of A into B provided that $f(x_{1}) \neq f(x_{2})$ whenever $x_{1} \neq x_{2}, x_{1} \in A, x_{2} \in A $}
+\marginnote{Alternatively, the concept of 1-1 can be expressed as follows:  $f$ is a 1-1 mapping of $A$ into $B$ provided that $f(x_{1}) \neq f(x_{2})$ whenever $x_{1} \neq x_{2}, x_{1} \in A, x_{2} \in A $}
 
 
-If $y \in B, f^{-1}(y)$ is the set of all $x\in A$ such that $f(x) = y$.  If for each $y \in B, f^{-1}(y)$ consists of at most one element of $A$, then $f$ is said to be a \emph{1-1 (one-to-one) mapping} of A into B. \end{definition}
+If $y \in B, f^{-1}(y)$ is the set of all $x\in A$ such that $f(x) = y$.  If for each $y \in B, f^{-1}(y)$ consists of at most one element of $A$, then $f$ is said to be a \emph{1-1 (one-to-one) mapping} of $A$ into $B$. \end{definition}
 \bigskip
 
 
-\begin{definition}\textsc{Cardinality:}  If there exists a 1-1 mapping of A onto B, we say that A and B can be put into 1-1 correspondence, or that A and B have the same \textsc{cardinal number}, or, briefly that A and B are \emph{equivalent}, and we write that $A \sim B $.  This relation is also an equivalence relation and therefore has the following properties:\marginnote{For two finite set A and B, we have $A \sim B$ iff A and B contain the same number of elements. \\
+\begin{definition}\textsc{Cardinality:}  If there exists a 1-1 mapping of $A$ onto $B$, we say that $A$ and $B$ can be put into 1-1 correspondence, or that $A$ and $B$ have the same \textsc{cardinal number}, or, briefly, that $A$ and $B$ are \emph{equivalent}, and we write that $A \sim B $.  This relation is also an equivalence relation and therefore has the following properties:\marginnote{For two finite sets $A$ and $B$, we have $A \sim B$ iff $A$ and $B$ contain the same number of elements. \\
 	For infinite sets, however this is a useful definition since the notion of 1-1 correspondence often maintains its clarity.}
 	\begin{itemize}
 	\item It is reflexive:  $A \sim A$
@@ -276,20 +274,20 @@ If $y \in B, f^{-1}(y)$ is the set of all $x\in A$ such that $f(x) = y$.  If for
 \bigskip
 
 
-\begin{definition}\textsc{Countability:}  For a set A
+\begin{definition}\textsc{Countability:}  For a set $A$,
 \begin{itemize}
-	\item A is \textsc{finite} if $A\sim [n]$ for some n \marginnote{Note: the empty set is also considered finite! \quad $A$ is infinite if $A$ is equivalent to one of its proper subsets.}
-	\item A is \textsc{infinite} if $A$ is not finite
-	\item A is \textsc{countable} if $A \sim N$
-	\item A is \textsc{uncountable} if A is neither finite nor countable
-	\item A is \textsc{at most countable} if A is either finite or countable
+	\item $A$ is \textsc{finite} if $A$ is empty or $A\sim \{1, 2, \ldots, n\}$ for some $n \in \mathbb{N}$ \marginnote{Note: the empty set is also considered finite! \quad $A$ is infinite if $A$ is equivalent to one of its proper subsets.}
+	\item $A$ is \textsc{infinite} if $A$ is not finite
+	\item $A$ is \textsc{countable} if $A \sim \mathbb{N}$
+	\item $A$ is \textsc{uncountable} if $A$ is neither finite nor countable
+	\item $A$ is \textsc{at most countable} if $A$ is either finite or countable
 	
 \end{itemize}\end{definition}
 
 Notice that $\mathbb{Z}$ is countable.  (We demonstrate this by defining the bijection). 
-\marginnote{An example of a 1-1 function from $N \to Z$:
+\marginnote{An example of a 1-1 function from $\mathbb{N}$ onto $\mathbb{Z}$:
 \begin{displaymath}
-   f(x) = \left\{
+   f(n) = \left\{
      \begin{array}{lr}
        (n-1)/2 & : n \quad \text{is odd}\\
        -n/2 & : n \quad \text{is even}
@@ -299,21 +297,22 @@ Notice that $\mathbb{Z}$ is countable.  (We demonstrate this by defining the bij
 Also notice that $\mathbb{Q}$ is countable. (We demonstrate this using the Cantor construction).  Likewise, the set of even natural numbers is countable.  We can show this by inventing an appropriate function.
 
 
-Also notice,  the function $f(x) = \frac{x}{x^2 - 1}$ takes the interval $(-1,1)$ onto $R$ in a 1-1 fashion.   Thus $(-1,1) \sim R$.   In fact, $(a,b) \sim R$ for any interval $(a,b)$.      Therefore, intervals on the real line are uncountable.
+Also notice,  the function $f(x) = \frac{x}{x^2 - 1}$ takes the interval $(-1,1)$ onto $\mathbb{R}$ in a 1-1 fashion.   Thus $(-1,1) \sim \mathbb{R}$.   In fact, $(a,b) \sim \mathbb{R}$ for any interval $(a,b)$.      Once we have shown that $\mathbb{R}$ is uncountable, it will follow that every interval on the real line is uncountable too.
 
 
 
-A finite set cannot be equivalent to one of its proper subsets.   That is, however possible for infinite sets.  In fact we could replace the definition for infinite with this statement:  A is infinite if A is equivalent to one of its proper subsets.
+A finite set cannot be equivalent to one of its proper subsets.   That is, however, possible for infinite sets.  In fact we could replace the definition for infinite with this statement:  $A$ is infinite if $A$ is equivalent to one of its proper subsets.
 \bigskip
 
 
-\noindent \begin{definition}\textsc{Sequence:} \marginnote{Simply put, a sequence is a function whose domain is $\mathbb{N}$} \end{definition}By a sequence, we mean a function $f$ defined on the set of natural numbers.   If $f(n) = x_{n}$ for $n \in \mathbb{N}$, it is customary to denote the sequence f by the symbol $\{x_{n}\}$, or sometimes by $x_{1}, x_{2}, \ldots$. The values of $f$, that is, the elements of the sequence are called terms.  If $A$ is a set and if $x_{n} \in A$ for all $n \in J$, then $\{x_{n}\}$ is said to be a sequence in A, or a sequence of elements of A.\\
+\begin{definition}\textsc{Sequence:} \marginnote{Simply put, a sequence is a function whose domain is $\mathbb{N}$.} By a sequence, we mean a function $f$ defined on the set of natural numbers.   If $f(n) = x_{n}$ for $n \in \mathbb{N}$, it is customary to denote the sequence $f$ by the symbol $\{x_{n}\}$, or sometimes by $x_{1}, x_{2}, \ldots$. The values of $f$, that is, the elements of the sequence are called terms.  If $A$ is a set and if $x_{n} \in A$ for all $n \in \mathbb{N}$, then $\{x_{n}\}$ is said to be a sequence in $A$, or a sequence of elements of $A$.
+\end{definition}
 
 Note that the terms of a sequence need not be distinct.\\
 
 
 \smallskip
-Since every countable set is the range of a bijection defined on the set of natural numbers, we can regard every countable set as the range of a sequence of distinct terms.  In other words, the elements of a countable set can be "arranged in a sequence."
+Since every countable set is the range of a bijection defined on the set of natural numbers, we can regard every countable set as the range of a sequence of distinct terms.  In other words, the elements of a countable set can be ``arranged in a sequence.''
 
 
 \smallskip
@@ -323,17 +322,17 @@ Since every countable set is the range of a bijection defined on the set of natu
 \begin{proof}
 Let $E \subset A$.
 \indent If $E$ is finite, then we are done. \\
-\indent On the other hand assume that $E$ is infinite.  Then let $A = \{x_{1}, x_{2}, \ldots\}$ which we can do since A is countable.  Then we construct a sequence $\{n_{k}\}$ as follows:  Let $n_{1}$ be the smallest natural number such that $x_{n_{1}} \in E$.   Having chosen, $n_{1}, \ldots, n_{k-1}$, let $n_{k}$ be the smallest natural number greater than $n_{k-1}$ such that $x_{n_{k}} \in E$.   Then set $f(k) = x_{n_{k}} \in E$.  This function is a bijection by construction and therefore $E$ is countable.
+\indent On the other hand assume that $E$ is infinite.  Then let $A = \{x_{1}, x_{2}, \ldots\}$ which we can do since $A$ is countable.  Then we construct a sequence $\{n_{k}\}$ as follows:  Let $n_{1}$ be the smallest natural number such that $x_{n_{1}} \in E$.   Having chosen, $n_{1}, \ldots, n_{k-1}$, let $n_{k}$ be the smallest natural number greater than $n_{k-1}$ such that $x_{n_{k}} \in E$.   Then set $f(k) = x_{n_{k}} \in E$.  This function is a bijection by construction and therefore $E$ is countable.
 
 \end{proof}
 
 This theorem shows that roughly speaking, no uncountable set can be a subset of a countable set.
 
-\begin{theorem}  The union of countably many countable sets is countable.   Let $\{E_{n}\} ,  n=1,2,3,\ldots$ be a sequence of countable sets.  Then the set $S$,
+\begin{theorem}\label{thm:countable-union}  The union of countably many countable sets is countable.   Let $\{E_{n}\} ,  n=1,2,3,\ldots$ be a sequence of countable sets.  Then the set $S$,
 \[S = \bigcup_{n=1}^{\infty} E_{n} \] is countable. \end{theorem}
 
 \begin{proof}
-Let every set $E_{n}$ be arranged in a sequence $\{x_{n_k}\}, k = 1,2,3, \ldots$ and consider the infinite array in which the elements of $E_n$ form the nth row of the array.  The array contains all of the elements of $S$.  As in the Cantor construction, these elements can be arranged in a sequence (denoted by the arrows) of the form  
+Let every set $E_{n}$ be arranged in a sequence $\{x_{nk}\}$, $k = 1,2,3, \ldots$, and consider the infinite array in which the elements of $E_n$ form the $n$th row of the array.  The array contains all of the elements of $S$.  As in the Cantor construction, these elements can be arranged in a sequence (denoted by the arrows) of the form  
 \begin{marginfigure}
   \includegraphics{rationals-countable.jpg}
   \caption{An example of the Cantor Construction for countability proofs.}
@@ -342,29 +341,29 @@ Let every set $E_{n}$ be arranged in a sequence $\{x_{n_k}\}, k = 1,2,3, \ldots$
 
 \[x_{11}; x_{21}, x_{12}; x_{31}, x_{22}, x_{13}; x_{41}, x_{32}, x_{23}, x_{14}; \ldots\]
 
-If any two sets have an element in common these will appear twice in the about sequence.  Therefore there is a subset of the natural numbers, call it T, such that $S \sim T$ which shows that S is at most countable.
+If any two sets have an element in common these will appear more than once in the above sequence.  Therefore there is a subset of the natural numbers, call it $T$, such that $S \sim T$, which shows that $S$ is at most countable.
 
-However, since $E_{1}\subset S$ and $E_{1}$ is infinite, then S is infinite and thus countable.
+However, since $E_{1}\subset S$ and $E_{1}$ is infinite, $S$ is infinite and thus countable.
 \end{proof}
 
-\begin{corollary} Suppose $A$ is at most countable and that for every $\alpha \in A$, there is associated a set $B_{\alpha}$ that is at most countable.  Then the set T
+\begin{corollary} Suppose $A$ is at most countable and that for every $\alpha \in A$, there is associated a set $B_{\alpha}$ that is at most countable.  Then the set $T$
 \[T = \bigcup_{\alpha \in A} B_{\alpha}\]
 is at most countable. \end{corollary}
 
 
 
-\begin{theorem}  A \emph{finite} product of countable sets is countable.  For any n,  $E_{1} \times E_{2} \times \ldots \times E_{n}$ is countable for $E_{i}$ all countable. \end{theorem}
+\begin{theorem}\label{thm:finite-product}  A \emph{finite} product of countable sets is countable.  For any n,  $E_{1} \times E_{2} \times \ldots \times E_{n}$ is countable for $E_{i}$ all countable. \end{theorem}
 
 \marginnote{Note that the fact that the product is \emph{finite} is key.  \\Take for example, \\$E = \{0,1\},\quad E \times E \times E \times E \ldots$ \\which is not countable.  (Exercise!)}
 
 
 \begin{proof}
-We complete this proof by induction on n.  For $n=1$, the assertion holds trivially.  Suppose that $E_{1} \times E_{2} \times \ldots \times E_{n-1}$ is countable.  To show this for $E_{1} \times E_{2} \times \ldots E_{n-1}\times E_{n}$, we notice that since $E_{n}$ is countable, we can list its elements as a sequence;  $E_{n}= {y_1, y_2, \ldots}$.  Then
+We complete this proof by induction on $n$.  For $n=1$, the assertion holds trivially.  Suppose that $E_{1} \times E_{2} \times \ldots \times E_{n-1}$ is countable.  To show this for $E_{1} \times E_{2} \times \ldots E_{n-1}\times E_{n}$, we notice that since $E_{n}$ is countable, we can list its elements as a sequence;  $E_{n}= \{y_1, y_2, \ldots\}$.  Then
 
 \[E_{1} \times E_{2} \times \ldots E_{n-1}\times E_{n} = \]
 \[  \big( E_{1} \times \ldots \times E_{n-1} \times \{y_1\} \big) \cup  \big( E_{1} \times  \ldots \times E_{n-1} \times \{y_2\}\big) \cup  \ldots   \] 
 
-\center{And}
+\noindent that is,
 \[E_{1} \times E_{2} \times \ldots E_{n-1}\times E_{n} = \bigcup_{i=1}^{\infty} (E_{1} \times  \ldots \times E_{n-1}) \times \{y_i\}  \] 
 
 Therefore,  $E_{1} \times E_{2} \times \ldots E_{n-1}\times E_{n} $ is equivalent to the countable union of countable sets and, by the theorem above, is also countable.
@@ -373,7 +372,7 @@ Therefore,  $E_{1} \times E_{2} \times \ldots E_{n-1}\times E_{n} $ is equivalen
 
 \begin{corollary}The set of all rational numbers is countable. \end{corollary}
 
-By the Theorem above, we take $n=2$ noting that every rational is of the form $b/a$ where $a$ and $b$ are both integers.  The set of pairs $(a,b)$ and therefore the set of fractions $b/a$ is countable.  
+By the Theorem above, we take $n=2$ noting that every rational is of the form $b/a$ where $a$ and $b$ are both integers and $a \neq 0$.  The set of pairs $(a,b)$ and therefore the set of fractions $b/a$ is countable.  
 \medskip
 
 In fact, even the set of all algebraic numbers is countable.
@@ -382,39 +381,39 @@ In fact, even the set of all algebraic numbers is countable.
 A complex number is said to be \emph{algebraic} if there are integers $a_{0}, \ldots, a_{n}$ not all zero such that 
 $$ a_{0}z^n + a_{1}z^{n-1} + \cdots + a_{n-1}z + a_{n} = 0. $$
 
-Prove that the set of algebraic numbers is countable.
+The set of all algebraic numbers is countable.
 \end{corollary}
  
 \begin{proof} 
-For each fixed integer $n \geq 0$, let us call the set $P_{n}$ the set of all polynomials with integer coefficients and degree of at most $n$.  We can be sure that such a set is countable since it is equivalent to set of all $n+1$-tuples $(a_{0}, \ldots, a_{n})$, where $a_{i} \in Z$ which is countable, as stated in Theorem 2.13.  
+For each fixed integer $n \geq 0$, let us call the set $P_{n}$ the set of all polynomials with integer coefficients and degree of at most $n$.  We can be sure that such a set is countable since it is equivalent to the set of all $(n+1)$-tuples $(a_{0}, \ldots, a_{n})$ with $a_{i} \in \mathbb{Z}$, which is countable by Theorem~\ref{thm:finite-product}.  
 
-The set of ALL polynomials of every degree with integer coefficients can therefore be expressed as
-$$   P = \bigcup^{\infty}_{n=0} P_{n} \qquad \text{where} \ n \in N.$$
+The set of \emph{all} polynomials of every degree with integer coefficients can therefore be expressed as
+$$   P = \bigcup^{\infty}_{n=0} P_{n}.$$
 
 
-By Theorem 2.12, the countable union of countable sets is also countable and therefore P, the set of all polynomials with integer coefficients, is countable.
+By Theorem~\ref{thm:countable-union}, the countable union of countable sets is also countable and therefore $P$, the set of all polynomials with integer coefficients, is countable.
 
-By the Fundamental Theorem of Algebra, each polynomial of degree $n$ has only finitely many roots (at most $n$). Therefore the set of all possible roots of all polynomials with integer coefficients is a countable union of finite sets, hence countable.
+Each nonzero polynomial of degree $n$ has only finitely many roots (at most $n$, since each root contributes a linear factor). Therefore the set of all possible roots of all polynomials with integer coefficients is a countable union of finite sets, hence countable.
 \end{proof}
 
 
 But note that not all infinite sets are countable as shown in the next theorem.
 
-\begin{theorem} Let A be the set of sequences whose elements are 0's and 1's.  This set A is uncountable. \end{theorem}
+\begin{theorem} Let $A$ be the set of all sequences whose elements are 0's and 1's.  This set $A$ is uncountable. \end{theorem}
 
 \begin{proof}
-Let $E$ be a countable subset of A and let E consists of the sequences $s_1, s_2, s_3, \ldots$.   We construct a sequence $s$ as follows: If the nth digit in $s_n$ is 1, we let the nth digit of $s$ be 0, and vice versa.  Then the sequence s differs from every member of E in at least one place and hence, $s \notin E$.  Clearly $s \in A$ however so that E is a proper subset of A.\\
+Let $E$ be a countable subset of $A$, consisting of the sequences $s_1, s_2, s_3, \ldots$.   We construct a sequence $s$ as follows: If the $n$th digit in $s_n$ is 1, we let the $n$th digit of $s$ be 0, and vice versa.  Then the sequence $s$ differs from every member of $E$ in at least one place and hence, $s \notin E$.  Clearly $s \in A$ however so that $E$ is a proper subset of $A$.\\
 
-We have shown that every countable subset of A is a proper subset of A.  It follow that A is uncountable (otherwise A would be a proper subset of A which is absurd).
+We have shown that every countable subset of $A$ is a proper subset of $A$.  It follows that $A$ is uncountable (otherwise $A$ would be a proper subset of $A$, which is absurd).
 \end{proof}
 
 \begin{proof} \marginnote{Alternative proof presented by Andre}
 
-We proceed to prove by contradiction.  Say A is countable and we can list its elements in an array:  $A = \{x_1, x_2, \ldots \}$.  Let $y = (y_1, y_2, y_3, \ldots)$ be the sequence of 0's and 1's listed along the diagonal in the array.   Define the sequence $z \in A$ as the sequence that exchanges all of the 1's in y for 0's and vice versa.  But then we have that z differs from every $x_i \in A$ in at least one place and hence $z$ cannot be in $A$.  Contradiction.
+We proceed to prove by contradiction.  Say $A$ is countable, so that we can list its elements in an array:  $A = \{x_1, x_2, \ldots \}$.  Let $y = (y_1, y_2, y_3, \ldots)$ be the sequence of 0's and 1's listed along the diagonal in the array.   Define the sequence $z \in A$ as the sequence that exchanges all of the 1's in $y$ for 0's and vice versa.  But then we have that $z$ differs from every $x_i \in A$ in at least one place and hence $z$ is missing from the list, even though $z \in A$.  Contradiction.
 
 \end{proof}
 
-\begin{theorem} The open interval $(0,1) \subset \mathbb{R}$ is uncountable.  \marginnote{This theorem is equivalent to the one below and to the theorem which states that R is uncountable.  (0,1) is uncountable iff [0,1] is uncountable iff R is uncountable.  See why this is true.}  \end{theorem}
+\begin{theorem} The open interval $(0,1) \subset \mathbb{R}$ is uncountable.  \marginnote{This theorem is equivalent to the one below and to the theorem which states that $\mathbb{R}$ is uncountable.  $(0,1)$ is uncountable iff $[0,1]$ is uncountable iff $\mathbb{R}$ is uncountable.  See why this is true.}  \end{theorem}
 
 
 \begin{proof}
@@ -423,13 +422,13 @@ We proceed to prove by contradiction.  Assume that there exists a function $f: \
 \[f(m) = .a_{m1}a_{m2}a_{m3}a_{m4}a_{m5} \ldots\]
 
 
-\marginnote{This theorem can also be proved by the production of a bijection from $R \to (0,1)$.  Take for example $$ f(x) = \frac{(x - 1/2)}{(x-x^2)} $$  Since $R$ is uncountable, it must follow that $(0,1)$ is also uncountable.}
-What is meant here is that for each $m,n \in \mathbb{N}, a_{mn}$ is the digit from the set $\{0,1,2, \ldots, 9\}$ that represents the nth digit in the decimal expansion of $f(m)$.  Therefore we can index the array of $f(m)'s$ by the digits of their decimal expansion.   We assume that \emph{every} real number between 0 and 1 appears somewhere on this list.\\
+\marginnote{This theorem can also be proved by producing a bijection from $(0,1)$ onto $\mathbb{R}$.  Take for example $$ f(x) = \frac{(x - 1/2)}{(x-x^2)} $$  Once we know that $\mathbb{R}$ is uncountable (by the Nested Interval argument below), it must follow that $(0,1)$ is also uncountable.}
+What is meant here is that for each $m,n \in \mathbb{N}, a_{mn}$ is the digit from the set $\{0,1,2, \ldots, 9\}$ that represents the $n$th digit in the decimal expansion of $f(m)$.  Therefore we can index the array of numbers $f(m)$ by the digits of their decimal expansion.   We assume that \emph{every} real number between 0 and 1 appears somewhere on this list.\\
 
 Now for the pearl of the argument.   Define a real number $x \in (0,1)$  with the decimal expansion $x=.b_1 b_2 b_3 b_4 \ldots$ using an arbitrary rule such as 
 
  \begin{displaymath}
-   f(x) = \left\{
+   b_n = \left\{
      \begin{array}{lr}
        2 & : a_{nn} \neq 2 \\
        3 & : a_{nn} = 2
@@ -438,33 +437,33 @@ Now for the pearl of the argument.   Define a real number $x \in (0,1)$  with th
  \end{displaymath} 
    
    
-   Since, by construction, this real number x differs from every other number listed, x cannot be a member of $A$ as defined.  Therefore, we have a contradiction.
+   Since, by construction, this real number $x$ differs from $f(n)$ in the $n$th decimal place, $x$ cannot be equal to $f(n)$ for any $n$: it is missing from the list.  This contradicts our assumption that every real number between 0 and 1 appears.
    
 \end{proof}
 
 \begin{theorem} The closed interval $[0,1] \subset \mathbb{R}$ is uncountable.  \end{theorem}
-\marginnote{Note that this is true iff R is uncountable.  Also note that this theorem is equivalent to the one below.  From this we can conclude that R is uncountable.}  (Hint: express $x \in [0,1]$ in binary notation)   From this conclusion, we can determine that $\mathbb{R}$ is uncountable.  
+\marginnote{Note that this is true iff $\mathbb{R}$ is uncountable.  Also note that this theorem is equivalent to the one below.  From this we can conclude that R is uncountable.}  (Hint: express $x \in [0,1]$ in binary notation)   From this conclusion, we can determine that $\mathbb{R}$ is uncountable.  
 
 
-\begin{theorem}  (i) The set $\mathbb{Q}$ is countable\\ (ii) The set $\mathbb{R}$ is uncountable.  \marginnote{There are 2 proofs for the countability of $Q$.  \begin{itemize}
-\item Function using the Cantor Construction  \item $Q = N \times N$ and is a finite product of countable sets. Therefore countable. \end{itemize}}  \marginnote{There are 4 proofs for the uncountability of $R$:
+\begin{theorem}  (i) The set $\mathbb{Q}$ is countable\\ (ii) The set $\mathbb{R}$ is uncountable.  \marginnote{There are 2 proofs for the countability of $\mathbb{Q}$.  \begin{itemize}
+\item Function using the Cantor Construction  \item $\mathbb{Q}$ is the image of $\mathbb{Z} \times \mathbb{N}$ under $(p,q) \mapsto p/q$, and $\mathbb{Z} \times \mathbb{N}$ is a finite product of countable sets. \end{itemize}}  \marginnote{There are 4 proofs for the uncountability of $\mathbb{R}$:
 \begin{itemize}
 	\item NIP
-	\item Using the binary representations of real numbers and the fact that the sequences of $0s$ and $1s$ is uncountable
-	\item There are infinite subsets of $R$ (namely $(0,1)$ and $[1,1]$ ) that are uncountable.
+	\item Using the binary representations of real numbers and the fact that the set of sequences of 0's and 1's is uncountable
+	\item There are subsets of $\mathbb{R}$ (namely $(0,1)$ and $[0,1]$) that are uncountable.
 	\item Max Lipyanskiy's Senior Thesis at Columbia
 \end{itemize}}
 \end{theorem}
 
 \begin{proof}
-(i) For each $n \in \mathbb{N}$, let $A_n$ ne the set given by:
-\[A_n = \{\pm \frac{p}{q}: \text{where} \quad p,q \in \mathbb{N} \}\]
-Also note that we stipulate that p and q are in the lowest possible terms with $p+q=n$.  \\
-What's crucial to observe is that every $A_n$ is \emph{finite} and every rational number appears in exactly one of these sets.  Our 1-1 correspondence with the natural numbers is then achieved by listing each of the elements of Q.  \\
-(ii) We proceed with a proof by contradiction.  Assume that there exists a bijection $f: \mathbb{N} \to \mathbb{R}$. This suggests that is it possible to enumerate the elements of $\mathbb{R}$.  We can write
-\begin{equation}\mathbb{R} = \{x_1, x_2, x_3, x_4, \ldots\}\end{equation}
-and be confident that every real number appears somewhere on the list.  We now use something called the Nested Interval Property\marginnote{Nested Interval Property: For each $n \in \mathbb{N}$, assume we are given a closed interval $[a_n, b_n] = \{x \in \mathbb{R}: a_n \leq x \leq b_n\}$.  Assume also that for each $I_n \supset I_{n+1}$.  Then the resulting nested sequence of closed intervals has a nonempty intersection. } to produce a real number that is not there on our list.\\  Let $I_1$ be a closed interval that \emph{does not} contain $x_1$.  Next, let $I_2$ be a closed interval, contained in $I_1$ such that $x_2 \notin I_2$.  The existence of $I_2$ is easy to verify.  Certainly, $I_1$ contains two smaller \emph{disjoint} closed intervals and $x_2$ can only be in one of these.  In general, given an interval $I_n$, construct $I_n+1$ to satisfy \begin{enumerate}
-	\item $I_n+1 \subset I_n$ and
+(i) Set $A_1 = \{0\}$ and, for each $n \geq 2$, let $A_n$ be the set given by:
+\[A_n = \left\{\pm \frac{p}{q}: p,q \in \mathbb{N} \text{ are in lowest terms with } p+q=n \right\}.\]
+For example, $A_2 = \{1, -1\}$ and $A_3 = \{\frac{1}{2}, -\frac{1}{2}, 2, -2\}$.  \\
+What's crucial to observe is that every $A_n$ is \emph{finite} and every rational number appears in exactly one of these sets.  Our 1-1 correspondence with the natural numbers is then achieved by listing the elements of $A_1$, then those of $A_2$, then those of $A_3$, and so on.  \\
+(ii) We proceed with a proof by contradiction.  Assume that there exists a bijection $f: \mathbb{N} \to \mathbb{R}$. This means that it is possible to enumerate the elements of $\mathbb{R}$.  We can write
+\begin{equation}\label{eq:list-of-reals}\mathbb{R} = \{x_1, x_2, x_3, x_4, \ldots\}\end{equation}
+and be confident that every real number appears somewhere on the list.  We now use something called the Nested Interval Property\marginnote{Nested Interval Property: For each $n \in \mathbb{N}$, assume we are given a closed interval $[a_n, b_n] = \{x \in \mathbb{R}: a_n \leq x \leq b_n\}$.  Assume also that $I_n \supset I_{n+1}$ for each $n$.  Then the resulting nested sequence of closed intervals has a nonempty intersection. } to produce a real number that is not there on our list.\\  Let $I_1$ be a closed interval that \emph{does not} contain $x_1$.  Next, let $I_2$ be a closed interval, contained in $I_1$ such that $x_2 \notin I_2$.  The existence of $I_2$ is easy to verify.  Certainly, $I_1$ contains two smaller \emph{disjoint} closed intervals and $x_2$ can only be in one of these.  In general, given an interval $I_n$, construct $I_{n+1}$ to satisfy \begin{enumerate}
+	\item $I_{n+1} \subset I_n$ and
 	\item $x_{n+1} \notin I_{n+1}$
 \end{enumerate}
 
@@ -476,10 +475,10 @@ We now consider the intersection \[ \bigcap_{n=1}^{\infty}I_n \]
  % \label{fig:textfig}
 \end{marginfigure}
 
-If $x_{n_0}$ is some real number from the list (1), then we have that $x_{n_0} \notin I_{n_0}$ and therefore not in the intersection of the intervals.\\  Now assuming that (1) contains every real number, this leads to the conclusion that 
+If $x_{n_0}$ is some real number from the list \eqref{eq:list-of-reals}, then we have that $x_{n_0} \notin I_{n_0}$ and therefore not in the intersection of the intervals.\\  Now assuming that \eqref{eq:list-of-reals} contains every real number, this leads to the conclusion that 
 \[ \bigcap_{n=1}^{\infty}I_n = \emptyset \]
 
-However, according to the Nested Interval Property this is impossible.  By NIP there is a least one x in the intersection that consequently cannot be on the list in (1).  This contradiction means that such an enumeration of $\mathbb{R}$ is impossible and we can conclude that $\mathbb{R}$ is uncountable.
+However, according to the Nested Interval Property this is impossible.  By the NIP there is at least one $x$ in the intersection, which consequently cannot be on the list \eqref{eq:list-of-reals}.  This contradiction means that such an enumeration of $\mathbb{R}$ is impossible and we can conclude that $\mathbb{R}$ is uncountable.
 
 
 
@@ -488,7 +487,7 @@ However, according to the Nested Interval Property this is impossible.  By NIP t
 \section{Properties of Norms}
 
 
-Suppose that $\mathbf{x,y,z} \in R^k$ and $\alpha$ is real. Then
+Suppose that $\mathbf{x,y,z} \in \mathbb{R}^k$ and $\alpha$ is real. Then
 \begin{itemize}[$\diamond$]
 	\item $|\mathbf{x}| \geq 0$
 	\item $|\mathbf{x}| = 0$ iff $\mathbf{x} = 0$
