@@ -18,6 +18,39 @@
 \usepackage{makeidx}
 \makeindex
 
+% Cross-references to figures and tables.  Write \caption{...}\label{...} as
+% usual.  The Tufte class sets a float's caption only at \end{figure}, and
+% postpones the \label to match; but amsmath resets \label at the start of
+% every minipage, which silently undoes that, so \ref would print the current
+% section or theorem number instead of the figure number.  This restores it.
+\makeatletter
+\expandafter\apptocmd\csname\string\@tufte@float\endcsname
+  {\let\label\@tufte@label}{}{\typeout{Warning: tufte float label patch failed}}
+\makeatother
+
+% ---------------------------------------------------------------- Figures (TikZ)
+% Every diagram in the book is drawn with these shared styles, so that the
+% pictures look alike and one convention holds throughout:
+%   a FILLED endpoint belongs to the set, a HOLLOW endpoint does not.
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing}
+\definecolor{accent}{HTML}{A63D2F}% brick red: the set under discussion
+\definecolor{calm}{HTML}{2B6A8C}%   slate blue: neighborhoods and covers
+\tikzset{
+  >={Stealth[length=4pt,width=3.5pt]},
+  numline/.style={draw=black!55, line width=0.5pt, <->},
+  tickmark/.style={draw=black!55, line width=0.5pt},
+  setline/.style={draw=accent, line width=1.8pt},
+  nbhdline/.style={draw=calm, line width=1.8pt},
+  closedpt/.style={circle, fill=#1, draw=#1, line width=0.7pt, inner sep=0pt, minimum size=4pt},
+  closedpt/.default=accent,
+  openpt/.style={circle, fill=white, draw=#1, line width=0.7pt, inner sep=0pt, minimum size=4pt},
+  openpt/.default=accent,
+  seqpt/.style={circle, fill=black, inner sep=0pt, minimum size=2.6pt},
+  lbl/.style={font=\footnotesize, inner sep=1.5pt},
+  bracedeco/.style={decorate, decoration={brace, amplitude=3.5pt}, line width=0.4pt, draw=black!70},
+}
+
 % ---------------------------------------------------------------- Numbering
 \setcounter{secnumdepth}{2}
 \renewcommand{\thesection}{\thechapter.\arabic{section}}
