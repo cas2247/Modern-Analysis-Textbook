@@ -1,0 +1,629 @@
+\bookchapter{Five}{The Derivative}
+
+Calculus is usually taught as a collection of techniques.  You learn to differentiate polynomials and products, to find maxima by setting a derivative to zero, and to conclude that a function with positive derivative is increasing.  These techniques work, and you have probably used them for years.  In this chapter we go back and ask why they work.
+
+The answers turn out to depend on everything we have built so far.  The derivative is a functional limit, so it rests on Chapter Four.  The theorem that lets us draw conclusions from it, the Mean Value Theorem, rests on the Extreme Value Theorem, and through it on compactness and the Axiom of Completeness.  Even the humble fact that a function with zero derivative is constant cannot be proved without them.
+
+\section{Zooming In}\label{sec:zooming}
+
+Take a smooth curve, pick a point on it, and examine that point through a magnifying glass.  The stronger the glass, the straighter the curve appears.  Under enough magnification, a small piece of a circle or a parabola is indistinguishable from a piece of a straight line.  That is why the Earth looks flat from where we stand.
+
+Not every curve behaves this way.  The graph of $|x|$ has a corner at the origin, and no amount of magnification will smooth it out.  Zoom in a thousandfold and the picture is exactly what it was before.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+  \foreach \k/\w/\lab in {0/1/{actual size}, 1/0.25/{magnified 4 times}, 2/0.0625/{magnified 16 times}} {
+    \begin{scope}[shift={(\k*3.3,0)}]
+      \begin{scope}
+        \clip (-1.3,-1.3) rectangle (1.3,1.3);
+        \draw[curve] plot[domain=-1.3:1.3, samples=30] (\x,{(2*\x/1.3 + \w*(\x/1.3)^2)*0.56});
+      \end{scope}
+      \draw[tickmark] (-1.3,-1.3) rectangle (1.3,1.3);
+      \node[seqpt] at (0,0) {};
+      \node[lbl] at (0,-1.6) {\lab};
+    \end{scope}
+    \begin{scope}[shift={(\k*3.3,-3.7)}]
+      \draw[curve] (-1.3,0.8) -- (0,-0.5) -- (1.3,0.8);
+      \draw[tickmark] (-1.3,-1.3) rectangle (1.3,1.3);
+      \node[seqpt] at (0,-0.5) {};
+      \node[lbl] at (0,-1.6) {\lab};
+    \end{scope}
+  }
+  \node[lbl,rotate=90] at (-1.65,0) {$x^2$ near $x = 1$};
+  \node[lbl,rotate=90] at (-1.65,-3.7) {$|x|$ near $x = 0$};
+\end{tikzpicture}
+\caption{Two curves under a magnifying glass.  The parabola in the top row straightens out as we zoom in on the marked point.  The corner in the bottom row looks the same at every magnification.}
+\label{fig:zoom}
+\end{figure}
+
+A function is \emph{differentiable} at a point when its graph straightens out under magnification there, and the \emph{derivative} is the slope of the line it straightens out to.  This single number describes how the function is behaving in the immediate vicinity of the point.  It is local information in the purest form.
+
+\newthought{Here is the question} that will occupy the second half of the chapter.  How much does local information of this kind tell us about the function as a whole?
+
+Think of a car.  Its speedometer reports the derivative of its position, instant by instant.  Suppose the speedometer reads zero at every moment of a journey.  Has the car moved?  Of course not, we want to say.  But notice what the claim involves.  The hypothesis is about infinitely many separate instants, and the conclusion is about the whole trip.  This is a passage from local to global of exactly the kind we met in Chapter Three, and it needs a proof.  We will see that the proof must use the completeness of the real numbers, because on a number line with holes in it the claim is false.
+
+\section{The Derivative}
+
+\begin{definition}\label{def:derivative}
+Let $g : A \to \mathbb{R}$ be a function defined on an interval $A$, and let $c \in A$.  The \textsc{derivative} of $g$ at $c$ is
+\[ g'(c) = \lim_{x \to c} \frac{g(x) - g(c)}{x - c}, \]
+provided this limit exists.  In that case we say that $g$ is \textsc{differentiable} at $c$.  If $g'(c)$ exists for every $c \in A$, we say that $g$ is differentiable on $A$.
+\end{definition}
+
+The fraction in the definition is called a \emph{difference quotient}.  It is the slope of the straight line through the two points $(c, g(c))$ and $(x, g(x))$ on the graph, which is called a \emph{secant line}.  As $x$ approaches $c$ the secant lines pivot about the point $(c, g(c))$, and if they settle toward a limiting position, that limiting line is the \emph{tangent} and its slope is $g'(c)$.
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1.1cm,y=1.1cm]
+  \draw[graphaxis] (0,0) -- (4.25,0);
+  \draw[graphaxis] (0,0) -- (0,3.5);
+  \coordinate (C) at (1.4,0.753);
+  \foreach \xx/\yy in {3.6/2.733, 2.8/1.811, 2.0/1.12} {
+    \draw[guide] ($(C)!-0.25!(\xx,\yy)$) -- ($(C)!1.12!(\xx,\yy)$);
+    \node[seqpt] at (\xx,\yy) {};
+  }
+  \draw[calm, line width=0.9pt] (0.4,0.249) -- (3.9,2.013);
+  \draw[curve] plot[domain=0.3:3.9, samples=40] (\x,{0.4+0.18*\x*\x});
+  \node[closedpt] at (C) {};
+  \draw[guide] (1.4,0) -- (1.4,0.753);
+  \node[lbl,below=2pt] at (1.4,0) {$c$};
+  \node[lbl,calm] at (3.35,1.3) {tangent};
+\end{tikzpicture}
+\caption{Secant lines through the point above $c$.  As the second point slides down the curve toward the first, the secants turn toward the tangent.}
+\end{marginfigure}
+
+The derivative is a functional limit in the sense of Definition~\ref{def:functional-limit}.  The function whose limit is being taken is the difference quotient, which is defined at every point of $A$ except $c$ itself.  This is the situation that definition was designed for.
+
+\begin{example}
+Let $f(x) = x^n$ for a natural number $n$.  The factorization
+\[ x^n - c^n = (x - c)\left(x^{n-1} + c\,x^{n-2} + c^2 x^{n-3} + \cdots + c^{n-1}\right) \]
+shows that for $x \neq c$ the difference quotient is the sum in the second bracket.  That sum is a polynomial in $x$, hence continuous, so its limit as $x \to c$ is its value at $c$.  It has $n$ terms and each of them becomes $c^{n-1}$.  Therefore $f'(c) = n c^{n-1}$.
+\end{example}
+
+\begin{example}\label{ex:abs-not-diff}
+Let $f(x) = |x|$ and $c = 0$.  The difference quotient is $|x|/x$, which equals $1$ when $x > 0$ and $-1$ when $x < 0$.  Along the sequence $\left(\frac1n\right)$ it converges to $1$ and along $\left(-\frac1n\right)$ it converges to $-1$.  By the Divergence Criterion (Corollary~\ref{cor:divergence-criterion}) the limit does not exist, and $|x|$ is not differentiable at $0$.  This is the corner in Figure~\ref{fig:zoom}.
+\end{example}
+
+\begin{example}
+Let $f(x) = \sqrt{x}$ on $[0, \infty)$ and $c = 0$.  The difference quotient is $\sqrt{x}/x = 1/\sqrt{x}$.  Along the sequence $x_n = 1/n^2$ it takes the values $n$, which do not converge.  So $\sqrt{x}$ is not differentiable at $0$.  This time the graph does straighten out under magnification, but the line it approaches is vertical, and a vertical line has no slope.
+\end{example}
+
+The functions in the last two examples are continuous at the points where they fail to be differentiable.  So continuity does not imply differentiability.  The implication does hold in the other direction.
+
+\begin{theorem}\label{thm:diff-implies-cont}
+If $g : A \to \mathbb{R}$ is differentiable at a point $c \in A$, then $g$ is continuous at $c$.
+\end{theorem}
+
+\begin{proof}
+For $x \neq c$ we can write
+\[ g(x) - g(c) = \frac{g(x) - g(c)}{x - c}\,(x - c). \]
+As $x \to c$ the first factor tends to $g'(c)$ and the second tends to $0$.  By the Algebraic Limit Theorem for functional limits (Corollary~\ref{cor:alt-functions}), the product tends to $g'(c) \cdot 0 = 0$.  Hence $\lim_{x \to c} g(x) = g(c)$.
+\end{proof}
+
+\newthought{The magnifying glass, made precise.}  Suppose $g$ is differentiable at $c$.  For $x \neq c$, let $\eta(x)$ be the amount by which the difference quotient misses its limit, so that
+\[ \frac{g(x) - g(c)}{x - c} = g'(c) + \eta(x) \qquad \text{and} \qquad \lim_{x \to c} \eta(x) = 0. \]
+Multiplying through by $x - c$ gives
+\[ g(x) = \underbrace{g(c) + g'(c)(x - c)}_{\text{the tangent line}} \ +\ \underbrace{\eta(x)(x - c)}_{\text{the error}}. \]
+Near $c$ the function is its tangent line plus an error, and the error is small in a strong sense.  It is not merely small.  It is small \emph{compared with} $x - c$, since their ratio $\eta(x)$ tends to zero.  When we magnify the picture, we enlarge $x - c$ to a visible size, and the error, being a vanishing fraction of that, disappears from view.  That is why the curve looks straight.
+
+\subsection{The Rules of Differentiation}
+
+\begin{theorem}[Algebraic Differentiability Theorem]\label{thm:alg-diff}
+Let $f$ and $g$ be functions defined on an interval $A$, both differentiable at a point $c \in A$.  Then
+\begin{enumerate}[(i)]
+	\item $(f + g)'(c) = f'(c) + g'(c)$,
+	\item $(kf)'(c) = k f'(c)$ for every $k \in \mathbb{R}$,
+	\item $(fg)'(c) = f'(c)\,g(c) + f(c)\,g'(c)$, and
+	\item $\left(\dfrac{f}{g}\right)'(c) = \dfrac{g(c) f'(c) - f(c) g'(c)}{g(c)^2}$, provided $g(c) \neq 0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Parts (i) and (ii) follow at once from the Algebraic Limit Theorem for functional limits.  For (iii), add and subtract $f(x) g(c)$ in the numerator of the difference quotient to get
+\[ \frac{f(x) g(x) - f(c) g(c)}{x - c} = f(x)\,\frac{g(x) - g(c)}{x - c} + g(c)\,\frac{f(x) - f(c)}{x - c}. \]
+Because $f$ is differentiable at $c$ it is continuous there, so $f(x) \to f(c)$.  The two quotients tend to $g'(c)$ and $f'(c)$.  The right-hand side therefore tends to $f(c) g'(c) + g(c) f'(c)$.
+
+For (iv), first consider $1/g$.  Since $g$ is continuous at $c$ and $g(c) \neq 0$, there is a neighborhood of $c$ on which $g$ is not zero, and for $x$ in that neighborhood
+\[ \frac{\dfrac{1}{g(x)} - \dfrac{1}{g(c)}}{x - c} = -\,\frac{g(x) - g(c)}{x - c} \cdot \frac{1}{g(x)\,g(c)} \ \longrightarrow\ -\frac{g'(c)}{g(c)^2}. \]
+Now write $f/g$ as the product $f \cdot (1/g)$ and apply (iii).
+\end{proof}
+
+Together with the first example, this theorem shows that every polynomial is differentiable on $\mathbb{R}$, and that a quotient of polynomials is differentiable wherever its denominator is not zero, with the derivatives we expect.
+
+\begin{theorem}[Chain Rule]\label{thm:chain-rule}
+Let $f : A \to \mathbb{R}$ and $g : B \to \mathbb{R}$ be functions on intervals, with the range of $f$ contained in $B$.  If $f$ is differentiable at $c \in A$ and $g$ is differentiable at $f(c)$, then $g \circ f$ is differentiable at $c$, and
+\[ (g \circ f)'(c) = g'(f(c)) \cdot f'(c). \]
+\end{theorem}
+
+It is tempting to prove this in one line by writing
+\[ \frac{g(f(x)) - g(f(c))}{x - c} = \frac{g(f(x)) - g(f(c))}{f(x) - f(c)} \cdot \frac{f(x) - f(c)}{x - c} \]
+and letting $x \to c$.  The trouble is that $f(x) - f(c)$ may be zero for values of $x$ arbitrarily close to $c$, and then the first fraction is meaningless.  The proof below is the same idea with that one defect repaired.
+
+\begin{proof}
+Define a function $d$ on $B$ by
+\begin{displaymath}
+   d(y) = \left\{
+     \begin{array}{ll}
+       \dfrac{g(y) - g(f(c))}{y - f(c)} & \text{if } y \neq f(c), \\[2.5ex]
+       g'(f(c)) & \text{if } y = f(c).
+     \end{array}
+   \right.
+\end{displaymath}
+This is the difference quotient of $g$ at $f(c)$, with the missing value filled in by the limit it is approaching.  The statement that $g$ is differentiable at $f(c)$ is exactly the statement that $d$ is continuous at $f(c)$.  Moreover the equation
+\[ g(y) - g(f(c)) = d(y)\,\big(y - f(c)\big) \]
+holds for \emph{every} $y \in B$, including $y = f(c)$, where both sides are zero.
+
+Put $y = f(x)$ and divide by $x - c$.  For every $x \neq c$ in $A$,
+\[ \frac{g(f(x)) - g(f(c))}{x - c} = d(f(x)) \cdot \frac{f(x) - f(c)}{x - c}. \]
+Now let $x \to c$.  Since $f$ is continuous at $c$ and $d$ is continuous at $f(c)$, the composition $d \circ f$ is continuous at $c$ (Theorem~\ref{thm:composition}), so $d(f(x)) \to d(f(c)) = g'(f(c))$.  The second factor tends to $f'(c)$.
+\end{proof}
+
+\section{Peaks, Valleys and Darboux's Theorem}
+
+The best-known use of the derivative is to find the largest and smallest values of a function.  The method depends on the following theorem.
+
+\begin{theorem}[Interior Extremum Theorem]\label{thm:interior-extremum}
+Let $f$ be differentiable on an open interval $(a,b)$.  If $f$ attains a maximum value at some point $c \in (a,b)$, so that $f(c) \geq f(x)$ for all $x \in (a,b)$, then $f'(c) = 0$.  The same is true if $f(c)$ is a minimum value.
+\end{theorem}
+
+\begin{proof}
+Suppose $f(c)$ is a maximum.  Because $c$ is in the \emph{open} interval $(a,b)$, we can approach it from both sides.
+
+Choose a sequence $(x_n)$ in $(a,b)$ with $x_n < c$ and $(x_n) \to c$.  In the difference quotient
+\[ \frac{f(x_n) - f(c)}{x_n - c} \]
+the numerator is at most zero, because $f(c)$ is a maximum, and the denominator is negative.  So every one of these quotients is at least zero, and by the Order Limit Theorem their limit $f'(c)$ satisfies $f'(c) \geq 0$.
+
+Now choose a sequence $(y_n)$ in $(a,b)$ with $y_n > c$ and $(y_n) \to c$.  This time the numerator is at most zero and the denominator is positive, so the quotients are at most zero and $f'(c) \leq 0$.
+
+Both inequalities hold, so $f'(c) = 0$.  The proof for a minimum is similar.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1.05cm,y=1.05cm]
+  \draw[graphaxis] (0,0) -- (4.4,0);
+  \draw[graphaxis] (0,0) -- (0,3.1);
+  \draw[calm, line width=0.9pt] (1.1,2.4) -- (3.3,2.4);
+  \draw[guide] (1.1,1.795) -- (2.2,2.4) -- (3.3,1.795);
+  \draw[curve] plot[domain=0.6:3.8, samples=40] (\x,{2.4-0.5*(\x-2.2)^2});
+  \node[closedpt] at (2.2,2.4) {};
+  \node[seqpt] at (1.1,1.795) {};
+  \node[seqpt] at (3.3,1.795) {};
+  \draw[guide] (2.2,0) -- (2.2,2.4);
+  \node[lbl,below=2pt] at (2.2,0) {$c$};
+  \node[lbl,below=2pt] at (0.6,0) {$a$};
+  \node[lbl,below=2pt] at (3.8,0) {$b$};
+  \draw[tickmark] (0.6,-0.05) -- (0.6,0.05);
+  \draw[tickmark] (3.8,-0.05) -- (3.8,0.05);
+\end{tikzpicture}
+\caption{At a peak, secants from the left slope upward and secants from the right slope downward.  The tangent is caught between them and must be horizontal.}
+\end{marginfigure}
+
+\begin{dangerousbend}
+The theorem has two limitations that are easy to forget.  It says nothing about a maximum at an \emph{endpoint} of a closed interval.  The function $f(x) = x$ on $[0,1]$ has its maximum at $1$, where its derivative is $1$.  And its converse is false.  The function $f(x) = x^3$ has $f'(0) = 0$, but $0$ is neither a maximum nor a minimum.
+\end{dangerousbend}
+
+\newthought{The Interior Extremum Theorem} has a consequence that says something unexpected about derivatives themselves.  Is the derivative of a differentiable function always continuous?  It is not, as we will see in a moment.  But a derivative cannot be discontinuous in just any way.  Like a continuous function, it is unable to skip values.
+
+\begin{theorem}[Darboux's Theorem]\label{thm:darboux}
+Let $f$ be differentiable on a closed interval $[a,b]$.  If $\alpha$ is a real number strictly between $f'(a)$ and $f'(b)$, then there is a point $c \in (a,b)$ with $f'(c) = \alpha$.
+\end{theorem}
+
+\begin{proof}
+We treat the case $f'(a) < \alpha < f'(b)$.  The other case is similar.  Define
+\[ g(x) = f(x) - \alpha x. \]
+Then $g$ is differentiable on $[a,b]$ with $g'(x) = f'(x) - \alpha$, so that $g'(a) < 0 < g'(b)$, and we are looking for a point where $g' = 0$.
+
+Since $g$ is differentiable it is continuous, and $[a,b]$ is compact, so by the Extreme Value Theorem (Theorem~\ref{thm:evt}) $g$ attains a minimum at some point $c \in [a,b]$.  We claim the minimum is not at either endpoint.
+
+Consider the endpoint $a$.  The difference quotients $\frac{g(x) - g(a)}{x - a}$ converge to the negative number $g'(a)$, so they are themselves negative for all $x$ sufficiently close to $a$.  For such $x$ the denominator is positive, so the numerator is negative, which says $g(x) < g(a)$.  Thus $g(a)$ is not the minimum.  At the other endpoint the quotients $\frac{g(x) - g(b)}{x - b}$ are eventually positive while the denominator is negative, so again $g(x) < g(b)$ for $x$ close to $b$.
+
+Therefore $c$ lies in the open interval $(a,b)$, and the Interior Extremum Theorem gives $g'(c) = 0$.  That is, $f'(c) = \alpha$.
+\end{proof}
+
+Notice that we did not assume $f'$ to be continuous.  If we had, the theorem would follow from the Intermediate Value Theorem applied to $f'$.  Darboux's Theorem says that derivatives have the intermediate value property whether they are continuous or not.  In particular, a derivative can never have a jump discontinuity, since a jump skips values.  The postage function of Chapter Four is not the derivative of anything.
+
+\begin{example}\label{ex:discontinuous-derivative}
+Here is a differentiable function whose derivative is not continuous.  We borrow the sine and cosine functions from calculus once more, and let
+\begin{displaymath}
+   g(x) = \left\{
+     \begin{array}{ll}
+       x^2 \sin(1/x) & \text{if } x \neq 0, \\
+       0 & \text{if } x = 0.
+     \end{array}
+   \right.
+\end{displaymath}
+At $c = 0$ the difference quotient is $x \sin(1/x)$, and since $|x \sin(1/x)| \leq |x|$ it tends to $0$.  So $g'(0) = 0$.  Away from the origin the rules of calculus give
+\[ g'(x) = 2x \sin(1/x) - \cos(1/x). \]
+The first term tends to $0$ as $x \to 0$, but the second oscillates between $-1$ and $1$ without settling down.  So $\lim_{x \to 0} g'(x)$ does not exist, and $g'$ is not continuous at $0$ even though $g'(0)$ exists.  The discontinuity is essential, as Darboux's Theorem says it must be.
+\end{example}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=2.15cm,y=2.15cm]
+  \draw[graphaxis] (-1.08,0) -- (1.12,0);
+  \draw[graphaxis] (0,-1.08) -- (0,1.12);
+  \draw[guide] plot[domain=-1:1, samples=40] (\x,{\x*\x});
+  \draw[guide] plot[domain=-1:1, samples=40] (\x,{-\x*\x});
+  % the window shows -0.2 <= x <= 0.2, magnified so that the oscillations are visible
+  \draw[curve, line width=0.7pt] plot[domain=5:130, samples=1400, variable=\t] ({5/\t},{25*sin(deg(\t))/\t/\t});
+  \draw[curve, line width=0.7pt] plot[domain=5:130, samples=1400, variable=\t] ({-5/\t},{-25*sin(deg(\t))/\t/\t});
+  \node[lbl,right] at (0.72,0.95) {$x^2$};
+  \node[lbl,right] at (0.72,-0.95) {$-x^2$};
+\end{tikzpicture}
+\caption{The function $x^2 \sin(1/x)$ is trapped between the parabolas $x^2$ and $-x^2$, which forces it to flatten out at the origin.  Its slope, however, keeps swinging between about $-1$ and $1$ all the way in.  The picture shows the part of the graph very close to the origin.}
+\end{marginfigure}
+
+\section{The Mean Value Theorem}
+
+We come now to the theorem that connects the derivative of a function with the function itself.  It is built in two steps.
+
+\begin{theorem}[Rolle's Theorem]\label{thm:rolle}
+Let $f : [a,b] \to \mathbb{R}$ be continuous on $[a,b]$ and differentiable on $(a,b)$.  If $f(a) = f(b)$, then there is a point $c \in (a,b)$ with $f'(c) = 0$.
+\end{theorem}
+
+\begin{proof}
+Because $f$ is continuous on the compact set $[a,b]$, it attains a maximum and a minimum there.  If both occur at the endpoints, then, since $f(a) = f(b)$, the maximum and minimum values are equal and $f$ is constant.  In that case $f'(c) = 0$ for every $c$.  Otherwise at least one of them occurs at a point $c$ of the open interval $(a,b)$, and the Interior Extremum Theorem says that $f'(c) = 0$.
+\end{proof}
+
+A graph that starts and ends at the same height must turn around somewhere, and where it turns around its tangent is horizontal.  The Mean Value Theorem is the same statement for a graph whose endpoints are at different heights.  The picture is simply tilted.
+
+\begin{theorem}[Mean Value Theorem]\label{thm:mvt}
+Let $f : [a,b] \to \mathbb{R}$ be continuous on $[a,b]$ and differentiable on $(a,b)$.  Then there is a point $c \in (a,b)$ where
+\[ f'(c) = \frac{f(b) - f(a)}{b - a}. \]
+\end{theorem}
+
+\begin{proof}
+The right-hand side is the slope of the secant line through the two ends of the graph.  Call that slope $m$.  The secant line itself is the graph of $y = f(a) + m(x - a)$.  Let $d(x)$ be the height of the graph of $f$ above this line,
+\[ d(x) = f(x) - \big[f(a) + m(x - a)\big]. \]
+Then $d$ is continuous on $[a,b]$ and differentiable on $(a,b)$, and it vanishes at both ends, since $d(a) = 0$ and $d(b) = f(b) - f(a) - m(b - a) = 0$.  By Rolle's Theorem there is a point $c \in (a,b)$ with $d'(c) = 0$.  Since $d'(x) = f'(x) - m$, this says $f'(c) = m$.
+\end{proof}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+  % Rolle
+  \begin{scope}[x=1.1cm,y=1.1cm]
+    \draw[graphaxis] (0,0) -- (4.2,0);
+    \draw[graphaxis] (0,0) -- (0,3.2);
+    \draw[guide] (0.5,1) -- (3.5,1);
+    \draw[calm, line width=0.9pt] (1.0,2.125) -- (3.0,2.125);
+    \draw[curve] plot[domain=0.5:3.5, samples=40] (\x,{1+0.5*(\x-0.5)*(3.5-\x)});
+    \node[closedpt] at (0.5,1) {};
+    \node[closedpt] at (3.5,1) {};
+    \node[seqpt] at (2,2.125) {};
+    \draw[guide] (0.5,0) -- (0.5,1);
+    \draw[guide] (3.5,0) -- (3.5,1);
+    \draw[guide] (2,0) -- (2,2.125);
+    \node[lbl,below=2pt] at (0.5,0) {$a$};
+    \node[lbl,below=2pt] at (2,0) {$c$};
+    \node[lbl,below=2pt] at (3.5,0) {$b$};
+    \node[lbl] at (2,-0.85) {Rolle's Theorem};
+  \end{scope}
+  % MVT
+  \begin{scope}[shift={(5.6,0)},x=1.1cm,y=1.1cm]
+    \draw[graphaxis] (0,0) -- (4.2,0);
+    \draw[graphaxis] (0,0) -- (0,3.2);
+    \draw[guide] (0.4,1.06) -- (3.6,2.66);
+    \draw[calm, line width=0.9pt] (0.9,1.95) -- (3.1,3.05);
+    \draw[curve] plot[domain=0.4:3.6, samples=40] (\x,{0.5+1.5*\x-0.25*\x*\x});
+    \node[closedpt] at (0.4,1.06) {};
+    \node[closedpt] at (3.6,2.66) {};
+    \node[seqpt] at (2,2.5) {};
+    \draw[guide] (0.4,0) -- (0.4,1.06);
+    \draw[guide] (3.6,0) -- (3.6,2.66);
+    \draw[guide] (2,0) -- (2,2.5);
+    \node[lbl,below=2pt] at (0.4,0) {$a$};
+    \node[lbl,below=2pt] at (2,0) {$c$};
+    \node[lbl,below=2pt] at (3.6,0) {$b$};
+    \node[lbl] at (2,-0.85) {Mean Value Theorem};
+  \end{scope}
+\end{tikzpicture}
+\caption{In each picture the dashed line joins the two ends of the graph, and the blue line is a tangent parallel to it.  The Mean Value Theorem is Rolle's Theorem with the page tilted.}
+\label{fig:mvt}
+\end{figure}
+
+In the language of the car, the quotient $\frac{f(b) - f(a)}{b - a}$ is the average speed over a journey and $f'(c)$ is the speedometer reading at one instant.  The theorem says that the two must agree at least once.  If you cover $120$ kilometers in two hours, then at some moment your speedometer read exactly $60$.
+
+\subsection{From Local to Global}
+
+We can now answer the question raised in Section~\ref{sec:zooming}.  Each of the following corollaries takes information about the derivative at every point, which is local, and converts it into a statement about the function over a whole interval.
+
+\begin{corollary}\label{cor:zero-derivative}
+If $g$ is differentiable on an interval $A$ and $g'(x) = 0$ for all $x \in A$, then $g$ is constant on $A$.
+\end{corollary}
+
+\begin{proof}
+Take any two points $x < y$ in $A$.  The Mean Value Theorem, applied to $g$ on the interval $[x,y]$, gives a point $c$ between them with
+\[ g(y) - g(x) = g'(c)\,(y - x) = 0. \]
+So $g(x) = g(y)$.  Since the two points were arbitrary, $g$ takes the same value everywhere.
+\end{proof}
+
+The car whose speedometer always reads zero has not moved.
+
+\begin{corollary}\label{cor:same-derivative}
+If $f$ and $g$ are differentiable on an interval $A$ and $f'(x) = g'(x)$ for all $x \in A$, then there is a constant $k$ such that $f(x) = g(x) + k$ for all $x \in A$.
+\end{corollary}
+
+\begin{proof}
+The function $f - g$ has derivative zero on $A$, so it is constant by Corollary~\ref{cor:zero-derivative}.
+\end{proof}
+
+\begin{corollary}\label{cor:monotone}
+Let $f$ be differentiable on an interval $A$.
+\begin{enumerate}[(i)]
+	\item If $f'(x) \geq 0$ for all $x \in A$, then $f$ is increasing on $A$.
+	\item If $f'(x) > 0$ for all $x \in A$, then $f$ is strictly increasing on $A$, meaning that $x < y$ implies $f(x) < f(y)$.
+\end{enumerate}
+The corresponding statements hold for decreasing functions.
+\end{corollary}
+
+\begin{proof}
+For $x < y$ in $A$ the Mean Value Theorem gives $f(y) - f(x) = f'(c)(y - x)$ for some $c$ between them.  The factor $y - x$ is positive, so the sign of $f(y) - f(x)$ is the sign of $f'(c)$.
+\end{proof}
+
+\begin{corollary}\label{cor:bounded-derivative}
+Let $f$ be differentiable on an interval $A$, and suppose there is a number $M$ with $|f'(x)| \leq M$ for all $x \in A$.  Then
+\[ |f(x) - f(y)| \leq M\,|x - y| \qquad \text{for all } x, y \in A, \]
+and consequently $f$ is uniformly continuous on $A$.
+\end{corollary}
+
+\begin{proof}
+The inequality is the Mean Value Theorem again, since $|f(x) - f(y)| = |f'(c)|\,|x - y|$ for some $c$ between $x$ and $y$.  Given $\varepsilon > 0$, the response $\delta = \varepsilon/M$ then works at every point.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1.05cm,y=1.05cm]
+  \fill[epsband] (0.3,-0.1) -- (2.2,1.8) -- (0.3,3.7) -- cycle;
+  \fill[epsband] (4.1,-0.1) -- (2.2,1.8) -- (4.1,3.7) -- cycle;
+  \draw[guide] (0.3,-0.1) -- (4.1,3.7);
+  \draw[guide] (0.3,3.7) -- (4.1,-0.1);
+  \draw[curve] plot[domain=0.3:4.1, samples=60] (\x,{1.8+0.45*sin(deg(1.5*(\x-2.2)))+0.12*(\x-2.2)});
+  \node[closedpt] at (2.2,1.8) {};
+  \node[lbl] at (3.55,3.55) {slope $M$};
+  \node[lbl] at (3.45,0.05) {slope $-M$};
+\end{tikzpicture}
+\caption{A bound on the derivative confines the graph.  Seen from any point on it, the rest of the graph must stay inside the shaded cone, between the lines of slope $M$ and $-M$.}
+\end{marginfigure}
+
+This last corollary explains something from Chapter Four.  When the tiler computed that an error of $h$ in the side of her tile produced an error of at most $7h$ in the area, the number $7$ was a bound for the derivative $2x$ of the function $x^2$ on the interval from $2$ to $4$.  Her whole calculation was the Mean Value Theorem in disguise.
+
+\newthought{Where did completeness come in?}  Trace the chain of reasoning backward.  The corollaries come from the Mean Value Theorem, which comes from Rolle's Theorem, which needs the Extreme Value Theorem, which needs the compactness of $[a,b]$, which needs the Bolzano--Weierstrass Theorem and the Axiom of Completeness.  None of this is avoidable.  Consider the function defined only on the rational numbers by
+\begin{displaymath}
+   s(x) = \left\{
+     \begin{array}{ll}
+       0 & \text{if } x^2 < 2, \\
+       1 & \text{if } x^2 > 2.
+     \end{array}
+   \right.
+\end{displaymath}
+Every rational number has a neighborhood on which $s$ is constant, so the difference quotients of $s$ are eventually zero at every point and $s'(x) = 0$ for every rational $x$.  Yet $s$ is not constant.  Among the rationals, a car whose speedometer always reads zero can still get from $0$ to $1$, by slipping through the hole at $\sqrt2$.
+
+\subsection{L'Hospital's Rule}
+
+One more application of these ideas justifies a familiar technique for evaluating limits.  It requires a version of the Mean Value Theorem for two functions at once.
+
+\begin{theorem}[Generalized Mean Value Theorem]\label{thm:gmvt}
+Let $f$ and $g$ be continuous on $[a,b]$ and differentiable on $(a,b)$.  Then there is a point $c \in (a,b)$ where
+\[ \big[f(b) - f(a)\big]\,g'(c) = \big[g(b) - g(a)\big]\,f'(c). \]
+\end{theorem}
+
+\begin{proof}
+Apply Rolle's Theorem to the function
+\[ h(x) = \big[f(b) - f(a)\big]\,g(x) - \big[g(b) - g(a)\big]\,f(x). \]
+A short calculation shows that
+\[ h(a) = f(b)\,g(a) - f(a)\,g(b) = h(b). \]
+So there is a point $c \in (a,b)$ with $h'(c) = 0$, which is the equation we want.
+\end{proof}
+
+Taking $g(x) = x$ recovers the ordinary Mean Value Theorem.
+
+\begin{theorem}[L'Hospital's Rule, the $0/0$ case]\label{thm:lhospital}
+Let $f$ and $g$ be continuous on an interval containing the point $a$, and differentiable at every point of that interval except possibly $a$.  Suppose that $f(a) = g(a) = 0$ and that $g'(x) \neq 0$ for $x \neq a$.  If
+\[ \lim_{x \to a} \frac{f'(x)}{g'(x)} = L, \qquad \text{then} \qquad \lim_{x \to a} \frac{f(x)}{g(x)} = L. \]
+\end{theorem}
+
+\begin{proof}
+Let $\varepsilon > 0$.  By hypothesis there is a $\delta > 0$ such that
+\[ \left|\frac{f'(t)}{g'(t)} - L\right| < \varepsilon \qquad \text{whenever } 0 < |t - a| < \delta. \]
+Fix an $x$ in the interval with $0 < |x - a| < \delta$.  First, $g(x) \neq 0$.  If $g(x)$ were zero, then $g$ would vanish at both $a$ and $x$, and Rolle's Theorem would produce a point between them where $g' = 0$, contrary to hypothesis.
+
+Now apply the Generalized Mean Value Theorem on the interval with endpoints $a$ and $x$.  It gives a point $c$ strictly between them with $f(x)\,g'(c) = g(x)\,f'(c)$, where we have used $f(a) = g(a) = 0$.  Dividing,
+\[ \frac{f(x)}{g(x)} = \frac{f'(c)}{g'(c)}. \]
+Since $c$ lies between $a$ and $x$ we have $0 < |c - a| < \delta$, and so the right-hand side is within $\varepsilon$ of $L$.  Hence $\left|\frac{f(x)}{g(x)} - L\right| < \varepsilon$.
+\end{proof}
+
+\begin{example}
+Both $x^5 - 1$ and $x^3 - 1$ vanish at $x = 1$, and the derivative $3x^2$ of the second is nonzero near $1$.  Therefore
+\[ \lim_{x \to 1} \frac{x^5 - 1}{x^3 - 1} = \lim_{x \to 1} \frac{5x^4}{3x^2} = \frac53. \]
+The rule may only be used after checking that numerator and denominator both tend to zero.  Applied to $\frac{x^5 + 1}{x^3 + 1}$ at $x = 1$ it would give the same answer $\frac53$, and the true limit there is $1$.
+\end{example}
+
+\section{A Continuous Function with No Derivative Anywhere}
+
+We have seen that a continuous function can fail to be differentiable at a point.  The function $|x|$ has one corner, and it is easy to draw a function with a corner at every integer.  For a long time it was taken for granted that this was as bad as things could get, and that a continuous function must be differentiable at most points, with at worst a scattering of exceptions.  In 1872 Karl Weierstrass showed that this is false.  There are continuous functions that have no derivative at any point whatever.  Their graphs have no tangent anywhere, and no magnifying glass will ever straighten them.
+
+Weierstrass built his example from cosines.  The one below, found by Teiji Takagi in 1903, is made of nothing but sawteeth.
+
+Let $h(x)$ be the distance from $x$ to the nearest integer.  Its graph is a row of teeth of height $\frac12$, one for each unit interval.  For $n = 0, 1, 2, \ldots$ let
+\[ h_n(x) = \frac{1}{2^n}\,h(2^n x). \]
+Each $h_n$ is a copy of $h$ shrunk by a factor of $2^n$ in both directions.  Its teeth are $2^n$ times as numerous and $2^n$ times as small, and every one of its sloping edges still has slope $1$ or $-1$.  Now add all of these together,
+\[ T(x) = \sum_{n=0}^{\infty} h_n(x) = \sum_{n=0}^{\infty} \frac{1}{2^n}\,h(2^n x). \]
+Since $0 \leq h_n(x) \leq \frac{1}{2^{n+1}}$, the series converges for every $x$ by comparison with a geometric series, so $T$ is a well-defined function on $\mathbb{R}$.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[declare function={saw(\x)=abs(\x-round(\x));}]
+  % the layers
+  \begin{scope}[x=3.6cm,y=3.6cm]
+    \foreach \lev/\yo in {0/1.05, 1/0.55, 2/0.2} {
+      \pgfmathsetmacro{\scl}{2^\lev}
+      \draw[tickmark] (0,\yo) -- (1,\yo);
+      \draw[curve, line width=0.8pt] plot[domain=0:1, samples=33] (\x,{\yo+saw(\scl*\x)/\scl});
+      \node[lbl,left=2pt] at (0,{\yo+0.08}) {$h_{\lev}$};
+    }
+    \node[lbl,below=2pt] at (0,0.2) {$0$};
+    \node[lbl,below=2pt] at (1,0.2) {$1$};
+  \end{scope}
+  % the sum
+  \begin{scope}[shift={(4.9,0.72)},x=4.8cm,y=5.2cm]
+    \draw[graphaxis] (0,0) -- (1.07,0);
+    \draw[graphaxis] (0,0) -- (0,0.76);
+    \draw[curve, line width=0.7pt] plot[domain=0:1, samples=257] (\x,{saw(\x)+saw(2*\x)/2+saw(4*\x)/4+saw(8*\x)/8+saw(16*\x)/16+saw(32*\x)/32+saw(64*\x)/64+saw(128*\x)/128});
+    \draw[tickmark] (1,-0.012) -- (1,0.012);
+    \draw[tickmark] (0.5,-0.012) -- (0.5,0.012);
+    \draw[tickmark] (-0.008,0.6667) -- (0.008,0.6667);
+    \node[lbl,below=2pt] at (0,0) {$0$};
+    \node[lbl,below=2pt] at (0.5,0) {$\frac12$};
+    \node[lbl,below=2pt] at (1,0) {$1$};
+    \node[lbl,left=2pt] at (0,0.6667) {$\frac23$};
+    \node[lbl] at (0.5,0.74) {$T$};
+  \end{scope}
+\end{tikzpicture}
+\caption{On the left, the first three sawtooth layers.  On the right, the sum of all of them.  Every small piece of the graph of $T$ carries smaller copies of the same bumps.}
+\label{fig:takagi}
+\end{figure}
+
+Two facts about $T$ are true.  It is continuous on $\mathbb{R}$, and it is not differentiable at any point.  The first fact needs a theorem about infinite sums of continuous functions that we will prove in Chapter Six.  The second we can prove now, and the proof makes no use of the first.
+
+The idea is this.  If a function is differentiable at $x$, then the slopes of short secants near $x$ must all be close to one number.  For $T$ we will find a sequence of shorter and shorter secants around $x$ whose slopes are integers that change by exactly $1$ at every step.  Such a sequence cannot settle down.
+
+We need to know that secants which \emph{straddle} the point $x$, with one end on each side, are as good as secants that start at $x$.
+
+\begin{lemma}[Straddle Lemma]\label{lem:straddle}
+Let $f$ be differentiable at $x$.  Suppose $(u_n)$ and $(v_n)$ are sequences with $u_n \leq x \leq v_n$ and $u_n < v_n$ for all $n$, and $v_n - u_n \to 0$.  Then
+\[ \lim_{n \to \infty} \frac{f(v_n) - f(u_n)}{v_n - u_n} = f'(x). \]
+\end{lemma}
+
+\begin{proof}
+Let $\varepsilon > 0$.  Since $f$ is differentiable at $x$ there is a $\delta > 0$ such that every difference quotient $\frac{f(t) - f(x)}{t - x}$ with $0 < |t - x| < \delta$ lies within $\varepsilon$ of $f'(x)$.  Choose $N$ so that $v_n - u_n < \delta$ for $n \geq N$, and fix such an $n$.
+
+If $u_n = x$ or $v_n = x$, the quotient in the lemma is an ordinary difference quotient at $x$ and we are done.  Otherwise $u_n < x < v_n$, and a little algebra shows that
+\[ \frac{f(v_n) - f(u_n)}{v_n - u_n} = \lambda\,\frac{f(v_n) - f(x)}{v_n - x} + (1 - \lambda)\,\frac{f(x) - f(u_n)}{x - u_n}, \]
+where $\lambda = \dfrac{v_n - x}{v_n - u_n}$.  The number $\lambda$ lies between $0$ and $1$, so the straddling slope is a weighted average of the two one-sided slopes.  Each of those is within $\varepsilon$ of $f'(x)$, and an average of two numbers within $\varepsilon$ of $f'(x)$ is itself within $\varepsilon$ of $f'(x)$.
+\end{proof}
+
+\begin{theorem}\label{thm:takagi}
+The function $T$ is not differentiable at any point of $\mathbb{R}$.
+\end{theorem}
+
+\begin{proof}
+Fix $x \in \mathbb{R}$.  For each $n \geq 1$ let $u_n$ be the largest number of the form $j/2^n$, with $j$ an integer, that is at most $x$, and let $v_n = u_n + 1/2^n$.  Then $u_n \leq x < v_n$ and $v_n - u_n = 1/2^n \to 0$.  The interval $[u_{n+1}, v_{n+1}]$ is either the left half or the right half of $[u_n, v_n]$, so these intervals are nested.
+
+We compute the slope of $T$ across $[u_n, v_n]$ one layer at a time.
+
+\emph{Layers $h_k$ with $k \geq n$.}  The function $h_k$ is zero at every multiple of $1/2^k$.  Both $u_n$ and $v_n$ are multiples of $1/2^n$, and therefore of $1/2^k$.  So $h_k(u_n) = h_k(v_n) = 0$, and these layers contribute nothing.
+
+\emph{Layers $h_k$ with $k < n$.}  The corners of $h_k$ are at the multiples of $1/2^{k+1}$.  Since $n \geq k + 1$, no such corner lies strictly inside $[u_n, v_n]$.  So $h_k$ is a straight line on this interval, with slope $s_k = 1$ or $s_k = -1$.  Because the intervals are nested, the value of $s_k$ does not depend on $n$.
+
+Adding the layers up, the slope of $T$ across $[u_n, v_n]$ is
+\[ q_n = \frac{T(v_n) - T(u_n)}{v_n - u_n} = s_0 + s_1 + \cdots + s_{n-1}. \]
+Each $q_n$ is an integer, and $q_{n+1} - q_n = s_n = \pm 1$.  Consecutive terms of the sequence $(q_n)$ are always exactly $1$ apart, so $(q_n)$ is not a Cauchy sequence and does not converge.
+
+If $T$ were differentiable at $x$, the Straddle Lemma would force $(q_n)$ to converge to $T'(x)$.  It does not converge.  So $T$ is not differentiable at $x$.
+\end{proof}
+
+Functions like $T$ were once regarded as monsters, artificial things that had no place in the real world.  The opposite turned out to be nearer the truth.  The path of a pollen grain jostled by water molecules, the outline of a coast, and the record of a share price all look far more like the graph of $T$ than like the graph of a polynomial.  In a sense that can be made precise, most continuous functions are differentiable nowhere, and the smooth functions of calculus are the rare exceptions.
+
+\section{Problems}
+
+\noindent The problems in this section are original to this text.
+
+\begin{problem}[From the definition]
+\hint{In (c), write $x|x|$ without absolute values for $x > 0$ and for $x < 0$ separately.}
+Work each part directly from the definition of the derivative, without using the rules of differentiation.
+\begin{enumerate}[(a)]
+	\item Find $f'(c)$ for $f(x) = \dfrac1x$ at a point $c \neq 0$.
+	\item Find $f'(c)$ for $f(x) = \sqrt{x}$ at a point $c > 0$.
+	\item Show that $f(x) = x\,|x|$ is differentiable at every point, including $0$, and find $f'$.  Is $f'$ differentiable at $0$?
+	\item For which numbers $a$ and $b$ is the function equal to $x^2$ for $x \leq 1$ and to $ax + b$ for $x > 1$ differentiable at $1$?  Sketch the result.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The only line that fits]
+\hint{The error for a line of slope $m$ is $E_m(x) = f(x) - f(c) - m(x - c)$.  Divide it by $x - c$.}
+Let $f$ be defined on an interval containing $c$.  For each real number $m$, the line through $(c, f(c))$ with slope $m$ approximates $f$ with an error $E_m(x) = f(x) - \big[f(c) + m(x - c)\big]$.
+\begin{enumerate}[(a)]
+	\item Prove that $f$ is differentiable at $c$ with $f'(c) = m$ if and only if $\lim_{x \to c} \dfrac{E_m(x)}{x - c} = 0$.
+	\item Deduce that if $f$ is differentiable at $c$, the tangent is the \emph{only} line through $(c, f(c))$ whose error is small compared with $x - c$.
+	\item For $f(x) = x^2$ and $c = 1$, compute $E_2(x)$ and $E_3(x)$ at $x = 1.1$, $1.01$ and $1.001$.  Describe in a sentence what the numbers show.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[True or false]
+\hint{The functions $|x|$, $x^3$ and $\sqrt{x}$ will supply all the counterexamples you need.}
+Decide whether each statement is true.  Prove the true ones and give a counterexample to each of the others.  In parts (d) and (e), $f$ is a differentiable function on a bounded open interval $(a,b)$.
+\begin{enumerate}[(a)]
+	\item If $f^2$ is differentiable at $c$, then $f$ is differentiable at $c$.
+	\item If $f$ is differentiable on $\mathbb{R}$ and $f'(x) \neq 0$ for all $x$, then $f$ is one-to-one.
+	\item If $f$ is differentiable on $\mathbb{R}$ and one-to-one, then $f'(x) \neq 0$ for all $x$.
+	\item If $f'$ is bounded on $(a,b)$, then so is $f$.
+	\item If $f$ is bounded on $(a,b)$, then so is $f'$.
+	\item If $f'(c) > 0$, then there is a $\delta > 0$ such that $f(x) > f(c)$ whenever $c < x < c + \delta$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Speed cameras]
+\hint{For (b), the speed is a derivative, and derivatives cannot skip values.}
+Two cameras stand $9$ kilometers apart on a road with a speed limit of $100$ kilometers per hour.  A car passes the first at 14:00:00 and the second at 14:04:30.
+\begin{enumerate}[(a)]
+	\item Prove that the car exceeded the speed limit at some instant.  State the assumptions about the car's motion that your proof requires.
+	\item The driver points out that she was stopped at a red light for part of the time between the cameras.  Prove that at some instant her speedometer read exactly $100$.
+	\item Did your argument in (b) need the car's speed to be a continuous function of time?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Known only by its derivative]
+\hint{Compare $f$ with the functions $x$ and $3x$.}
+A differentiable function $f : \mathbb{R} \to \mathbb{R}$ satisfies $f(0) = 0$ and $1 \leq f'(x) \leq 3$ for all $x$.  Nothing else about it is known.
+\begin{enumerate}[(a)]
+	\item Prove that $2 \leq f(2) \leq 6$.
+	\item Show that every number between $2$ and $6$ is a possible value of $f(2)$.
+	\item Shade the region of the plane in which the graph of $f$ must lie.
+	\item What can you say about $f(-1)$?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Homing in]
+\hint{For (b), show that $|x_{n+1} - x_n| \leq \frac{1}{2^{n-1}}\,|x_2 - x_1|$ and then recall the hiker of Chapter Two.}
+Let $f : \mathbb{R} \to \mathbb{R}$ be differentiable with $|f'(x)| \leq \frac12$ for all $x$.
+\begin{enumerate}[(a)]
+	\item Prove that $f$ has at most one fixed point.
+	\item Choose any $x_1$ and define $x_{n+1} = f(x_n)$.  Prove that $(x_n)$ is a Cauchy sequence, and that its limit is a fixed point of $f$.
+	\item The function $f(x) = \sqrt{x^2 + 1}$ satisfies $|f'(x)| < 1$ for all $x$.  Show that it has no fixed point.  Why does this not contradict part (b)?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Could this be a derivative?]
+\hint{Darboux's Theorem rules out three of these.}
+For each function $\varphi$ below, decide whether there is a differentiable function $F : \mathbb{R} \to \mathbb{R}$ with $F' = \varphi$.  Give such an $F$ or prove that there is none.
+\begin{enumerate}[(a)]
+	\item $\varphi(x) = |x|$
+	\item $\varphi(x) = 0$ for $x < 0$ and $\varphi(x) = 1$ for $x \geq 0$
+	\item Dirichlet's function
+	\item Any function that takes exactly two different values
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Counting roots]
+\hint{Between two roots of $p$ there is a root of $p'$.}
+\begin{enumerate}[(a)]
+	\item Use Rolle's Theorem and induction to prove that a polynomial of degree $n \geq 1$ has at most $n$ real roots.
+	\item Prove that the equation $x^5 + x - 1 = 0$ has exactly one real solution.
+	\item Show that, whatever the value of the constant $k$, the equation $x^3 - 3x + k = 0$ cannot have two different solutions in the interval $[0,1]$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Climbing the blancmange]
+\hint{For (b), every term of the series for $T\left(\frac13\right)$ is the same.}
+Let $T$ be the function of Theorem~\ref{thm:takagi}, and let $q_n$ be the slopes that appear in its proof.
+\begin{enumerate}[(a)]
+	\item Sketch $h_0$, $h_1$ and $h_2$ on $[0,1]$, and then sketch their sum.
+	\item Compute $T\left(\frac12\right)$, $T\left(\frac14\right)$ and $T\left(\frac13\right)$.
+	\item Show that $0 \leq T(x) \leq 1$ for all $x$.
+	\item For the point $x = 0$, show that $q_n = n$.  What does this say about the graph of $T$ just to the right of the origin?
+	\item Find a point $x$ for which the sequence $(q_n)$ is bounded.  The function is still not differentiable there.  Why not?
+\end{enumerate}
+\end{problem}
