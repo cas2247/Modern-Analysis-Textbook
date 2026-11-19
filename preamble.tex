@@ -1,0 +1,56 @@
+% preamble.tex -- packages, theorem environments and macros shared by every chapter.
+% Loaded by AnalysisBook.tex with \input{preamble}.
+
+\hypersetup{colorlinks}
+
+% ---------------------------------------------------------------- Packages
+% (The tufte-book class already loads hyperref, xcolor, paralist, titlesec,
+% titletoc, multicol and natbib.)
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{manfnt}   % the "dangerous bend" sign used by the Caution environment
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\usepackage{makeidx}
+\makeindex
+
+% ---------------------------------------------------------------- Numbering
+\setcounter{secnumdepth}{2}
+\renewcommand{\thesection}{\thechapter.\arabic{section}}
+\numberwithin{section}{chapter}
+
+% \bookchapter{One}{Title} starts "Chapter One: Title".  Stepping the chapter
+% counter here resets the section, theorem, definition, proposition, figure
+% and equation counters automatically, so chapters need no manual \setcounter.
+\newcommand{\bookchapter}[2]{%
+  \stepcounter{chapter}%
+  \chapter{Chapter #1: #2}}
+
+% ---------------------------------------------------------------- Theorem environments
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}{Proposition}[chapter]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+\newtheorem*{imp}{Important point}
+\newtheorem*{dangerousbend}{\textdbend Caution}
+\newtheorem*{summary}{Summary}
+
+% ---------------------------------------------------------------- Front-matter macros
+% A full-width epigraph: \openepigraph{quotation}{author}
+\newcommand{\openepigraph}[2]{%
+  \begin{fullwidth}
+  \sffamily\large
+  \begin{doublespace}
+  \noindent\allcaps{#1}\\% epigraph
+  \noindent\allcaps{#2}% author
+  \end{doublespace}
+  \end{fullwidth}
+}
