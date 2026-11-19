@@ -1,0 +1,19 @@
+# LaTeX build byproducts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# macOS
+.DS_Store
+
+# Local reference material (stays on this machine only)
+/reference-texts/
