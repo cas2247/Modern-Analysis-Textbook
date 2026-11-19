@@ -1,173 +1,900 @@
-\bookchapter{Three}{Basic Topology}
+\bookchapter{Three}{Basic Topology of the Real Line}
 
-\section{Metric Spaces}
+Chapter Two ended with a promise.  Five statements---the Axiom of Completeness, the Nested Interval Property, the Monotone Convergence Theorem, the Bolzano--Weierstrass Theorem and the Cauchy Criterion---all turned out to be saying the same thing about $\mathbb{R}$, and we promised to say more precisely what that thing is.
 
-\textsc{Metric Spaces}  A set $X$, whose elements we shall call points, is said to be a metric space if with any two points $p$ and $q$ of $X$ there is associated a real number $d(p,q)$, called the distance from $p$ to $q$, such that:
+To keep the promise we have to change what we look at.  So far the objects of study have been numbers, and sequences of numbers.  In this chapter the objects are \emph{sets} of real numbers, and the question we ask of a set is always some version of this one:
 
+\begin{quote}
+\emph{If I start inside the set and take a limit, where do I end up?}
+\end{quote}
+
+\noindent The study of that question is called \textsc{topology}.  It has a reputation for being abstract, but on the real line every one of its ideas can be drawn, and we will draw them.
+
+\section{Where Can a Sequence Go?}\label{sec:three-escapes}
+
+Here are three sets that look very much alike:
+\[ A = (0,1], \qquad B = [0, \infty), \qquad K = [0,1]. \]
+Let us release a sequence inside each one and watch where it goes.
+
+\newthought{In the set $A$}, take $a_n = 1/n$.  Every term belongs to $A$, and the sequence converges.  But its limit is $0$, and $0$ is not in $A$.  The sequence walked to the edge of the set and found the door open.
+
+\newthought{In the set $B$}, take $b_n = n$.  Every term belongs to $B$, but this time there is no limit at all, and no subsequence has one either.  The sequence did not leak out through an edge; it ran away down an endless corridor.
+
+\newthought{In the set $K$}, neither escape is possible.  Take \emph{any} sequence in $K$.  It is bounded, so the Bolzano--Weierstrass Theorem hands us a convergent subsequence, and since every term lies between $0$ and $1$ the Order Limit Theorem says the limit does too.  Whatever the sequence does, some part of it settles down, and it settles down \emph{inside} $K$.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % --- A = (0,1]
+  \node[lbl,anchor=east] at (1.0,0) {$A=(0,1]$};
+  \draw[numline] (1.2,0) -- (9.6,0);
+  \draw[setline] (1.8,0) -- (7.8,0);
+  \foreach \n in {1,2,3,4,5,6,8,11,16,25,45}
+    \node[seqpt] at ({1.8+6/\n},0.28) {};
+  \node[openpt] at (1.8,0) {};
+  \node[closedpt] at (7.8,0) {};
+  \node[lbl,below=3pt] at (1.8,0) {$0$};
+  \node[lbl,below=3pt] at (7.8,0) {$1$};
+  \draw[->,black!60,line width=0.4pt] (3.4,0.6) -- (2.0,0.6);
+  % --- B = [0,infinity)
+  \node[lbl,anchor=east] at (1.0,-1.6) {$B=[0,\infty)$};
+  \draw[numline] (1.2,-1.6) -- (9.6,-1.6);
+  \draw[setline] (1.8,-1.6) -- (9.45,-1.6);
+  \foreach \n in {1,...,6}
+    \node[seqpt] at ({1.8+1.2*\n},-1.32) {};
+  \node[closedpt] at (1.8,-1.6) {};
+  \node[lbl,below=3pt] at (1.8,-1.6) {$0$};
+  \draw[->,black!60,line width=0.4pt] (7.6,-1.0) -- (9.2,-1.0);
+  % --- K = [0,1]
+  \node[lbl,anchor=east] at (1.0,-3.2) {$K=[0,1]$};
+  \draw[numline] (1.2,-3.2) -- (9.6,-3.2);
+  \draw[setline] (1.8,-3.2) -- (7.8,-3.2);
+  \foreach \t in {0.93,0.12,0.66,0.30,0.80,0.52,0.40,0.47,0.43,0.455,0.445}
+    \node[seqpt] at ({1.8+6*\t},-2.92) {};
+  \node[closedpt] at (1.8,-3.2) {};
+  \node[closedpt] at (7.8,-3.2) {};
+  \node[lbl,below=3pt] at (1.8,-3.2) {$0$};
+  \node[lbl,below=3pt] at (7.8,-3.2) {$1$};
+\end{tikzpicture}
+\caption{Three sets and a sequence (black dots) in each.  In $A$ the sequence leaks out through the missing endpoint; in $B$ it runs off to infinity; in $K$ it has nowhere to go.  Throughout this book a filled endpoint belongs to the set and a hollow one does not.}
+\label{fig:three-escapes}
+\end{figure}
+
+Three separate ideas are tangled together in this little experiment, and the work of the chapter is to pull them apart.
 \begin{itemize}
-	\item $d(p,q) > 0$ if $p \neq q$; $d(p,p) = 0$
-	\item $d(p,q) = d(q,p)$
-	\item $d(p,q) \leq d(p,r) + d(r,q)$ for any $r \in X$  (Triangle Inequality)
+	\item A set with no leaks at its edges, like $B$ and $K$, is called \textsc{closed}.
+	\item A set with no corridor to infinity, like $A$ and $K$, is \textsc{bounded}; we know this word already.
+	\item A set like $K$, from which there is no escape of either kind, will be called \textsc{compact}.  Compactness is the most important idea in the chapter, and one of the most important in all of analysis.
 \end{itemize}
+Before any of that, though, we need a name for the opposite of having an edge.
 
-\newthought{Examples of Metric Spaces:}
-\begin{enumerate}
-	\item Let $X$ be any set and define
-		
-\begin{displaymath}
-   d(p,q) = \left\{
-     \begin{array}{lr}
-       1 & : \text{if } p \neq q \\
-       0 & : \text{if } p = q
-     \end{array}
-   \right.
- \end{displaymath} 
- 
- \item $\mathbb{Q}$ or $\mathbb{R}$ with $d(p,q) =|p-q|$ is a metric space.
- 
- \item  $\mathbb{R}^2 = \{(x_1, x_2) : x_1, x_2 \in \mathbb{R}\}$ with
- \[d(\vec{x}, \vec{y}) = ||\vec{x}- \vec{y}|| = \sqrt{(x_1 - y_1)^2  + (x_2 - y_2)^2} \]  is a metric space.
- 
- \item  The most important examples of metric spaces from our standpoint are the Euclidean spaces $\mathbb{R}^k$ with the distance function defined as above.  The properties of norms in $\mathbb{R}^k$ (reviewed at the end of Chapter One) show that the conditions of a metric space are satisfied.
-		
+\section{Open Sets}
+
+Recall from Chapter Two that the \textsc{$\varepsilon$-neighborhood} of a real number $a$ is the set of points within $\varepsilon$ of it,
+\[ V_{\varepsilon}(a) = \{x \in \mathbb{R} : |x - a| < \varepsilon\} = (a - \varepsilon,\, a + \varepsilon). \]
+
+\begin{definition}\label{def:open}
+A set $O \subseteq \mathbb{R}$ is \textsc{open} if for every point $a \in O$ there exists an $\varepsilon > 0$ such that $V_{\varepsilon}(a) \subseteq O$.
+\end{definition}
+
+In words: every point of an open set is surrounded by a little cushion of other points of the set.  You can stand at any point of $O$ and take a small step in either direction without leaving.  \marginnote{The cushion is allowed to depend on the point.  Near the edge of the set it usually has to be very thin, and that is fine: it only has to exist.}  An open set has no edge that belongs to it.
+
+\begin{example}
+Every open interval $(c,d)$ is an open set.  To see this, let $a \in (c,d)$ and take
+\[ \varepsilon = \min\{a - c,\; d - a\}, \]
+the distance from $a$ to the nearer endpoint.  If $x \in V_{\varepsilon}(a)$ then $x > a - \varepsilon \geq a - (a - c) = c$ and $x < a + \varepsilon \leq a + (d - a) = d$, so $x \in (c,d)$.
+\end{example}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[setline] (0.6,0) -- (4.2,0);
+  \node[openpt] at (0.6,0) {};
+  \node[openpt] at (4.2,0) {};
+  \draw[nbhdline] (2.6,0.32) -- (4.2,0.32);
+  \node[openpt=calm] at (2.6,0.32) {};
+  \node[openpt=calm] at (4.2,0.32) {};
+  \node[seqpt] at (3.4,0) {};
+  \node[lbl,below=3pt] at (0.6,0) {$c$};
+  \node[lbl,below=3pt] at (3.4,0) {$a$};
+  \node[lbl,below=3pt] at (4.2,0) {$d$};
+  \node[lbl,above=2pt,calm] at (3.4,0.32) {$V_{\varepsilon}(a)$};
+\end{tikzpicture}
+\caption{The cushion around a point $a$ of $(c,d)$.  Its radius is the distance to the nearer endpoint.}
+\end{marginfigure}
+
+\begin{example}
+The half-open interval $[c,d)$ is \emph{not} open, and the trouble is at exactly one point.  The point $c$ belongs to the set, but it has no cushion: however small $\varepsilon$ is, the neighborhood $V_{\varepsilon}(c)$ contains $c - \varepsilon/2$, which lies outside.  One bad point is enough to spoil openness.
+\end{example}
+
+\begin{example}
+The whole line $\mathbb{R}$ is open.  So is the empty set $\emptyset$: the definition asks something of every point of $O$, and when there are no points there is nothing to check.\marginnote{A statement of the form ``every element of $\emptyset$ has such-and-such a property'' is always true.  Logicians call it \emph{vacuously} true.}  On the other hand a set consisting of a single point is not open, and neither is $\mathbb{Q}$, because every neighborhood of a rational number contains irrational numbers.
+\end{example}
+
+How do open sets behave when we combine them?
+
+\begin{theorem}\label{thm:open-unions}
+Open sets combine as follows.
+\begin{enumerate}[(i)]
+	\item The union of an arbitrary collection of open sets is open.
+	\item The intersection of a \emph{finite} collection of open sets is open.
 \end{enumerate}
-
-Also note that every subset of a metric space, is itself a metric space under that same distance function.  Thus every subset of Euclidean space is a metric space.
-
-
-\newthought{Definitions:}
-\begin{itemize}
-
-	\item A  \textsc{segment} $(a,b)$ is the set of real numbers $x$ such that  $a<x<b$ 
-	\item An \textsc{interval} $[a,b]$ is the set of real numbers $x$ such that  $a\leq x \leq b$	
-	
-	\item A \textsc{$k$-cell} is the set of points $\mathbf{x} = (x_1, \ldots, x_k)$ in $\mathbb{R}^k$ such that $a_i\leq x_i \leq b_i$ for $1 \leq i \leq k$, given that $a_i < b_i$ for every $1 \leq i \leq k$.
-	\item An \textsc{Open (or Closed) Ball} with center $\mathbf{x}$ and radius $r$ is the set of all points $\mathbf{y}$ such that $|\mathbf{x}-\mathbf{y}|< r$ (or $|\mathbf{x}-\mathbf{y}| \leq r$ for the closed ball)
-	\item A set $E$ is \textsc{convex} if $\lambda y + (1-\lambda) z \in E$ whenever $y,z \in E$ and $0< \lambda < 1$.
-	\item A \textsc{neighborhood} of a point $p$ with radius $r$ is the set $N_r(p)$ of all points $q$ such that $d(p,q) < r$
-	
-	\item A \textsc{Limit Point} of $E$ is a point $p$ such that every neighborhood of $p$ contains a point $q \neq p$ with $q \in E$
-	\item An \textsc{Isolated Point}  is a point $p\in E$ such that $p$ is not a limit point of $E$ (that is, there is a neighborhood of $p$ that contains no other points of $E$)
-	\item A set $E$ is \textsc{Closed} if it contains all of its limit points.
-	\item An \textsc{Interior Point}  is a point $p\in E$ such that there exists a neighborhood $N$ of $p$ with $N \subset E$
-	\item A set $E$ is \textsc{Open} if all of its points are interior points.   \marginnote{The notion of being ``open'' is relative to the metric space that contains the subset.}
-	\item The \textsc{Complement} of a set $E$ is the set $E^c$ of all points $p \in X$	such that $p \notin E$
-	\item A set $E$ is \textsc{Bounded} if there exists a real number $M$ and a point $p \in X$ such that $d(p,q) < M$ for all $q\in E$
-	\item A set $E$ is \textsc{Dense} in $X$ if for all $p\in X$, $p$ is either a limit point of $E$ or $p \in E$	
-	
-	\end{itemize}
-
-\newthought{Every Neighborhood is an open set. That is, open balls are open.}
+\end{theorem}
 
 \begin{proof}
-Consider a neighborhood $E = N_r (p) $ and let $q$ be any point of $E$.  Then there is a positive real number $h$ such that 
-\[d(p,q) = r-h\]
-For all points $s$ such that $d(q,s)<h$, we have then that
-\[d(p,s) \leq d(p,q) + d(q,s) < r-h+h = r\]
-so that $s\in E$.  Thus $q$ is an interior point of $E$ and therefore $E$ is open. 
+(i)  Let $\{O_{\lambda} : \lambda \in \Lambda\}$ be a collection of open sets and let $O$ be their union.\marginnote{The index set $\Lambda$ may be finite, countable or uncountable.  Part (i) does not care.}  If $a \in O$ then $a$ belongs to at least one of the sets, say $O_{\lambda'}$.  Because $O_{\lambda'}$ is open there is an $\varepsilon > 0$ with $V_{\varepsilon}(a) \subseteq O_{\lambda'}$, and $O_{\lambda'} \subseteq O$.  So $V_{\varepsilon}(a) \subseteq O$.
+
+(ii)  Let $O_1, O_2, \ldots, O_N$ be open and let $a$ be a point of their intersection.  For each $k$ the point $a$ lies in the open set $O_k$, so there is an $\varepsilon_k > 0$ with $V_{\varepsilon_k}(a) \subseteq O_k$.  We need one cushion that fits inside all $N$ sets at once, so we take the thinnest:
+\[ \varepsilon = \min\{\varepsilon_1, \varepsilon_2, \ldots, \varepsilon_N\}. \]
+Then $\varepsilon > 0$, and $V_{\varepsilon}(a) \subseteq V_{\varepsilon_k}(a) \subseteq O_k$ for every $k$.  Hence $V_{\varepsilon}(a) \subseteq O_1 \cap \cdots \cap O_N$.
 \end{proof}
 
-\newthought{Theorem:} If $p$ is a limit point of a set $E$, then every neighborhood of $p$ contains infinitely many points of $E$.
+Where exactly did the proof of (ii) use the word \emph{finite}?  In one place only: the smallest of finitely many positive numbers is positive.  For infinitely many positive numbers there may be no smallest, and their infimum can perfectly well be zero.
+
+\begin{dangerousbend}
+An infinite intersection of open sets need not be open.  Take $O_n = \left(-\frac{1}{n}, \frac{1}{n}\right)$ for $n = 1, 2, 3, \ldots$.  Each $O_n$ is open, but
+\[ \bigcap_{n=1}^{\infty} O_n = \{0\}, \]
+because $0$ lies in every $O_n$, while any $x \neq 0$ is excluded as soon as $\frac{1}{n} < |x|$.  The cushions around $0$ have been squeezed down to nothing.
+\end{dangerousbend}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \foreach \n in {1,...,6} {
+    \pgfmathsetmacro{\w}{2.2/\n}
+    \pgfmathsetmacro{\y}{-0.36*(\n-1)}
+    \draw[nbhdline] ({2.4-\w},\y) -- ({2.4+\w},\y);
+    \node[openpt=calm] at ({2.4-\w},\y) {};
+    \node[openpt=calm] at ({2.4+\w},\y) {};
+  }
+  \node[lbl] at (2.4,-2.2) {$\vdots$};
+  \node[closedpt=calm] at (2.4,-2.8) {};
+  \node[lbl,right=4pt] at (2.4,-2.8) {$\{0\}$};
+  \node[lbl,above=3pt] at (2.4,0) {$O_1 = (-1,1)$};
+  \draw[black!40, dashed, line width=0.4pt] (2.4,0) -- (2.4,-1.9);
+\end{tikzpicture}
+\caption{The open intervals $\left(-\frac1n,\frac1n\right)$ shrink onto the single point $0$.  All that survives in the intersection is a set that is not open.}
+\end{marginfigure}
+
+\section{Limit Points and Closed Sets}
+
+In the experiment of Section~\ref{sec:three-escapes}, the point $0$ was not a member of $A = (0,1]$ and yet it was plainly attached to $A$ in some way: points of $A$ crowd right up against it.  The next definition gives that attachment a name.
+
+\begin{definition}\label{def:limit-point}
+A point $x \in \mathbb{R}$ is a \textsc{limit point} of a set $A$ if every $\varepsilon$-neighborhood $V_{\varepsilon}(x)$ contains a point of $A$ other than $x$ itself.
+\end{definition}
+
+Two things about this definition deserve a second look.  First, $x$ is not required to belong to $A$; it may or may not.  Second, the phrase ``other than $x$ itself'' is doing real work.  It means that $x$ does not get to vouch for itself: there have to be \emph{other} points of $A$ arbitrarily close by.  A limit point of $A$ is a point you can sneak up on from within $A$.\marginnote{Limit points are also called \emph{cluster points} or \emph{accumulation points}, which are perhaps better names: they are the places where the set piles up.}
+
+Sneaking up on a point is what sequences do, so it is no surprise that limit points can be described by sequences.
+
+\begin{theorem}\label{thm:limit-point-sequence}
+A point $x$ is a limit point of a set $A$ if and only if $x = \lim a_n$ for some sequence $(a_n)$ of points of $A$ with $a_n \neq x$ for all $n \in \mathbb{N}$.
+\end{theorem}
 
 \begin{proof}
-We proceed with a proof by contradiction.  Suppose that there is a neighborhood $N$ of $p$ which contains only a finite number of points of $E$.   Let $q_1, q_2, \ldots , q_n$ be those points of $N \cap E$, which are distinct from $p$, and put
-\[r = \min_{1\leq m \leq n} d(p,q_m)\]
-The minimum of a finite set of positive numbers is clearly positive so that $r>0$.\\ 
+($\Rightarrow$)  Suppose $x$ is a limit point of $A$.  We use the definition over and over, with smaller and smaller neighborhoods.  For each $n \in \mathbb{N}$ the neighborhood $V_{1/n}(x)$ contains a point of $A$ other than $x$; choose one and call it $a_n$.  Then $a_n \in A$, $a_n \neq x$, and $|a_n - x| < \frac{1}{n}$.  Given $\varepsilon > 0$, choose $N > 1/\varepsilon$.  For $n \geq N$ we have $|a_n - x| < \frac{1}{n} \leq \frac{1}{N} < \varepsilon$, so $(a_n) \to x$.
 
-The neighborhood $N_{r}(p)$ contains no point $q$ of $E$ such that $q \neq p$, so that $p$ is not a limit point of $E$.  This contradiction establishes the theorem.
+($\Leftarrow$)  Suppose $(a_n) \to x$ with $a_n \in A$ and $a_n \neq x$.  Let $\varepsilon > 0$.  By the definition of convergence there is an $N$ with $a_N \in V_{\varepsilon}(x)$, and $a_N$ is a point of $A$ different from $x$.  So every neighborhood of $x$ contains such a point, and $x$ is a limit point of $A$.
 \end{proof}
 
-\newthought{Corollary:} A finite point set has no limit points.
+\begin{definition}
+A point $a \in A$ is an \textsc{isolated point} of $A$ if it is not a limit point of $A$; that is, if some neighborhood $V_{\varepsilon}(a)$ contains no point of $A$ except $a$.
+\end{definition}
 
-\newthought{Theorem:} A set $E$ is open $\iff$ its complement is closed.
+\marginnote{Every point \emph{of} $A$ is either a limit point of $A$ or an isolated point of $A$.  But a limit point of $A$ may lie outside $A$, whereas an isolated point, by definition, never does.}
+
+\begin{example}
+Let $A = \left\{\frac{1}{n} : n \in \mathbb{N}\right\} = \left\{1, \frac12, \frac13, \frac14, \ldots\right\}$.
+
+\emph{Every point of $A$ is isolated.}  The nearest neighbor of $\frac1n$ in $A$ is $\frac{1}{n+1}$, at distance $\frac{1}{n(n+1)}$.  A neighborhood of $\frac1n$ with that radius contains no other point of $A$.
+
+\emph{The point $0$ is a limit point of $A$.}  Given $\varepsilon > 0$, the Archimedean Property supplies an $n$ with $\frac1n < \varepsilon$, and $\frac1n$ is a point of $A$, different from $0$, inside $V_{\varepsilon}(0)$.
+
+\emph{There are no other limit points.}  A point $y < 0$ or $y > 1$ has a neighborhood that misses $A$ entirely.  If $y > 0$, only finitely many points of $A$ are larger than $y/2$ (those with $n < 2/y$), so by choosing $\varepsilon$ smaller than $y/2$ and smaller than the distance from $y$ to each of those finitely many points other than $y$ itself, we get a neighborhood of $y$ containing no point of $A$ except possibly $y$.
+
+So this set $A$ has exactly one limit point, and it is not a member of $A$.
+\end{example}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[nbhdline] (0.15,0.3) -- (1.15,0.3);
+  \node[openpt=calm] at (0.15,0.3) {};
+  \node[openpt=calm] at (1.15,0.3) {};
+  \foreach \n in {1,...,40}
+    \node[circle, fill=accent, inner sep=0pt, minimum size=2.4pt] at ({0.65+3.8/\n},0) {};
+  \node[openpt] at (0.65,0) {};
+  \node[lbl,below=3pt] at (0.65,0) {$0$};
+  \node[lbl,below=3pt] at (4.45,0) {$1$};
+  \node[lbl,below=3pt] at (2.55,0) {$\frac12$};
+  \node[lbl,below=3pt] at (1.92,0) {$\frac13$};
+  \node[lbl,above=2pt,calm] at (0.65,0.3) {$V_{\varepsilon}(0)$};
+\end{tikzpicture}
+\caption{The set $\left\{\frac1n\right\}$.  Each of its points stands alone, yet every neighborhood of $0$ catches infinitely many of them.}
+\end{marginfigure}
+
+\begin{example}
+Every real number is a limit point of $\mathbb{Q}$.  This is just the density of $\mathbb{Q}$ in $\mathbb{R}$ in new clothes: between $x$ and $x + \varepsilon$ there is always a rational number.  In the same way every real number is a limit point of the set of irrationals.
+\end{example}
+
+\newthought{We can now say} what it means for a set to have no leaks.
+
+\begin{definition}\label{def:closed}
+A set $F \subseteq \mathbb{R}$ is \textsc{closed} if it contains all of its limit points.
+\end{definition}
+
+If you can sneak up on a point from inside a closed set, then that point was inside all along.  The following theorem says the same thing in the language of sequences, and it is the form in which closedness is most often used.
+
+\begin{theorem}\label{thm:closed-sequences}
+A set $F \subseteq \mathbb{R}$ is closed if and only if every convergent sequence of points of $F$ has its limit in $F$.
+\end{theorem}
+\marginnote{In $\mathbb{R}$ a sequence converges exactly when it is Cauchy.  So we could also say: $F$ is closed if and only if every Cauchy sequence in $F$ has a limit in $F$.  A closed subset of $\mathbb{R}$ inherits the completeness of $\mathbb{R}$.}
 
 \begin{proof}
-($\Leftarrow$)  Assume that $E^c$ is closed and say that $p \in E$.  Then $p \notin E^c$, so $p$ cannot be a limit point of $E^c$.  Hence, there exists an $r>0$ such that $B_r (p)$ does not contain any points of $E^c$.  Then $B_r (p) \subset E$, $p$ is an interior point of $E$ and $E$ is open.\\
-($\Rightarrow$)  Assume that $E$ is open.  Let $p$ be a limit point of $E^c$.  Since $p$ is a limit point of  $E^c$ then every neighborhood of $p$ contains a point of  $E^c$ other than $p$.   But then for every neighborhood of $p$, $B_r (p) \not \subset E$.  Therefore $p$ is not an interior point of $E$, and since $E$ is open, this implies that $p \in E^c$.
+($\Rightarrow$)  Let $F$ be closed, and let $(x_n) \to x$ with $x_n \in F$ for all $n$.  If $x_n = x$ for some $n$, then $x \in F$ and we are done.  Otherwise $x_n \neq x$ for every $n$, and Theorem~\ref{thm:limit-point-sequence} says that $x$ is a limit point of $F$.  Since $F$ is closed, $x \in F$.
+
+($\Leftarrow$)  Suppose every convergent sequence in $F$ has its limit in $F$, and let $x$ be a limit point of $F$.  By Theorem~\ref{thm:limit-point-sequence} there is a sequence in $F$ converging to $x$, and so $x \in F$.  Thus $F$ contains all its limit points.
 \end{proof}
 
-%\newtheorem{Theorem:}  Let (X,d) be a metric space and let A be any set.   
-%\begin{itemize}
-	%\item 
-%\end{itemize}
 
+Table~\ref{tab:open-closed} collects a number of examples.  It is worth covering the right-hand columns and working each row out for yourself.
 
-\section{Compactness}
+\begin{table}
+\centering
+\begin{tabular}{llcc}
+\toprule
+Set & Its limit points & Closed? & Open? \\
+\midrule
+$(0,1)$ & $[0,1]$ & no & yes \\
+$[0,1]$ & $[0,1]$ & yes & no \\
+$(0,1]$ & $[0,1]$ & no & no \\
+$\left\{\frac1n : n \in \mathbb{N}\right\}$ & $\{0\}$ & no & no \\
+$\left\{\frac1n : n \in \mathbb{N}\right\} \cup \{0\}$ & $\{0\}$ & yes & no \\
+$\mathbb{Z}$ & none & yes & no \\
+$\mathbb{Q}$ & all of $\mathbb{R}$ & no & no \\
+$\mathbb{R}$ & all of $\mathbb{R}$ & yes & yes \\
+$\emptyset$ & none & yes & yes \\
+\bottomrule
+\end{tabular}
+\caption{Open and closed are not opposites.}
+\label{tab:open-closed}
+\end{table}
 
-Some heuristic remarks are helpful only to a subset of readers. (Maybe that's true of all heuristics, as a meta-heuristic - if everyone accepts a rough explanation, it's something rather more than that.)
-
-Non-compactness is about being able to "move off to infinity" in some way in a space. On the real line you can do that to the left, or right: but bend the line round to fill all but one point on a circle (which is compact) and you see the difference having the "other point" near which you end up. This example of real line versus circle is too simple, really. Another way you can "go off to infinity" in a space is by having paths branching out infinitely.
-
-Compactness is a major topological concept because the various ways you might try to "trap" movement within a space to prevent "escape" to infinity can be summed up in a single idea (for metric spaces, let's say). The definition by open sets is cleaner, but the definition by sequences having to accumulate on themselves (not necessarily to converge, but to have at least one convergent subsequence) is somewhat quicker to say. If you restrict attention to spaces that are manifolds, you can think of continuous paths and whether they have to wind back close to themselves or not.
-
-I swear the concept of compactness was invented to remedy the shortcomings of closedness. Compact sets are closed (in Hausdorff spaces and therefore metric spaces), so compactness is stricter than closedness. It evidently patches some feebleness in the definition of closedness to make it more useful.
-
-Closedness of a set in a metric space (includes all limit points), by the sound of it, really wants to be something akin to has solid boundaries. But it isnt. The problem is that the existence of limit points depends on the embedding space. If the embedding space lacks those limit points, then a set in it can be technically closed even though it isnt really like other closed sets. For example, the set  in space  is closed, because the space has no point called .
-
-%The first stab at �has solid boundaries� was to get rid of infinities by adding boundedness (�can be covered by some ball�) to the condition. Now, the set ? in space (?,dEucl.) is closed yet not bounded, so it doesn�t have solid boundaries. Excellent. Upon further inspection, however, it doesn�t really address the real issue. For instance, set ??[0,1] in space (?,dEucl.) is closed and bounded, but it�s still porous at all the irrational numbers. It doesn�t have solid boundaries.
-
-%The second stab then was to replace closedness with completeness (�contains all Cauchy limits�). Completeness gets rid of the dependency on the embedding space and uses points in the set itself to define limits. This along with boundedness takes care of the above two examples. But there is still a deeply unsatisfying outcome: completeness and boundedness both depend on the metric and therefore are affected by rescaling. First let�s rewrite the boundedness condition as equivalently �can be covered by a finite number of r-balls for a fixed r�. The set ? in space (?,d1Disc.) where dkDisc.(x,y)=k if x�y is complete and bounded, if we choose r>1, yet under a rescaling, say by replacing d1Disc. with dr+?Disc., the set is no longer bounded.
-
-%So finally, a third stab was to require sets to be bounded at once for all rescaling, by replacing boundedness with total boundedness (�can be covered by a finite collection of r-balls for all r�).
-
-%This last definition, complete and totally bounded, turns out to be equivalent to compactness (�every open cover has a finite subcover�) in metric spaces. And it shows. We�ve managed to drop all the stuff dependent on the embedding space and the metric scaling. All that is left are the topological properties of the set under open balls generated by the metric.
-
-%In some sense, what we get out of compactness (and really wanted from the outset) is the notion that a set is well contained regardless of scaling. This is what it means to have solid boundaries. It has to be a topological property of the set itself. More interestingly, because we can scale the set however we want (provided the scaling is non-singular), we can turn infinitesimals into infinities and vice versa. Small-scale infinitesimals (limiting sequence) and large-scale infinities (unbounded sequence) are really the same thing. For instance, the set {1/n}n?? under the metric dEucl. has an unincluded Cauchy limit at 0 and is thus not complete, but if we rescale the underlying space by 1/x at x, then it is basically ? under the metric d1Disc., with no Cauchy limits to include and is complete. Similarly the first set is totally bounded while the second is not. This scale-dependence is awkward. Apparently, completeness and total boundedness take care of the small-scale and the large-scale separately, but in the end, they are all infinities and should be treated the same. The true distinction of consequence is between finitude (solid boundaries, well contained) and infinitude (no solid boundaries, ill contained), a distinction which compactness identifies.
-
-%One of the immediately intuitive notions coming from this understanding of compactness is the theorem that states �the image of a compact set under continuous mapping is also compact� (just a rescaling after all). We can regurgitate this as, a set with solid boundaries under continuous rescaling of the space still has solid boundaries. Other nice properties about limits being attained on compact sets, and about functions on compact sets, follow from the same intuition of their having solid boundaries. It also makes sense why the intersection of a compact set with a closed set is compact (well containment only needs to be ensured once), and therefore the intersection of any number of compact sets is compact. In some sense, compact sets are a much more useful dual to open sets, than closed sets � even under their topological definition (�complement is open�) � ever were.
-
-
-\newthought{The biggest thing about compactness} that I have come across is that for a compact set, results that hold locally also hold globally.
-For example, local boundedness on a compact set implies global boundedness for the whole set.
-Other properties follow the same idea.
-
-
-\subsection{Completeness Revisited:}
-
-The principles of the Axiom of Completeness, Nested Interval Property, Monotone Convergence, Bolzano-Weierstrass and Cauchy Criterion are inextricably linked.
-
-\section{Topology of $\mathbb{R}$ and Metric Spaces}
-\subsection{Open and Closed Sets}
-\newthought{Open:} A set $O$ is open if every point in $O$ is an interior point.
-	\newthought{Examples}
-		\begin{itemize}
-			\item The real numbers are open
-			\item $(c,d)$ is open
-			\item The union of open intervals is open
-		\end{itemize}
-
-
-\newthought{Closed} A set $E$ is \textsc{Closed} if it contains all of its limit points.
-	\marginnote{ An \textsc{Interior Point}  is a point $p\in E$ such that there exists a neighborhood $N$ of $p$ with $N \subset E$}
-	
-	\newthought{Theorem}  A point x is a limit point of A iff x=
-
-\newthought{}
+\begin{dangerousbend}
+A set is not a door.  A door must be either open or closed, but the table shows sets that are neither, such as $(0,1]$ and $\mathbb{Q}$, and two sets, $\mathbb{R}$ and $\emptyset$, that are both.  To show that a set is closed it is never enough to show that it is not open.
+\end{dangerousbend}
 
 \subsection{Closure}
+
+If a set fails to be closed, we can repair it by throwing in the points it is missing.
+
+\begin{definition}
+Let $A \subseteq \mathbb{R}$ and let $L$ be the set of all limit points of $A$.  The \textsc{closure} of $A$ is the set $\overline{A} = A \cup L$.
+\end{definition}
+
+For example $\overline{(0,1)} = [0,1]$ and $\overline{\mathbb{Q}} = \mathbb{R}$, while $\overline{\mathbb{Z}} = \mathbb{Z}$.  It seems clear that $\overline{A}$ ought to be closed, but there is something to check.  By adding the limit points of $A$ we have made a bigger set, and a bigger set might have acquired new limit points of its own.  Happily it has not.
+
+\begin{theorem}\label{thm:closure}
+For any $A \subseteq \mathbb{R}$, the closure $\overline{A}$ is a closed set, and it is the smallest closed set containing $A$.
+\end{theorem}
+
+\begin{proof}
+Let $L$ be the set of limit points of $A$, and let $x$ be a limit point of $\overline{A} = A \cup L$.  We will show that $x$ is in fact a limit point of $A$, so that $x \in L \subseteq \overline{A}$.
+
+Let $\varepsilon > 0$.  The neighborhood $V_{\varepsilon}(x)$ contains some point $y \in \overline{A}$ with $y \neq x$.  If $y \in A$, good: $V_{\varepsilon}(x)$ contains a point of $A$ other than $x$.  If not, then $y \in L$, and we use the fact that $y$ is itself a limit point of $A$.  Put a small neighborhood $V_{\delta}(y)$ around $y$, small enough to fit inside $V_{\varepsilon}(x)$ and to leave out $x$; the choice
+\[ \delta = \min\{\varepsilon - |x - y|,\; |x - y|\} \]
+does both.  Since $y$ is a limit point of $A$, the neighborhood $V_{\delta}(y)$ contains a point $a \in A$.  This $a$ lies in $V_{\varepsilon}(x)$ and is different from $x$.  In either case, then, $V_{\varepsilon}(x)$ contains a point of $A$ other than $x$, and $x$ is a limit point of $A$.
+
+For the second claim, let $F$ be any closed set with $A \subseteq F$.  A limit point of $A$ is automatically a limit point of the larger set $F$, and $F$ contains its limit points.  Hence $L \subseteq F$, and so $\overline{A} = A \cup L \subseteq F$.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[bracedeco] (0.5,0.62) -- (3.9,0.62) node[midway,above=4pt,lbl] {$V_{\varepsilon}(x)$};
+  \draw[bracedeco,draw=accent] (3.9,-0.3) -- (2.5,-0.3) node[midway,below=4pt,lbl,accent] {$V_{\delta}(y)$};
+  \draw[nbhdline] (0.5,0) -- (3.9,0);
+  \draw[setline] (2.5,0) -- (3.9,0);
+  \node[seqpt] at (2.0,0) {};
+  \node[seqpt] at (3.2,0) {};
+  \node[seqpt] at (2.75,0) {};
+  \node[lbl,below=3pt] at (2.0,0) {$x$};
+  \node[lbl,above=3pt] at (3.2,0) {$y$};
+  \node[lbl,above=3pt] at (2.75,0) {$a$};
+\end{tikzpicture}
+\caption{A neighborhood inside a neighborhood.  The point $y$ is close to $x$, and $a \in A$ is close to $y$, so $a$ is close to $x$.}
+\end{marginfigure}
+
 \subsection{Complements}
-\subsection{Compact Sets}
-The three definitions of compactness: 1) every sequence has a convergent subsequence with its limit in the compact set 2) Closed and Bounded 3) Every open cover has a finite sub cover
 
-\subsection{Connected Sets}
+Open sets and closed sets are not opposites, as the table showed.  The true relationship between them is more interesting.  Write $A^c = \{x \in \mathbb{R} : x \notin A\}$ for the \textsc{complement} of a set $A$.
 
+\begin{theorem}\label{thm:complements}
+A set $O$ is open if and only if its complement $O^c$ is closed.  Likewise, a set $F$ is closed if and only if $F^c$ is open.
+\end{theorem}
 
-\section{Functional Limits and Continuity}
-\subsection{Functional Limits}
-Structure of the definition follows the ``challenge-response'' approach we saw in limits of sequences.
-Formal definition and Topological Version
-Sequential Criterion for Functional Limits
-\subsection{Combinations of Continuous Functions}
-\subsection{Continuous Functions on Compact Sets}
-Uniform Continuity
-\subsection{IVT}
-\subsection{Discontinuity}
+\begin{proof}
+($\Rightarrow$)  Let $O$ be open and let $x$ be a limit point of $O^c$.  We must show that $x \in O^c$.  If instead $x$ were in $O$, there would be a neighborhood $V_{\varepsilon}(x)$ lying entirely inside $O$.  That neighborhood would contain no points of $O^c$ at all, which is impossible for a limit point of $O^c$.  So $x \in O^c$, and $O^c$ is closed.
 
+($\Leftarrow$)  Let $O^c$ be closed and let $x \in O$.  Then $x$ is not in $O^c$, and since $O^c$ contains all of its limit points, $x$ is not a limit point of $O^c$.  So some neighborhood $V_{\varepsilon}(x)$ contains no point of $O^c$ other than $x$, and $x$ itself is not in $O^c$ either.  That is, $V_{\varepsilon}(x) \subseteq O$.  Hence $O$ is open.
 
+The second statement is the first one applied to $O = F^c$, since $(F^c)^c = F$.
+\end{proof}
 
+This theorem lets us translate any fact about open sets into a fact about closed sets by taking complements.  The dictionary is supplied by De Morgan's Laws.\marginnote{\textsc{De Morgan's Laws:}
+\[ \Big(\bigcup_{\lambda} E_{\lambda}\Big)^{c} = \bigcap_{\lambda} E_{\lambda}^{c}, \]
+\[ \Big(\bigcap_{\lambda} E_{\lambda}\Big)^{c} = \bigcup_{\lambda} E_{\lambda}^{c}. \]
+A point fails to be in \emph{some} set exactly when it is not in \emph{all} of them.}
 
+\begin{corollary}\label{cor:closed-unions}
+Closed sets combine as follows.
+\begin{enumerate}[(i)]
+	\item The union of a \emph{finite} collection of closed sets is closed.
+	\item The intersection of an arbitrary collection of closed sets is closed.
+\end{enumerate}
+\end{corollary}
 
-%Arithmetic Mean Inequality:
-%$ \lambda \geq 0$ for all $0 \leq i \leq n$
-%Then $$  (\lambda_1 \ldots \lambda_n) \leq ( \frac{\lamda_1 + \ldots + \lambda_n}{n} ) ^n $$
+\begin{proof}
+(i)  If $F_1, \ldots, F_N$ are closed then each $F_k^c$ is open, and by De Morgan's Laws $(F_1 \cup \cdots \cup F_N)^c = F_1^c \cap \cdots \cap F_N^c$.  This is a finite intersection of open sets, hence open by Theorem~\ref{thm:open-unions}.  So $F_1 \cup \cdots \cup F_N$ is closed.  Part (ii) is proved in the same way from part (i) of Theorem~\ref{thm:open-unions}.
+\end{proof}
 
+Notice that the roles of ``finite'' and ``arbitrary'' have changed places.  An infinite union of closed sets can fail to be closed: each interval $\left[\frac1n, 1\right]$ is closed, but
+\[ \bigcup_{n=1}^{\infty} \left[\tfrac1n, 1\right] = (0, 1]. \]
+
+\section{Compact Sets}
+
+We return to the set $K = [0,1]$ of Section~\ref{sec:three-escapes}, the set from which no sequence could escape.  Here is the definition that captures what was special about it.
+
+\begin{definition}\label{def:compact}
+A set $K \subseteq \mathbb{R}$ is \textsc{compact} if every sequence in $K$ has a subsequence that converges to a limit that is also in $K$.
+\end{definition}
+
+\begin{example}
+Every closed interval $[c,d]$ is compact, by the argument we gave for $[0,1]$: the Bolzano--Weierstrass Theorem produces a convergent subsequence, and the Order Limit Theorem keeps its limit between $c$ and $d$.
+
+The set $(0,1]$ is not compact.  The sequence $\left(\frac1n\right)$ lies in it, but every subsequence converges to $0$, which does not.
+
+The set $[0,\infty)$ is not compact.  The sequence $(n)$ lies in it and has no convergent subsequence whatever.
+\end{example}
+
+The two failures in this example are the two escapes of Figure~\ref{fig:three-escapes}, and the next theorem says that they are the only two ways for compactness to fail.
+
+\begin{theorem}[Characterization of Compactness in $\mathbb{R}$]\label{thm:closed-bounded}
+A set $K \subseteq \mathbb{R}$ is compact if and only if it is closed and bounded.
+\end{theorem}
+
+\begin{proof}
+($\Rightarrow$)  Let $K$ be compact.
+
+\emph{$K$ is bounded.}  Suppose not.  Then for each $n \in \mathbb{N}$ there is a point $x_n \in K$ with $|x_n| > n$.  Every subsequence of $(x_n)$ is unbounded, and convergent sequences are bounded, so no subsequence of $(x_n)$ converges.  This contradicts compactness.
+
+\emph{$K$ is closed.}  Let $x$ be a limit point of $K$.  By Theorem~\ref{thm:limit-point-sequence} there is a sequence $(x_n)$ in $K$ with $(x_n) \to x$.  Compactness gives a subsequence converging to some point of $K$.  But every subsequence of a convergent sequence converges to the same limit as the whole sequence, so that point is $x$.  Hence $x \in K$.
+
+($\Leftarrow$)  Let $K$ be closed and bounded, and let $(x_n)$ be a sequence in $K$.  It is a bounded sequence, so by Bolzano--Weierstrass it has a convergent subsequence.  The limit of that subsequence is the limit of a convergent sequence of points of the closed set $K$, so by Theorem~\ref{thm:closed-sequences} it belongs to $K$.
+\end{proof}
+
+\marginnote{``Closed and bounded'' is the practical test for compactness in $\mathbb{R}$.  The definition by sequences is what compactness \emph{means}; this theorem is how one usually \emph{checks} it.}
+
+Compact sets are the right generalization of closed intervals.  As evidence, here is the Nested Interval Property again, with ``closed interval'' replaced by ``compact set.''
+
+\begin{theorem}[Nested Compact Set Property]\label{thm:nested-compact}
+If
+\[ K_1 \supseteq K_2 \supseteq K_3 \supseteq K_4 \supseteq \cdots \]
+is a nested sequence of nonempty compact sets, then $\bigcap_{n=1}^{\infty} K_n$ is not empty.
+\end{theorem}
+
+\begin{proof}
+For each $n$ choose a point $x_n \in K_n$.  Because the sets are nested, the whole sequence $(x_n)$ lies in $K_1$, and $K_1$ is compact.  So there is a subsequence $(x_{n_k})$ converging to some $x \in K_1$.  We claim that $x$ belongs to every $K_m$.
+
+Fix $m$.  Whenever $k \geq m$ we have $n_k \geq k \geq m$, so $x_{n_k} \in K_{n_k} \subseteq K_m$.  Thus, after its first few terms, $(x_{n_k})$ is a sequence in $K_m$ converging to $x$.  Since $K_m$ is closed, $x \in K_m$.
+\end{proof}
+
+Both hypotheses are needed.  The sets $\left(0, \frac1n\right)$ are nested, bounded and nonempty, but their intersection is empty; they are not closed.  The sets $[n, \infty)$ are nested, closed and nonempty, but their intersection is empty; they are not bounded.
+
+\subsection{Open Covers}
+
+There is a second way of describing compactness, one that makes no mention of sequences.  It is stranger than the first, and at first sight it seems to have nothing to do with it.  It is also the description that mathematicians reach for most often, so it repays some patience.
+
+Imagine a road, and street lamps along it.  Each lamp lights up an open stretch of the road.  Suppose there are enough lamps, possibly infinitely many, that every point of some set $A$ on the road is lit.  We ask: could we switch off all but \emph{finitely many} of the lamps and still have every point of $A$ lit?
+
+\begin{definition}
+Let $A \subseteq \mathbb{R}$.  An \textsc{open cover} of $A$ is a collection $\{O_{\lambda} : \lambda \in \Lambda\}$ of open sets whose union contains $A$.  A \textsc{finite subcover} is a finite subcollection of the original open cover whose union still contains $A$.
+\end{definition}
+
+\begin{example}\label{ex:cover-open-interval}
+Let $A = (0,1)$, and for $n = 2, 3, 4, \ldots$ let $O_n = \left(\frac1n, 1\right)$.
+
+This is an open cover of $A$: if $x \in (0,1)$, choose $n > 1/x$; then $\frac1n < x < 1$, so $x \in O_n$.
+
+But it has no finite subcover.  Take any finitely many of the sets, $O_{n_1}, \ldots, O_{n_m}$, and let $N$ be the largest of the indices.  The sets are nested, so their union is just $O_N = \left(\frac1N, 1\right)$, and this misses the point $\frac{1}{N}$ of $A$.  However many lamps we leave on, there is a dark stretch of road next to $0$.
+\end{example}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0.4,0) -- (9.7,0);
+  \draw[setline] (1,0) -- (9,0);
+  \node[openpt] at (1,0) {};
+  \node[openpt] at (9,0) {};
+  \node[lbl,above=3pt] at (1,0) {$0$};
+  \node[lbl,above=3pt] at (9,0) {$1$};
+  \node[lbl,above=3pt,accent] at (5,0) {$A = (0,1)$};
+  \foreach \n in {2,...,8} {
+    \pgfmathsetmacro{\y}{-0.42*(\n-1)}
+    \pgfmathsetmacro{\l}{1+8/\n}
+    \draw[nbhdline] (\l,\y) -- (9,\y);
+    \node[openpt=calm] at (\l,\y) {};
+    \node[openpt=calm] at (9,\y) {};
+    \node[lbl,anchor=west] at (9.25,\y) {$O_{\n}$};
+  }
+  \node[lbl] at (5,-3.5) {$\vdots$};
+  \draw[black!45, dashed, line width=0.4pt] (1,0) -- (1,-3.7);
+\end{tikzpicture}
+\caption{The open cover $O_n = \left(\frac1n, 1\right)$ of the interval $(0,1)$.  The sets creep toward $0$ without ever arriving, so no finite number of them will do.}
+\label{fig:open-cover}
+\end{figure}
+
+\begin{example}\label{ex:cover-closed-interval}
+Now try the same thing with the closed interval $[0,1]$.  The sets $O_n$ no longer form a cover, because nothing covers $0$ or $1$.  To get a cover we must add at least one open set $O_0$ containing $0$ and one open set $O_1'$ containing $1$.  But look at what $O_0$ is forced to do.  It is open, so it contains a whole neighborhood $V_{\varepsilon}(0)$, and that neighborhood swallows the dark stretch of road: it covers all of $[0, \varepsilon)$.  Now choose $n$ with $\frac1n < \varepsilon$.  The three sets $O_0$, $O_n$ and $O_1'$ already cover $[0,1]$.
+
+Adding the two endpoints to the set changed everything.  Whatever covers the point $0$ must cover its neighbors too, and only finitely many more sets are then needed.
+\end{example}
+
+That is the phenomenon in miniature.  Here is the theorem.
+
+\begin{theorem}[Heine--Borel Theorem]\label{thm:heine-borel}
+For a set $K \subseteq \mathbb{R}$, the following three statements are equivalent.
+\begin{enumerate}[(i)]
+	\item $K$ is compact: every sequence in $K$ has a subsequence converging to a point of $K$.
+	\item $K$ is closed and bounded.
+	\item Every open cover of $K$ has a finite subcover.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We know from Theorem~\ref{thm:closed-bounded} that (i) and (ii) are equivalent, so it is enough to prove that (iii) implies (ii) and that (ii) implies (iii).
+
+\newthought{(iii) implies (ii).}  Assume every open cover of $K$ has a finite subcover.  The trick in both halves is to design an open cover whose finite subcovers tell us what we want to know.
+
+\emph{$K$ is bounded.}  The open intervals $O_n = (-n, n)$, $n \in \mathbb{N}$, cover all of $\mathbb{R}$ and so certainly cover $K$.  Finitely many of them cover $K$; if $N$ is the largest index used, then $K \subseteq (-N, N)$.
+
+\emph{$K$ is closed.}  Let $y$ be a limit point of $K$ and suppose, hoping for a contradiction, that $y \notin K$.  For each $n \in \mathbb{N}$ let
+\[ O_n = \left\{x \in \mathbb{R} : |x - y| > \tfrac1n\right\} = \left(-\infty,\, y - \tfrac1n\right) \cup \left(y + \tfrac1n,\, \infty\right), \]
+an open set.  The union of all the $O_n$ is every real number except $y$, and $y \notin K$, so these sets cover $K$.  Finitely many of them cover $K$, and since $O_1 \subseteq O_2 \subseteq \cdots$ this means $K \subseteq O_N$ for a single $N$.  But then no point of $K$ lies within $\frac1N$ of $y$, and $y$ is not a limit point of $K$ after all.  This contradiction shows that $y \in K$.
+
+\newthought{(ii) implies (iii).}  This is the heart of the theorem.  Let $K$ be closed and bounded, let $\{O_{\lambda} : \lambda \in \Lambda\}$ be an open cover of $K$, and suppose for contradiction that no finite subcollection covers $K$.
+
+Since $K$ is bounded, it lies in some closed interval $I_0 = [-M, M]$.  Cut $I_0$ in half.  If the part of $K$ in the left half could be covered by finitely many of the $O_{\lambda}$, and likewise the part in the right half, then putting the two finite collections together would cover $K$.  So for at least one of the halves, call it $I_1$, the set $K \cap I_1$ cannot be covered by finitely many of the $O_{\lambda}$.  Cut $I_1$ in half and repeat.  We obtain closed intervals
+\[ I_0 \supseteq I_1 \supseteq I_2 \supseteq \cdots, \]
+where $I_n$ has length $2M/2^n$ and $K \cap I_n$ cannot be covered by finitely many of the $O_{\lambda}$.  In particular $K \cap I_n$ is never empty.
+
+By the Nested Interval Property there is a point $x$ in every $I_n$.  We claim $x \in K$.  Choose $x_n \in K \cap I_n$ for each $n$.  Since $x$ and $x_n$ both lie in $I_n$, we have $|x_n - x| \leq 2M/2^n$, so $(x_n) \to x$; and $K$ is closed, so $x \in K$ by Theorem~\ref{thm:closed-sequences}.
+
+Now the cover comes back into play.  The point $x$ is in $K$, so it lies in one of the open sets, say $O_{\lambda_0}$, and therefore so does a whole neighborhood $V_{\varepsilon}(x)$.  Choose $n$ large enough that $2M/2^n < \varepsilon$.  The interval $I_n$ contains $x$ and is shorter than $\varepsilon$, so
+\[ I_n \subseteq V_{\varepsilon}(x) \subseteq O_{\lambda_0}. \]
+But this says that $K \cap I_n$ is covered by the \emph{single} set $O_{\lambda_0}$, when we built $I_n$ so that no finite number of the $O_{\lambda}$ would do.  This contradiction completes the proof.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[bracedeco] (0.3,0.62) -- (4.5,0.62) node[midway,above=4pt,lbl] {$O_{\lambda_0}$};
+  \draw[nbhdline] (1.1,0.3) -- (3.7,0.3);
+  \node[openpt=calm] at (1.1,0.3) {};
+  \node[openpt=calm] at (3.7,0.3) {};
+  \node[lbl,calm,anchor=west] at (3.8,0.3) {$V_{\varepsilon}(x)$};
+  \draw[setline] (1.9,0) -- (2.9,0);
+  \node[closedpt] at (1.9,0) {};
+  \node[closedpt] at (2.9,0) {};
+  \node[seqpt] at (2.4,0) {};
+  \node[lbl,below=3pt] at (2.4,0) {$x$};
+  \draw[bracedeco,draw=accent] (2.9,-0.45) -- (1.9,-0.45) node[midway,below=4pt,lbl,accent] {$I_n$};
+\end{tikzpicture}
+\caption{The end of the proof.  The intervals $I_n$ shrink onto $x$, so eventually one of them fits inside the neighborhood of $x$ that a single set of the cover provides.}
+\end{marginfigure}
+
+Compare this proof with the proof of the Bolzano--Weierstrass Theorem in Chapter Two.  They are the same argument: bisect, keep the ``bad'' half, and let the Nested Interval Property find the point where the trouble is concentrated.  And once again, underneath everything, is the Axiom of Completeness.
+
+\subsection{What Is Compactness For?}
+
+The open-cover description may seem like a peculiar way of saying ``closed and bounded.''  Its value is that it converts \emph{local} information into \emph{global} information.  Very often in analysis we know something about a small neighborhood of each point: near each point a function is bounded, or two quantities are close, or some estimate holds.  Each point has its own neighborhood and its own estimate, and there are infinitely many points.  If the set is compact, finitely many of those neighborhoods already cover it, and finitely many estimates can always be combined into one.
+
+\begin{example}
+Let $K$ be compact and let $f : K \to \mathbb{R}$ be a function that is \emph{locally bounded}: for each $x \in K$ there are a neighborhood $V_{\varepsilon_x}(x)$ and a number $M_x$ such that $|f(t)| \leq M_x$ for all $t \in K \cap V_{\varepsilon_x}(x)$.  Then $f$ is bounded on all of $K$.
+
+Indeed, the neighborhoods $V_{\varepsilon_x}(x)$, one for each $x \in K$, form an open cover of $K$.  By the Heine--Borel Theorem, finitely many of them, centered at $x_1, \ldots, x_m$ say, cover $K$.  Put $M = \max\{M_{x_1}, \ldots, M_{x_m}\}$.  Every $t \in K$ lies in one of the $m$ neighborhoods, so $|f(t)| \leq M$.
+
+Without compactness the conclusion is false.  The function $f(x) = 1/x$ on $(0,1)$ is locally bounded, since near any point $x$ it is at most $2/x$, but it is certainly not bounded.
+\end{example}
+
+We will lean on this local-to-global principle again and again in the chapters on continuity and integration.
+
+\section{The Cantor Set}
+
+Our intuition about subsets of the line is built on intervals, and intervals are misleadingly tame.  The following set, constructed by Georg Cantor in 1883, is a good corrective.  It is a compact set that manages to be very small and very large at the same time.
+
+Start with the closed interval $C_0 = [0,1]$ and remove its open middle third, leaving
+\[ C_1 = \left[0, \tfrac13\right] \cup \left[\tfrac23, 1\right]. \]
+Now remove the open middle third of each of the two pieces, leaving
+\[ C_2 = \left[0, \tfrac19\right] \cup \left[\tfrac29, \tfrac13\right] \cup \left[\tfrac23, \tfrac79\right] \cup \left[\tfrac89, 1\right], \]
+and carry on in this way forever.  At stage $n$ we have a set $C_n$ consisting of $2^n$ closed intervals, each of length $1/3^n$.  The \textsc{Cantor set} is what remains when all the removals have been made:
+\[ C = \bigcap_{n=0}^{\infty} C_n. \]
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=9cm,y=1cm]
+  \def\h{0.2}
+  \fill[accent] (0,0) rectangle (1,\h);
+  \foreach \a in {0,2}
+    \fill[accent] ({\a/3},-0.65) rectangle ++(1/3,\h);
+  \foreach \a in {0,2} \foreach \b in {0,2}
+    \fill[accent] ({\a/3+\b/9},-1.3) rectangle ++(1/9,\h);
+  \foreach \a in {0,2} \foreach \b in {0,2} \foreach \c in {0,2}
+    \fill[accent] ({\a/3+\b/9+\c/27},-1.95) rectangle ++(1/27,\h);
+  \foreach \a in {0,2} \foreach \b in {0,2} \foreach \c in {0,2} \foreach \d in {0,2}
+    \fill[accent] ({\a/3+\b/9+\c/27+\d/81},-2.6) rectangle ++(1/81,\h);
+  \foreach \k/\y in {0/0,1/-0.65,2/-1.3,3/-1.95,4/-2.6}
+    \node[lbl,anchor=east] at (-0.025,{\y+0.1}) {$C_{\k}$};
+  \node[lbl] at (0,0.45) {$0$};
+  \node[lbl] at (1,0.45) {$1$};
+  \node[lbl] at (1/3,-0.24) {$\frac13$};
+  \node[lbl] at (2/3,-0.24) {$\frac23$};
+  \draw[calm, line width=0.6pt] (0.25,0.4) -- (0.25,-2.8);
+  \node[lbl,calm] at (0.25,-3.05) {$\frac14$};
+\end{tikzpicture}
+\caption{The first five stages in the construction of the Cantor set.  The vertical line marks the number $\frac14$, which is never an endpoint and is never removed.}
+\label{fig:cantor}
+\end{figure}
+
+\newthought{How much is left?}  One way to answer is to add up what we threw away.  At the first stage we removed one interval of length $\frac13$; at the second, two intervals of length $\frac19$; at the $n$th, $2^{n-1}$ intervals of length $1/3^n$.  The total length removed is
+\[ \frac13 + \frac29 + \frac{4}{27} + \cdots = \frac13 \sum_{k=0}^{\infty} \left(\frac23\right)^{k} = \frac13 \cdot \frac{1}{1 - \frac23} = 1. \]
+We started with an interval of length $1$ and removed a total length of $1$.  In this sense the Cantor set has length zero.\marginnote{Put another way: $C$ is contained in $C_n$, which has total length $\left(\frac23\right)^n$, and that tends to zero.}  It certainly contains no interval, however short, because an interval of length $\ell$ cannot fit inside $C_n$ once $1/3^n < \ell$.
+
+\newthought{Is anything left at all?}  Yes.  The endpoints $0$ and $1$ are never removed, and neither are $\frac13$, $\frac23$, $\frac19$, $\frac29$, or any other endpoint of any interval of any $C_n$, since we only ever remove \emph{open} middle thirds.  So $C$ contains infinitely many points.  There are countably many of these endpoints, and it would be natural to guess that they are all there is.
+
+\newthought{The guess is wrong.}  To see what else is in $C$, give every point of $C$ an address.  A point $x \in C$ lies in $C_1$, so it is in either the \textbf{L}eft piece or the \textbf{R}ight piece.  Whichever piece that is, it splits into two at the next stage, and $x$ is in the left or the right part of it; and so on forever.  In this way $x$ determines an infinite sequence of L's and R's.  For instance, Figure~\ref{fig:cantor} shows that the address of $\frac14$ begins L, R, L, R, and in fact it continues in the same pattern forever.
+
+Conversely, every infinite sequence of L's and R's is the address of exactly one point of $C$.  Following the instructions picks out a nested sequence of closed intervals $I_1 \supseteq I_2 \supseteq I_3 \supseteq \cdots$, one from each $C_n$, with lengths $1/3^n$.  By the Nested Interval Property they have a point in common; because their lengths tend to zero they have only one; and that point lies in every $C_n$, so it lies in $C$.  Two different addresses lead to different points, because at the first place where the addresses disagree the two points fall into disjoint intervals.
+
+So the points of the Cantor set correspond one-to-one with the infinite sequences of two symbols.  We proved in Chapter One that the set of all such sequences is uncountable.  Therefore:
+
+\begin{quote}
+\emph{The Cantor set is uncountable.}  It has as many points as the whole interval $[0,1]$ from which it was carved, even though the carving removed the entire length of that interval.
+\end{quote}
+
+\marginnote{Readers who know base-3 notation can describe $C$ in one line: it is the set of numbers in $[0,1]$ that can be written in base 3 using only the digits $0$ and $2$.  An L is a digit $0$ and an R is a digit $2$, so that $\frac14 = 0.020202\ldots$ in base 3.}
+
+\newthought{What does topology say about $C$?}  Each $C_n$ is a finite union of closed intervals and is therefore closed.  So $C$, an intersection of closed sets, is closed (Corollary~\ref{cor:closed-unions}).  It is bounded.  Hence \emph{the Cantor set is compact}.
+
+Moreover, \emph{the Cantor set has no isolated points.}  Let $x \in C$ and $\varepsilon > 0$, and choose $n$ with $1/3^n < \varepsilon$.  The point $x$ lies in one of the intervals that make up $C_n$.  Both endpoints of that interval belong to $C$, both are within $1/3^n < \varepsilon$ of $x$, and at least one of them is different from $x$.  So $V_{\varepsilon}(x)$ contains a point of $C$ other than $x$.
+
+Sets with these two properties have a name.
+
+\begin{definition}
+A set $P \subseteq \mathbb{R}$ is \textsc{perfect} if it is closed and has no isolated points.
+\end{definition}
+
+Closed intervals $[c,d]$ with $c < d$ are perfect, and so are $\mathbb{R}$ and the Cantor set.  The set $\left\{\frac1n\right\} \cup \{0\}$ is closed but not perfect, since most of its points are isolated; $\mathbb{Q}$ has no isolated points but is not perfect, since it is not closed.  The address argument showed that one particular perfect set is uncountable.  Remarkably, they all are.
+
+\begin{theorem}\label{thm:perfect-uncountable}
+A nonempty perfect set is uncountable.
+\end{theorem}
+
+\begin{proof}
+Let $P$ be perfect and nonempty.  Then $P$ is infinite, because every point of a finite set is isolated.  Suppose, for contradiction, that $P$ is countable, so that its points can be listed:
+\[ P = \{x_1, x_2, x_3, \ldots\}. \]
+We will build a nested sequence of closed intervals $I_1 \supseteq I_2 \supseteq I_3 \supseteq \cdots$ so that
+\begin{enumerate}[(a)]
+	\item each $I_n$ contains a point of $P$ in its interior, that is, strictly between its endpoints; and
+	\item $x_n \notin I_{n+1}$ for every $n$.
+\end{enumerate}
+Begin with $I_1 = [x_1 - 1, x_1 + 1]$, which has the point $x_1$ of $P$ in its interior.
+
+Suppose $I_n$ has been constructed, and let $y$ be a point of $P$ in its interior.  We first find a point $y'$ of $P$ in the interior of $I_n$ with $y' \neq x_n$.  If $y \neq x_n$ we simply take $y' = y$.  If $y = x_n$, we use the fact that $y$ is not isolated: it is a limit point of $P$, so every neighborhood of $y$, including one small enough to lie in the interior of $I_n$, contains a point $y' \in P$ different from $y$.  Now let $I_{n+1}$ be a closed interval centered at $y'$, short enough to lie inside $I_n$ and to leave out $x_n$.  Then (a) holds for $I_{n+1}$, and (b) holds for $n$.
+
+Finally let $K_n = I_n \cap P$.  Each $K_n$ is closed and bounded, hence compact; it is nonempty by (a); and the sets are nested.  By the Nested Compact Set Property (Theorem~\ref{thm:nested-compact}) there is a point $x$ in every $K_n$.  This $x$ is a point of $P$, so it appears on the list: $x = x_m$ for some $m$.  But $x \in I_{m+1}$ and, by (b), $x_m \notin I_{m+1}$.  This contradiction shows that $P$ cannot be countable.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[bracedeco] (0.4,0.6) -- (4.4,0.6) node[midway,above=4pt,lbl] {$I_n$};
+  \draw[bracedeco,draw=accent] (3.8,-0.5) -- (2.6,-0.5) node[midway,below=4pt,lbl,accent] {$I_{n+1}$};
+  \draw[tickmark] (0.4,-0.12) -- (0.4,0.12);
+  \draw[tickmark] (4.4,-0.12) -- (4.4,0.12);
+  \draw[setline] (2.6,0) -- (3.8,0);
+  \node[closedpt] at (2.6,0) {};
+  \node[closedpt] at (3.8,0) {};
+  \node[seqpt] at (1.5,0) {};
+  \node[seqpt] at (3.2,0) {};
+  \node[lbl,below=3pt] at (1.5,0) {$x_n$};
+  \node[lbl,above=3pt] at (3.2,0) {$y'$};
+\end{tikzpicture}
+\caption{One step of the construction.  The new interval is centered on a point $y'$ of $P$ and is short enough to avoid $x_n$.}
+\end{marginfigure}
+
+Since $\mathbb{R}$ is itself a nonempty perfect set, this gives one more proof that $\mathbb{R}$ is uncountable.  In fact the Nested Interval proof of that fact in Chapter One is precisely this argument in the special case $P = \mathbb{R}$, where finding the point $y'$ takes no effort at all.
+
+\section{Connected Sets}
+
+An interval is all in one piece.  The set $[0,1] \cup [2,3]$ is in two pieces.  It is surprisingly delicate to say precisely what ``in one piece'' means.
+
+A first attempt: call a set disconnected if it can be split into two nonempty disjoint parts.  This is useless, since \emph{every} set with at least two points can be split in that way; the interval $(1,3)$ is the union of the disjoint sets $(1,2]$ and $(2,3)$.  What is wrong with this splitting is that the two parts are still touching.  The point $2$ belongs to the first part and is a limit point of the second.  A genuine break in a set should leave the two parts not merely disjoint but out of reach of each other.
+
+\begin{definition}
+Two nonempty sets $A, B \subseteq \mathbb{R}$ are \textsc{separated} if $\overline{A} \cap B$ and $A \cap \overline{B}$ are both empty: neither set contains a point of the other, or a limit point of the other.
+
+A set $E \subseteq \mathbb{R}$ is \textsc{disconnected} if it can be written as $E = A \cup B$ where $A$ and $B$ are nonempty separated sets.  A set that is not disconnected is \textsc{connected}.
+\end{definition}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % separated
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[setline] (0.6,0) -- (2.4,0);
+  \draw[nbhdline] (2.4,0) -- (4.2,0);
+  \node[openpt] at (0.6,0) {};
+  \node[openpt=calm] at (4.2,0) {};
+  \node[openpt=black] at (2.4,0) {};
+  \node[lbl,below=3pt] at (0.6,0) {$1$};
+  \node[lbl,below=3pt] at (2.4,0) {$2$};
+  \node[lbl,below=3pt] at (4.2,0) {$3$};
+  \node[lbl,above=3pt,accent] at (1.5,0) {$A$};
+  \node[lbl,above=3pt,calm] at (3.3,0) {$B$};
+  % not separated
+  \draw[numline] (0,-1.5) -- (4.8,-1.5);
+  \draw[setline] (0.6,-1.5) -- (2.4,-1.5);
+  \draw[nbhdline] (2.4,-1.5) -- (4.2,-1.5);
+  \node[openpt] at (0.6,-1.5) {};
+  \node[openpt=calm] at (4.2,-1.5) {};
+  \node[closedpt] at (2.4,-1.5) {};
+  \node[lbl,below=3pt] at (0.6,-1.5) {$1$};
+  \node[lbl,below=3pt] at (2.4,-1.5) {$2$};
+  \node[lbl,below=3pt] at (4.2,-1.5) {$3$};
+  \node[lbl,above=3pt,accent] at (1.5,-1.5) {$A$};
+  \node[lbl,above=3pt,calm] at (3.3,-1.5) {$B$};
+\end{tikzpicture}
+\caption{Above: $A = (1,2)$ and $B = (2,3)$ are separated; the missing point $2$ keeps them apart.  Below: $A = (1,2]$ and $B = (2,3)$ are disjoint but not separated, because $2 \in A$ is a limit point of $B$.}
+\end{marginfigure}
+
+\begin{example}
+The sets $A = (1,2)$ and $B = (2,3)$ are separated: $\overline{A} = [1,2]$ does not meet $B$, and $\overline{B} = [2,3]$ does not meet $A$.  So $(1,2) \cup (2,3)$ is disconnected, as it should be.
+
+The sets $(1,2]$ and $(2,3)$ are not separated, because the closure of the second contains the point $2$ of the first.  This splitting does not show that $(1,3)$ is disconnected, and we will see in a moment that no splitting can.
+\end{example}
+
+\begin{example}
+The set $\mathbb{Q}$ is disconnected.  Let $A = \mathbb{Q} \cap (-\infty, \sqrt2)$ and $B = \mathbb{Q} \cap (\sqrt2, \infty)$.  Their union is $\mathbb{Q}$, because $\sqrt2$ is irrational.  Since $\overline{A} = (-\infty, \sqrt2]$ contains no point of $B$, and $\overline{B} = [\sqrt2, \infty)$ contains no point of $A$, the two sets are separated.  The rational numbers fall apart at every one of the irrational gaps between them.
+\end{example}
+
+On the real line there is a simple test for connectedness.
+
+\begin{theorem}\label{thm:connected-intervals}
+A set $E \subseteq \mathbb{R}$ is connected if and only if it has the following property: whenever $a < c < b$ with $a \in E$ and $b \in E$, it follows that $c \in E$ as well.
+\end{theorem}
+
+\begin{proof}
+($\Rightarrow$)  We prove the contrapositive.  Suppose there are points $a, b \in E$ and a point $c \notin E$ with $a < c < b$.  Let
+\[ A = E \cap (-\infty, c), \qquad B = E \cap (c, \infty). \]
+Then $a \in A$ and $b \in B$, so both are nonempty, and $E = A \cup B$ because $c \notin E$.  Every limit point of $A$ is at most $c$, so $\overline{A} \subseteq (-\infty, c]$ does not meet $B$; similarly $\overline{B}$ does not meet $A$.  Thus $E$ is disconnected.
+
+($\Leftarrow$)  Suppose $E$ has the stated property, and suppose for contradiction that $E = A \cup B$ with $A$ and $B$ nonempty and separated.  Pick $a \in A$ and $b \in B$; we may assume $a < b$.  By the stated property the whole interval $[a,b]$ lies in $E$.  Let
+\[ s = \sup\big(A \cap [a,b]\big). \]
+The supremum of a set is either a member of the set or a limit point of it, so $s \in \overline{A}$.\marginnote{For every $\varepsilon > 0$ there is an element of the set in $(s - \varepsilon, s]$.  If none of these elements is $s$ itself, then $s$ is a limit point.}  Because the sets are separated, $s \notin B$.  But $s \in [a,b] \subseteq E = A \cup B$, so $s \in A$.
+
+In particular $s \neq b$, so $s < b$.  Now consider the points of $(s, b]$.  They all lie in $E$, and none of them is in $A$, since they are in $[a,b]$ and larger than the supremum of $A \cap [a,b]$.  So they are all in $B$.  But then $s$ is a limit point of $B$, and $s \in A \cap \overline{B}$, contradicting the assumption that $A$ and $B$ are separated.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[numline] (0,0) -- (4.8,0);
+  \draw[setline] (0.7,0) -- (2.6,0);
+  \draw[nbhdline] (2.6,0) -- (4.1,0);
+  \node[closedpt] at (0.7,0) {};
+  \node[closedpt] at (2.6,0) {};
+  \node[closedpt=calm] at (4.1,0) {};
+  \node[lbl,below=3pt] at (0.7,0) {$a$};
+  \node[lbl,below=3pt] at (2.6,0) {$s$};
+  \node[lbl,below=3pt] at (4.1,0) {$b$};
+  \node[lbl,above=3pt,calm] at (3.4,0) {all in $B$};
+\end{tikzpicture}
+\caption{The proof looks for the last point of $A$ before $b$.  That point $s$ belongs to $A$, yet the points of $B$ press right up against it.}
+\end{marginfigure}
+
+The sets with the property in Theorem~\ref{thm:connected-intervals} are exactly the intervals, if we allow the word to include single points, rays such as $[c, \infty)$, the whole line and the empty set.  So \emph{the connected subsets of $\mathbb{R}$ are precisely the intervals.}\marginnote{This theorem is the engine behind the Intermediate Value Theorem, which we will meet in Chapter Four.}
+
+At the other extreme stands the Cantor set.  Between any two of its points there is a point that is not in it, since it contains no interval.  So not only is $C$ disconnected; every subset of $C$ with more than one point is disconnected.  Such a set is called \textsc{totally disconnected}.  The Cantor set is as far from an interval as a set can be, and yet, like an interval, it is compact, perfect and uncountable.
+
+\section{Beyond the Real Line: Metric Spaces}\label{sec:metric-spaces}
+
+Look back over the definitions in this chapter: open set, limit point, closed set, compact set.  Each was built from $\varepsilon$-neighborhoods, and an $\varepsilon$-neighborhood was built from a single ingredient, the distance $|x - y|$ between two real numbers.  We never added two elements of a set, and never asked which of two points was larger.  This suggests that the same definitions will make sense wherever there is a reasonable notion of distance.
+
+\begin{definition}
+A set $X$, whose elements we shall call points, is a \textsc{metric space} if with any two points $p$ and $q$ of $X$ there is associated a real number $d(p,q)$, called the \textsc{distance} from $p$ to $q$, such that
+\begin{enumerate}[(i)]
+	\item $d(p,q) > 0$ if $p \neq q$, and $d(p,p) = 0$;
+	\item $d(p,q) = d(q,p)$;
+	\item $d(p,q) \leq d(p,r) + d(r,q)$ for any $r \in X$.
+\end{enumerate}
+\end{definition}
+
+Property (iii) is the \textsc{triangle inequality}: going from $p$ to $q$ by way of $r$ is never shorter than going directly.
+
+\newthought{Examples of metric spaces.}
+\begin{enumerate}
+	\item The real line $\mathbb{R}$ with $d(p,q) = |p - q|$.  This is the metric space we have been studying all along.
+	\item The rational numbers $\mathbb{Q}$ with the same distance.  More generally, any subset of a metric space is itself a metric space under the same distance function.
+	\item The plane $\mathbb{R}^2 = \{(x_1, x_2) : x_1, x_2 \in \mathbb{R}\}$ with
+	\[ d(\mathbf{x}, \mathbf{y}) = \sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2}, \]
+	and in the same way the Euclidean space $\mathbb{R}^k$ for any $k$.  The properties of norms listed at the end of Chapter One show that the three conditions are satisfied.
+	\item Any set $X$ at all, with the \textsc{discrete metric}
+	\begin{displaymath}
+	   d(p,q) = \left\{
+	     \begin{array}{ll}
+	       1 & \text{if } p \neq q, \\
+	       0 & \text{if } p = q.
+	     \end{array}
+	   \right.
+	\end{displaymath}
+	In this space every point is at distance $1$ from every other.
+\end{enumerate}
+
+In a metric space the $\varepsilon$-neighborhood of a point $p$ is $V_{\varepsilon}(p) = \{q \in X : d(p,q) < \varepsilon\}$.  In the plane this is a disc without its rim, which is why neighborhoods are also called \emph{open balls}.  With this one change, Definitions~\ref{def:open}, \ref{def:limit-point}, \ref{def:closed} and \ref{def:compact} can be repeated word for word.  Do the theorems survive as well?  Many do, and with the same proofs.  Here is one whose proof shows the triangle inequality at work.
+
+\begin{theorem}
+In any metric space, every neighborhood $V_r(p)$ is an open set.
+\end{theorem}
+
+\begin{proof}
+Let $q \in V_r(p)$, so that $d(p,q) < r$, and put $h = r - d(p,q) > 0$.  We claim that $V_h(q) \subseteq V_r(p)$.  If $s \in V_h(q)$, then by the triangle inequality
+\[ d(p,s) \leq d(p,q) + d(q,s) < d(p,q) + h = r, \]
+so $s \in V_r(p)$.  Thus every point $q$ of $V_r(p)$ has a neighborhood contained in $V_r(p)$.
+\end{proof}
+
+\begin{marginfigure}
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[calm, line width=0.8pt, dashed, fill=calm!8] (0,0) circle (2.1);
+  \draw[accent, line width=0.8pt, dashed, fill=accent!14] (1.1,0.6) circle (0.84);
+  \draw[black!60, line width=0.4pt] (0,0) -- (1.1,0.6) -- (1.844,1.005);
+  \node[seqpt] at (0,0) {};
+  \node[seqpt] at (1.1,0.6) {};
+  \node[seqpt] at (1.45,0.2) {};
+  \node[lbl,below left] at (0,0) {$p$};
+  \node[lbl,above left] at (1.1,0.6) {$q$};
+  \node[lbl,right=1pt] at (1.45,0.2) {$s$};
+  \node[lbl,above=1pt] at (1.5,0.82) {$h$};
+  \node[lbl,calm] at (-1.0,-1.1) {$V_r(p)$};
+\end{tikzpicture}
+\caption{An open ball is open.  The point $q$ is at distance $h$ from the rim, so the ball of radius $h$ about $q$ stays inside.}
+\end{marginfigure}
+
+\newthought{What survives and what does not.}  Theorems~\ref{thm:open-unions}, \ref{thm:limit-point-sequence}, \ref{thm:closed-sequences}, \ref{thm:closure} and \ref{thm:complements} hold in every metric space, and their proofs need no change beyond writing $d(x,y)$ in place of $|x - y|$.  It is also true in every metric space that a compact set is closed and bounded, and that a set is compact if and only if each of its open covers has a finite subcover, although the proof of the latter requires new ideas.
+
+One thing does \emph{not} survive.
+
+\begin{dangerousbend}
+In a general metric space, a closed and bounded set need not be compact.
+\begin{itemize}
+	\item In the metric space $\mathbb{Q}$, the set $K = \{x \in \mathbb{Q} : 0 \leq x \leq 2\}$ is closed and bounded.  But the sequence $1,\ 1.4,\ 1.41,\ 1.414,\ \ldots$ of decimal approximations to $\sqrt2$ lies in $K$, and no subsequence of it converges to a point of $\mathbb{Q}$.
+	\item Let $X$ be an infinite set with the discrete metric.  The whole space $X$ is closed and bounded, since no two points are more than $1$ apart.  But a sequence of distinct points of $X$ has no convergent subsequence, because its terms stay at distance $1$ from one another.
+\end{itemize}
+\end{dangerousbend}
+
+So the implication ``closed and bounded implies compact'' in the Heine--Borel Theorem is really a theorem about $\mathbb{R}$, and about the Euclidean spaces $\mathbb{R}^k$, where it is also true.  Its proof rested on the Bolzano--Weierstrass Theorem, and so, in the end, on the Axiom of Completeness.
+
+This brings us back to the promise we began with.  Of the five equivalent statements at the end of Chapter Two, three are phrased in terms of the order on $\mathbb{R}$: they speak of suprema, of intervals, of monotone sequences.  The Bolzano--Weierstrass Theorem can be stated using distance alone, but the second example in the caution above shows that it asks for more than the absence of holes.  That leaves the Cauchy Criterion, which speaks of nothing but distance, and it is taken as the definition: a metric space is \textsc{complete} if every Cauchy sequence in it converges to a point of the space.  The real line is complete, and $\mathbb{Q}$ is not.  That is the precise sense in which $\mathbb{R}$ has no holes, and the first example in the caution above shows what goes wrong when a space has them.
+
+\section{Problems}
+
+\noindent The problems in this section are original to this text.
+
+\begin{problem}[Sorting sets]
+\hint{Draw each set first.  For (f), think carefully about the point $0$.}
+For each of the following sets, find its limit points and its isolated points, decide whether it is open, closed, both or neither, and write down its closure.
+\begin{enumerate}[(a)]
+	\item $\mathbb{N}$
+	\item $\{x \in \mathbb{R} : x^2 < 2\}$
+	\item $\{x \in \mathbb{Q} : x^2 < 2\}$
+	\item $\left\{(-1)^n + \frac1n : n \in \mathbb{N}\right\}$
+	\item $\displaystyle\bigcup_{n=1}^{\infty} \left[\frac{1}{2n}, \frac{1}{2n-1}\right]$
+	\item $\left\{x \in \mathbb{R} : x \neq \frac1n \text{ for every } n \in \mathbb{N}\right\}$
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Measuring the cushion]
+\hint{For (b): if a ball of radius $\varepsilon$ around $a$ fits inside $O$, how large a ball around a nearby point $b$ is guaranteed to fit?}
+Let $O$ be an open set other than $\mathbb{R}$ itself.  For $a \in O$ let $c(a)$ be the radius of the largest cushion around $a$:
+\[ c(a) = \sup\{\varepsilon > 0 : V_{\varepsilon}(a) \subseteq O\}. \]
+\begin{enumerate}[(a)]
+	\item For $O = (0,1) \cup (1,3)$, find a formula for $c(a)$ and sketch its graph.
+	\item For a general $O$, prove that $|c(a) - c(b)| \leq |a - b|$ for all $a, b \in O$.
+	\item What does (b) say about the steepness of the graph you drew in (a)?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[True or false]
+\hint{The pair $A = (0,1)$, $B = (1,2)$ is a useful test case.}
+Decide whether each statement is true for all sets $A, B \subseteq \mathbb{R}$.  Prove the true ones and give counterexamples to the others.
+\begin{enumerate}[(a)]
+	\item If $A$ is open and $B$ is closed, then $A \setminus B = \{x \in A : x \notin B\}$ is open.
+	\item Every limit point of $A \cup B$ is a limit point of $A$ or a limit point of $B$.
+	\item Every limit point of $A \cap B$ is a limit point of both $A$ and $B$.
+	\item $\overline{A \cup B} = \overline{A} \cup \overline{B}$.
+	\item $\overline{A \cap B} = \overline{A} \cap \overline{B}$.
+	\item Every infinite set has a limit point.
+	\item Every bounded infinite set has a limit point.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Lamps along the road]
+\hint{In (a), three open intervals of length $\frac23$ have total length $2$.  Why is that not quite enough for a \emph{closed} interval of length $2$?}
+For each set and each open cover, either find a finite subcover or prove that none exists.
+\begin{enumerate}[(a)]
+	\item The set $[0,2]$, covered by all the neighborhoods $V_{1/3}(x)$ with $x \in [0,2]$.  Find a finite subcover using as few sets as you can, and explain why no smaller number will do.
+	\item The set $(0,1]$, covered by the intervals $\left(\frac{x}{2}, 2x\right)$ for $x \in (0,1]$.
+	\item The set $[0,1]$, covered by the intervals in (b) together with one more open set $O_0$ that contains $0$.
+	\item The set $\mathbb{Z}$, covered by the neighborhoods $V_{1/2}(n)$ for $n \in \mathbb{Z}$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Arithmetic with compact sets]
+\hint{For (c), take a sequence $x_n + y_n$ and choose a subsequence twice: once to make the $x$'s behave, and again to make the $y$'s behave.  For (d), try $A = \mathbb{N}$ and a set $B$ of negative numbers that are not quite integers.}
+For sets $A, B \subseteq \mathbb{R}$ define $A + B = \{a + b : a \in A,\ b \in B\}$.  Let $K$ and $L$ be compact.
+\begin{enumerate}[(a)]
+	\item Prove that $K \cup L$ is compact.
+	\item Prove that $K \cap L$ is compact.
+	\item Prove that $K + L$ is compact.
+	\item Show by example that if $A$ and $B$ are merely closed, then $A + B$ need not be closed.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Addresses in the Cantor set]
+\hint{For (d), what do the two maps do to an address?}
+Every point of the Cantor set has an address, an infinite sequence of L's and R's, as described in the text.
+\begin{enumerate}[(a)]
+	\item Find the address of $\frac34$.
+	\item Which points have the addresses L, R, R, R, R, \ldots\ and R, L, L, L, L, \ldots?
+	\item Show that a point of $C$ is an endpoint of one of the intervals making up some $C_n$ if and only if its address is eventually constant.  Deduce that the set of all such endpoints is countable, so that ``most'' points of $C$ are not endpoints.
+	\item Show that if $x \in C$ then $\frac{x}{3} \in C$ and $\frac{x+2}{3} \in C$.  Conclude that the Cantor set is the union of two copies of itself, each one third the size.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[A fat Cantor set]
+\hint{For (b), how long can each of the $2^n$ intervals remaining after stage $n$ be?}
+Repeat the construction of the Cantor set, but remove less.  Start with $[0,1]$.  At stage $n$, from the middle of each of the $2^{n-1}$ closed intervals that remain, remove an open interval of length $1/4^n$.  Let $F$ be the set of points that are never removed.
+\begin{enumerate}[(a)]
+	\item Show that the total length removed is $\frac12$.
+	\item Show that $F$ nevertheless contains no interval.
+	\item Is $F$ compact?  Is it perfect?
+	\item The Cantor set contains no interval, and we said that it has ``length zero.''  What does $F$ suggest about the relationship between those two facts?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[One piece or several?]
+\hint{Theorem~\ref{thm:connected-intervals} turns every part of this problem into a question about intervals.}
+\begin{enumerate}[(a)]
+	\item Decide whether each set is connected: the set of irrational numbers; the set $\{x \in \mathbb{R} : |x - 1| + |x + 1| \leq 3\}$; the set $\{x \in \mathbb{R} : x^2 - 3x + 2 > 0\}$.
+	\item Let $A$ and $B$ be connected subsets of $\mathbb{R}$ with $A \cap B \neq \emptyset$.  Prove that $A \cup B$ and $A \cap B$ are both connected.
+	\item Prove that the closure of a connected set is connected.
+	\item One of the two conclusions in (b) is special to the real line.  Draw two ``one-piece'' regions in the plane, overlapping, whose intersection is in two pieces.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[From local to global]
+\hint{This is the street-lamp argument: one lamp for each point of $K$.}
+Let $K$ be a compact set, and suppose that every point $x \in K$ has a neighborhood $V_{\varepsilon_x}(x)$ that contains only finitely many points of $K$.
+\begin{enumerate}[(a)]
+	\item Prove that $K$ is finite.
+	\item Show by example that the conclusion can fail for a set that is closed but not bounded, and for a set that is bounded but not closed.
+	\item Deduce that every infinite compact set has a limit point, and that this limit point belongs to the set.
+\end{enumerate}
+\end{problem}
