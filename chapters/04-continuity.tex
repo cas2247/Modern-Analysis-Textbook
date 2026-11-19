@@ -2,40 +2,40 @@
 
 We now have a mathematically unambiguous definition of what it means for a sequence or series to converge.  Now we move toward a rigorous understanding of functional limits and continuity.
 
-Loosely, if given a function $f$ with domain $D \subseteq R$, we want to define continuity at a point $c \in D$ to mean that if we choose $x \in D$ \emph{close to} $c$, then $f(x)$ is \emph{close to} $f(c)$.
+Loosely, if given a function $f$ with domain $D \subseteq \mathbb{R}$, we want to define continuity at a point $c \in D$ to mean that if we choose $x \in D$ \emph{close to} $c$, then $f(x)$ is \emph{close to} $f(c)$.
 
 At present however, we do not yet have a clear notion of what is meant by $\lim_{x \to c} f(x)$.  Unlike with sequences,  we want the value of $\lim_{x \to c} f(x)$ to be independent of how we approach $c$.  In fact, $c$ need not even be in the domain of $f$.   
 
 \section{Functional Limits}
 
-Consider a function $f: A \to R$.
+Consider a function $f: A \to \mathbb{R}$.
 
 Recall the topological definitions of a limit point.
 
 \newthought{Limit Point:}
-A point $x$ is called a \emph{limit point} (sometimes called a "cluster point" or "accumulation point") of a set $A$ then TFAE 
+A point $x$ is called a \emph{limit point} (sometimes called a ``cluster point'' or ``accumulation point'') of a set $A$ if either of the following equivalent conditions holds: 
 
 \begin{enumerate}
 	\item Every $\varepsilon-$neighborhood $V_{\varepsilon}(x)$ of $x$ intersects the set $A$ in some point other than $x$
-	\item The point $x = \lim a_n$ for some sequence $(a_n)$ contained in $A$ satisfying $a_n \neq x$ for all $n \in N$.  In other words, x is the limit of some sequence contained entirely in A but such that no term of the sequence equals x.  
+	\item The point $x = \lim a_n$ for some sequence $(a_n)$ contained in $A$ satisfying $a_n \neq x$ for all $n \in N$.  In other words, $x$ is the limit of some sequence contained entirely in $A$ but such that no term of the sequence equals $x$.  
 \end{enumerate}
 
-It is important to remember that limit points of A do not necessarily belong to the set A unless A is closed.
+It is important to remember that limit points of $A$ do not necessarily belong to the set $A$ unless $A$ is closed.
 
 
 
 If we were to say that $c$ is a limit point of the domain of $f$, then intuitively, the statement 
 \[		\lim_{x \to c} f(x) = L\]
-conveys that the values of $f(x)$ get close to $L$ as $x$ gets close to $x$.   The issue of what happens when $x=c$ is irrelevant from the point of view of functional limits.  In fact, like with the limit points of sets, we do not even require that $c$ be in the domain of $f$.
+conveys that the values of $f(x)$ get close to $L$ as $x$ gets close to $c$.   The issue of what happens when $x=c$ is irrelevant from the point of view of functional limits.  In fact, like with the limit points of sets, we do not even require that $c$ be in the domain of $f$.
 
 \begin{definition}
-	Let $f: A \to R$ and let $c$ be a limit point of the domain $A$.  We say that $\lim_{x \to c} f(x) = L$ provided that for all $\varepsilon >0$, there exists a $\delta >0$ such that whenever $0 < |x - c| < \delta$ (and $x\in A$) it follows that $|f(x) - L|<\varepsilon$.  
+	Let $f: A \to \mathbb{R}$ and let $c$ be a limit point of the domain $A$.  We say that $\lim_{x \to c} f(x) = L$ provided that for all $\varepsilon >0$, there exists a $\delta >0$ such that whenever $0 < |x - c| < \delta$ (and $x\in A$) it follows that $|f(x) - L|<\varepsilon$.  
 \end{definition}
 
 Like with sequential limits we can cast this definition with a more topological intuition.
 
 \begin{definition}[Topological Version]
-	Let $c$ be a limit point of the domain of $f: A \to R$.  We say that $\lim_{x \to c} f(x) = L$ provided that for every $\varepsilon-$neighborhood $V_{\varepsilon}(L)$of L, there exists a $\delta-$neighborhood $V_{\delta}(c)$ around $c$ with the property that for all $x \in V_{\delta}(c)$ different from $c$ it follows that $f(x) \in V_{\varepsilon}(L)$\end{definition}
+	Let $c$ be a limit point of the domain of $f: A \to \mathbb{R}$.  We say that $\lim_{x \to c} f(x) = L$ provided that for every $\varepsilon-$neighborhood $V_{\varepsilon}(L)$ of $L$, there exists a $\delta-$neighborhood $V_{\delta}(c)$ around $c$ with the property that for all $x \in V_{\delta}(c)$ different from $c$ it follows that $f(x) \in V_{\varepsilon}(L)$\end{definition}
 
 
 Note that the appearance of $f(x)$ carries with it the implicit assumption that $x$ is in the domain of $f$.  On a similar note, there is no reason to discuss functional limits at isolated points in the domain.  Thus, functional limits will only be discussed as $x$ tends toward a limit point of the function's domain.
