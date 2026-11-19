@@ -11,7 +11,7 @@ We will demonstrate how the rational number system is inadequate for many purpos
 \bigskip
 
 \section{The Axiom of Completeness}
-\subsection{Ordered Sets}
+\subsection{Ordered Sets}\label{sec:ordered-sets}
 %\marginnote{Here are some standard set-theory terms that will be used throughout:  If $A$ is any set (whose elements may be numbers or any other objects), we write $x \in A$ to indicate that $x$ is a member of $A$.   If $x$ is not a member of $A$, we write that $x \notin A$. \\  The set which contains no element will be called the \textsc{empty set}.   If a set has at least one element, it is called nonempty. \\  If $A$ and $B$ are sets, and if every element of $A$ is an element of $B$, we say that $A$ is a subset of $B$ and write $A \subset B$ or $B \supset A$.  If, in addition, there is another element of $B$ not in $A$ then we say that $A$ is a proper subset of $B$.   Note that $A \subset A$ for every set $A$ \\ If $A \subset B$ and $B\subset A$ , we write that $A=B$.  Otherwise $A \neq B$.  }
 In order to elucidate the structure of the real numbers as well as that of the complex numbers, we must start with a brief discussion of the general concepts of ordered set and field.
 
@@ -148,8 +148,8 @@ Altogether then, we have $a_n \leq x \leq b_n$, which means $x \in I_n$ for ever
 \section{The Density of \texorpdfstring{$\mathbb{Q}$}{Q} and of the Irrationals in \texorpdfstring{$\mathbb{R}$}{R}}
 Again here, we are restricting our discussion to the real numbers.  
 
-\begin{theorem}\marginnote{Archimedean Property}  \begin{itemize}[(i)] 
-\item  Given any number $x \in \mathbb{R}$ there exists an $n \in \mathbb{N}$ such that $x<n$.  \item Given any real number $y>0$, there exists an $ n \in \mathbb{N}$ such that $\frac{1}{n}< y$. \end{itemize} \end{theorem}
+\begin{theorem}\marginnote{Archimedean Property}  \begin{enumerate}[(i)] 
+\item  Given any number $x \in \mathbb{R}$ there exists an $n \in \mathbb{N}$ such that $x<n$.  \item Given any real number $y>0$, there exists an $ n \in \mathbb{N}$ such that $\frac{1}{n}< y$. \end{enumerate} \end{theorem}
 
 \begin{proof}   Part (i) of the theorem states that $\mathbb{N}$ is not bounded above.  This might seem obvious and not in need of a proof yet it is important to note that a set might possess the Archimedean property without being complete---take $\mathbb{Q}$ for example---but a demonstration of this fact requires an investigation into the axiomatic construction of the ordered field in question. In the case of $\mathbb{R}$, the AoC furnishes us with a very short argument.
 
@@ -161,13 +161,13 @@ Note that $\frac{1}{n} < y$ implies that $\frac{1}{y} < n$.  Therefore this stat
 
 \begin{theorem}  \marginnote{Density of $\mathbb{Q}$ and of the irrationals in $\mathbb{R}$}  
 
-\begin{itemize}[(i)] 
+\begin{enumerate}[(i)] 
 \item    For every two real numbers $a$ and $b$ with $a<b$, there exists a rational number $r$ satisfying $a<r<b$
 \item Given any two real numbers $a$ and $b$ with $a<b$, there exists an irrational number $t$ satisfying $a<t<b$
- \end{itemize} \end{theorem}
+ \end{enumerate} \end{theorem}
  
  \begin{proof}
- \begin{itemize}[(i)]
+ \begin{enumerate}[(i)]
  	\item Without loss of generality assume that $0 \leq a < b$.  A rational number is a quotient of integers, so our task is to produce $m, n \in \mathbb{N}$ such that 
 	\[	a  < \frac{m}{n} < b	\]
  The first step is to choose a denominator large enough so that consecutive increments of size $1/n$ are too close together to ``step over'' the interval $(a,b)$.
@@ -184,7 +184,7 @@ Because $m<nb$ implies that $m/n < b$, we have $a<m/n <b$ as desired.
 \item  We want to prove the existence of an irrational number between any two real numbers $a$ and $b$.  Using the density of $\mathbb{Q}$ in $\mathbb{R}$ on the real numbers $a - \sqrt{2}$ and $b - \sqrt{2}$ we can find a rational number $r$ such that $a - \sqrt{2} < r < b - \sqrt{2}$.  This then implies that $a< r + \sqrt{2} < b$.  Since an irrational plus a rational is again an irrational (a result proved in the exercises) it follows that $r + \sqrt{2}$ is irrational.
 
  
- \end{itemize}
+ \end{enumerate}
  \end{proof}
 
 
