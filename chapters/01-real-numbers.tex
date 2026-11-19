@@ -505,7 +505,7 @@ Suppose that $\mathbf{x,y,z} \in \mathbb{R}^k$ and $\alpha$ is real. Then
 
 \section{Problems}
 
-\noindent The problems in this section are original to this text.  Several of them ask you to decide whether a statement is true before you prove anything.  Resist the urge to skip the deciding: a few minutes spent drawing number lines and hunting for counterexamples is where most of the learning happens.
+\noindent The problems in this section are original to this text.  Several of them ask you to decide whether a statement is true before you prove anything.  Resist the urge to skip the deciding.  A few minutes spent drawing number lines and hunting for counterexamples is where most of the learning happens.
 
 \begin{problem}[Two sets facing each other]
 \hint{For (a), every element of $B$ is an upper bound for $A$.  What does that say about the \emph{least} upper bound?}
@@ -531,7 +531,7 @@ For a nonempty bounded set $A \subseteq \mathbb{R}$, define its \emph{width} to 
 \end{problem}
 
 \begin{problem}[The Nested Interval Property needs the reals]
-\hint{For (b): a number lying in every $J_n$ is within $10^{-n}$ of both $a_n$ and $b_n$, for every $n$.  What does that force its square to be?}
+\hint{For (b), notice that a number lying in every $J_n$ is within $10^{-n}$ of both $a_n$ and $b_n$, for every $n$.  What does that force its square to be?}
 Let us watch the Nested Interval Property fail in $\mathbb{Q}$.  For each $n \in \mathbb{N}$ let $a_n$ be the largest decimal with $n$ digits after the decimal point whose square is less than $2$, so that $a_1 = 1.4$, $a_2 = 1.41$, $a_3 = 1.414$, and so on.  Let $b_n = a_n + 10^{-n}$ and
 \[ J_n = \{ x \in \mathbb{Q} : a_n \leq x \leq b_n \}. \]
 \begin{enumerate}[(a)]
@@ -548,13 +548,13 @@ Ada chooses two real numbers $a < b$ and announces them.  Bea wins if she can na
 	\item Prove that Bea can always win.
 	\item How finely must the ruler be divided?  Find, in terms of $b - a$, a value of $k$ that is guaranteed to work.
 	\item Suppose instead that Bea's ruler shows every fraction whose denominator is at most $1000$, and nothing else.  Show that now Ada can always win.
-	\item In a sentence: what must be true of a set of ``ruler marks'' for it to be dense in $\mathbb{R}$?
+	\item In one sentence, what must be true of a set of ``ruler marks'' for it to be dense in $\mathbb{R}$?
 \end{enumerate}
 \end{problem}
 
 \begin{problem}[Top-heavy sets]
 \hint{Two of these six are true for a reason you could explain to a friend in one breath.  One of them is true and takes real work.}
-Call a nonempty set $A \subseteq \mathbb{R}$ \emph{top-heavy} if it is bounded above and $\sup A \in A$; in other words, if $A$ has a largest element.  Call it \emph{bottom-heavy} if it is bounded below and $\inf A \in A$.  Decide whether each statement is true or false.  Prove the true ones and give a counterexample to each false one.
+Call a nonempty set $A \subseteq \mathbb{R}$ \emph{top-heavy} if it is bounded above and $\sup A \in A$, which is to say that $A$ has a largest element.  Call it \emph{bottom-heavy} if it is bounded below and $\inf A \in A$.  Decide whether each statement is true or false.  Prove the true ones and give a counterexample to each false one.
 \begin{enumerate}[(a)]
 	\item Every nonempty finite set is top-heavy.
 	\item The union of two top-heavy sets is top-heavy.
@@ -567,11 +567,11 @@ Call a nonempty set $A \subseteq \mathbb{R}$ \emph{top-heavy} if it is bounded a
 
 \begin{problem}[The library]
 \hint{For (c), ask how many finite beginnings it takes to pin down a single scroll.}
-A library owns exactly one book for every finite string of letters from a 26-letter alphabet: \emph{a}, \emph{b}, \ldots, \emph{aa}, \emph{ab}, \ldots, however long and however meaningless.
+A library owns exactly one book for every finite string of letters from a 26-letter alphabet.  There are books called \emph{a}, \emph{b}, \ldots, \emph{aa}, \emph{ab}, \ldots, however long and however meaningless.
 \begin{enumerate}[(a)]
 	\item Show that the collection is countable by describing how to shelve the books in a single row, so that each book sits at a definite position $1, 2, 3, \ldots$
 	\item A new wing holds one scroll for every \emph{infinite} string of letters.  Prove that no single row of shelving can hold all of the scrolls.
-	\item The librarian objects: ``Every scroll is completely determined by its finite beginnings.  There are only countably many finite beginnings, since they are the books from part (a).  So there can only be countably many scrolls.''  The first two sentences are true.  Where exactly does the argument break down?
+	\item The librarian objects, ``Every scroll is completely determined by its finite beginnings.  There are only countably many finite beginnings, since they are the books from part (a).  So there can only be countably many scrolls.''  The first two sentences are true.  Where exactly does the argument break down?
 	\item Describe a 1-1 map from the set of all scrolls into the set of scrolls that use only the letters \emph{a} and \emph{b}.  Shrinking the alphabet from 26 letters to 2 does not make the collection any ``smaller.''
 \end{enumerate}
 \end{problem}

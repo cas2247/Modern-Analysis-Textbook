@@ -1057,13 +1057,13 @@ Also note that we could have begun this chain with \emph{any} of these statement
 \hint{Read each proof against the template in Section~\ref{sec:sequence-examples}.  Who is supposed to speak first, $\varepsilon$ or $N$?  And for which $n$ must the final inequality hold?}
 Each of the following ``proofs'' has something wrong with it.  In each case say whether the \emph{claim} is true, pinpoint the faulty step, and, where the claim is true, write a correct proof.
 \begin{enumerate}[(a)]
-	\item \emph{Claim:} $\lim \frac{1}{n} = 0$.
+	\item \emph{Claim.} $\lim \frac{1}{n} = 0$.
 
 	\emph{``Proof.''}  Let $N \in \mathbb{N}$ be arbitrary and set $\varepsilon = 2/N$.  If $n \geq N$ then $\left|\frac{1}{n} - 0\right| = \frac{1}{n} \leq \frac{1}{N} < \frac{2}{N} = \varepsilon$.  Hence $\left(\frac{1}{n}\right) \to 0$.
-	\item \emph{Claim:} the sequence $a_n = (-1)^n$ converges to $1$.
+	\item \emph{Claim.} the sequence $a_n = (-1)^n$ converges to $1$.
 
 	\emph{``Proof.''}  Let $\varepsilon > 0$ and choose $N = 2$.  For every even $n \geq N$ we have $|a_n - 1| = |1 - 1| = 0 < \varepsilon$.
-	\item \emph{Claim:} $\lim \frac{2n+1}{n} = 2$.
+	\item \emph{Claim.} $\lim \frac{2n+1}{n} = 2$.
 
 	\emph{``Proof.''}  Let $\varepsilon > 0$ and choose $N = 1/\varepsilon$.  If $n \geq N$ then $\left|\frac{2n+1}{n} - 2\right| = \frac{1}{n} \leq \frac{1}{N} = \varepsilon$.
 \end{enumerate}
@@ -1071,7 +1071,7 @@ To convince yourself that (a) is a broken argument and not merely an unusual one
 \end{problem}
 
 \begin{problem}[Sticking and visiting]
-\hint{For the second half of (c), look back at Chapter One: how many rational numbers are there?  For (d), the Bolzano--Weierstrass Theorem will find you a second number to visit.}
+\hint{For the second half of (c), look back at Chapter One and ask how many rational numbers there are.  For (d), the Bolzano--Weierstrass Theorem will find you a second number to visit.}
 Here are two invented definitions, built from the same ingredients as convergence but with the quantifiers rearranged.
 \begin{itemize}
 	\item A sequence $(a_n)$ \emph{sticks to} $a$ if there exists an $N \in \mathbb{N}$ such that for every $\varepsilon > 0$ and every $n \geq N$ we have $|a_n - a| < \varepsilon$.
@@ -1098,11 +1098,11 @@ Define a sequence by $x_1 = 1$ and
 	\item Every term of this sequence lies in $\mathbb{Q}$, and within $\mathbb{Q}$ the sequence is increasing and bounded.  Which theorem of this chapter have you just shown to be false in $\mathbb{Q}$?
 	\item Use the identity in (b) to show that $3 - x_n^2 \leq 2/9^{\,n-1}$.  How many terms are needed before $x_n^2$ is guaranteed to be within one millionth of $3$?
 \end{enumerate}
-Notice what part (c) accomplishes: without ever writing the symbol $\sqrt{3}$, you have proved that there is a positive real number whose square is $3$.
+Notice what part (c) accomplishes.  Without ever writing the symbol $\sqrt{3}$, you have proved that there is a positive real number whose square is $3$.
 \end{problem}
 
 \begin{problem}[Bolzano--Weierstrass by decimal digits]
-\hint{Part (a) is the pigeonhole principle for infinitely many pigeons: if infinitely many terms are shared among ten bins, the bins cannot all be finite.}
+\hint{Part (a) is the pigeonhole principle for infinitely many pigeons.  If infinitely many terms are shared among ten bins, the bins cannot all be finite.}
 The proof of the Bolzano--Weierstrass Theorem in the text cuts an interval in half again and again.  This problem redoes it by cutting into tenths, which lets us watch the limit being written down one digit at a time.  Let $(a_n)$ be any sequence with $0 \leq a_n < 1$ for all $n$.
 \begin{enumerate}[(a)]
 	\item Sort the terms into ten bins $[0, 0.1)$, $[0.1, 0.2)$, \ldots, $[0.9, 1)$ according to their first decimal digit.  Explain why at least one bin receives $a_n$ for infinitely many values of $n$.  Call the digit of one such bin $d_1$.
@@ -1116,11 +1116,11 @@ The proof of the Bolzano--Weierstrass Theorem in the text cuts an interval in ha
 \end{problem}
 
 \begin{problem}[A hiker's steps]
-\hint{For (b), group the steps: the third and fourth together cover at least $\frac{1}{2}$, as do the fifth through eighth, and so on.  For (c), let her turn around whenever she has wandered too far.}
+\hint{For (b), group the steps.  The third and fourth together cover at least $\frac{1}{2}$, as do the fifth through eighth, and so on.  For (c), let her turn around whenever she has wandered too far.}
 A hiker walks along the number line.  Her position after $n$ steps is $a_n$, so her $n$th step has length $|a_{n+1} - a_n|$.
 \begin{enumerate}[(a)]
 	\item Suppose that $|a_{n+1} - a_n| \leq 2^{-n}$ for every $n$.  Prove that $(a_n)$ is a Cauchy sequence, so that she is certainly headed \emph{somewhere}.
-	\item Suppose instead that every step is forward and the $n$th step has length exactly $1/n$; that is, $a_{n+1} = a_n + \frac{1}{n}$.  Show that she eventually passes every milestone: the sequence $(a_n)$ is unbounded.
+	\item Suppose instead that every step is forward and the $n$th step has length exactly $1/n$, so that $a_{n+1} = a_n + \frac{1}{n}$.  Show that she eventually passes every milestone, which is to say that the sequence $(a_n)$ is unbounded.
 	\item Now let the $n$th step again have length exactly $1/n$, but allow her to choose its direction.  Describe a rule for choosing directions that keeps her inside the interval $[-1, 2]$ forever and yet leaves $(a_n)$ divergent.  Prove both claims.
 	\item In (b) and (c) the steps shrink to zero, and still the sequence is not Cauchy.  Explain in a sentence or two, with reference to the quantifiers in the definition, why ``consecutive terms get close together'' is a weaker statement than ``the sequence is Cauchy.''
 \end{enumerate}
